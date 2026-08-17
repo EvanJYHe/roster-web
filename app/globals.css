@@ -3189,6 +3189,74 @@ h1 {
   }
 }
 
+/* Soft orbital ribbons: the earlier tunnel-like depth cue, kept off the copy. */
+.signal-field::before,
+.signal-field::after {
+  background:
+    radial-gradient(ellipse at 100% 50%, rgba(142, 176, 164, 0.075), transparent 48%),
+    repeating-radial-gradient(
+      ellipse at 100% 50%,
+      transparent 0 11.5%,
+      rgba(188, 208, 200, 0.028) 11.85% 12.15%,
+      transparent 12.55% 23.5%
+    );
+  content: "";
+  display: block;
+  filter: blur(0.7px) saturate(0.72);
+  height: 88%;
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.22) 22%, #000 65%, #000 100%);
+  position: absolute;
+  top: 6%;
+  width: 44%;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.22) 22%, #000 65%, #000 100%);
+  animation: ribbon-drift 18s ease-in-out infinite alternate;
+}
+
+.signal-field::before {
+  left: -5%;
+}
+
+.signal-field::after {
+  right: -5%;
+  transform: scaleX(-1);
+  animation-name: ribbon-drift-right;
+}
+
+@keyframes ribbon-drift {
+  from {
+    background-position: 0% 50%, 0% 50%;
+    opacity: 0.52;
+    transform: translate3d(-1.5%, 1%, 0) scale(1.01);
+  }
+
+  to {
+    background-position: 8% 47%, 10% 53%;
+    opacity: 0.88;
+    transform: translate3d(2%, -1%, 0) scale(1.045);
+  }
+}
+
+@keyframes ribbon-drift-right {
+  from {
+    background-position: 0% 50%, 0% 50%;
+    opacity: 0.46;
+    transform: translate3d(1.5%, 1%, 0) scaleX(-1) scale(1.01);
+  }
+
+  to {
+    background-position: -8% 53%, -10% 47%;
+    opacity: 0.82;
+    transform: translate3d(-2%, -1%, 0) scaleX(-1) scale(1.045);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal-field::before,
+  .signal-field::after {
+    animation: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .learning-bars i {
     animation: none;
