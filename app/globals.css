@@ -266,20 +266,22 @@ h1 {
 .button {
   align-items: center;
   display: inline-flex;
-  font-size: 13px;
+  font-size: 14px;
   justify-content: center;
   min-height: 44px;
-  padding: 0 20px;
+  padding: 0 24px;
   transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
 }
 
 .button-primary {
-  background: #f3f3f1;
+  background: #ffffff;
   color: #0b0b0b;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 .button-primary:hover {
-  background: #cfcfca;
+  background: #f1f1ef;
 }
 
 .button-secondary {
@@ -295,7 +297,7 @@ h1 {
 .docs-icon {
   font-size: 19px;
   line-height: 0;
-  margin-left: 10px;
+  margin-left: 9px;
   transform: rotate(180deg);
 }
 
