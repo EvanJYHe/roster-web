@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    background: #050505;
+    background: #030404;
     color: #f3f3f1;
   }
 
@@ -24,7 +24,7 @@
     max-width: 100%;
     margin: 0;
     overflow-x: hidden;
-    background: #050505;
+    background: #030404;
     color: #f3f3f1;
   }
 
@@ -45,15 +45,17 @@
   /* The WebGL canvas carries the moving signal; these restrained edge layers preserve the 3002 composition. */
   .signal-field {
     background:
-      radial-gradient(ellipse at 0% 50%, rgba(54, 110, 116, 0.22), transparent 38%),
-      radial-gradient(ellipse at 100% 50%, rgba(54, 110, 116, 0.22), transparent 38%);
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.28), transparent 24%, transparent 72%, rgba(0, 0, 0, 0.24)),
+      radial-gradient(ellipse 58% 68% at 50% 54%, rgba(23, 35, 37, 0.13), transparent 72%),
+      radial-gradient(ellipse at 0% 50%, rgba(44, 91, 96, 0.13), transparent 38%),
+      radial-gradient(ellipse at 100% 50%, rgba(44, 91, 96, 0.13), transparent 38%);
   }
 
   .signal-field::before,
   .signal-field::after {
     background:
-      repeating-linear-gradient(112deg, transparent 0 42px, rgba(20, 74, 105, 0.10) 43px 51px, rgba(23, 119, 94, 0.08) 52px 58px, transparent 59px 126px),
-      radial-gradient(ellipse at 40% 50%, rgba(37, 103, 111, 0.15), transparent 65%);
+      repeating-linear-gradient(112deg, transparent 0 42px, rgba(20, 74, 105, 0.06) 43px 51px, rgba(23, 119, 94, 0.05) 52px 58px, transparent 59px 126px),
+      radial-gradient(ellipse at 40% 50%, rgba(37, 103, 111, 0.085), transparent 65%);
     content: "";
     filter: saturate(1.2) contrast(1.12);
     height: 100%;

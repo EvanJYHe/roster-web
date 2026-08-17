@@ -222,7 +222,7 @@ function SignalField() {
 
   return (
     <div
-      className="signal-field pointer-events-none absolute inset-x-0 top-[68px] z-0 h-[760px] overflow-hidden opacity-90"
+      className="signal-field pointer-events-none absolute inset-x-0 top-[68px] z-0 h-[760px] overflow-hidden opacity-80"
       aria-hidden="true"
     >
       <canvas ref={canvasRef} className="absolute inset-0 size-full" />
@@ -240,7 +240,7 @@ export default function Home() {
   }
 
   return (
-    <main id="top" className="relative isolate min-h-screen overflow-hidden bg-[#050505] font-mono text-paper selection:bg-white selection:text-black">
+    <main id="top" className="relative isolate min-h-screen overflow-hidden bg-[#030404] font-mono text-paper selection:bg-white selection:text-black">
       <SignalField />
       <div
         className="pointer-events-none absolute inset-0 z-20 opacity-[0.07] mix-blend-soft-light"
