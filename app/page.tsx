@@ -63,8 +63,11 @@ export default function Home() {
       <section className="hero" id="top">
         <div className="hero-copy">
           <div className="eyebrow">
-            <span className="eyebrow-dot" />
-            Local-first MCP router
+            <span className="eyebrow-tag">Latest update</span>
+            <span className="eyebrow-message">
+              Beta v0.1 Now Live
+              <span className="eyebrow-arrow" aria-hidden="true">↗</span>
+            </span>
           </div>
 
           <h1>

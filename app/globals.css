@@ -204,29 +204,40 @@ button {
 
 .eyebrow {
   align-items: center;
-  border: 1px solid var(--line);
-  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   color: rgba(255, 255, 255, 0.77);
   display: inline-flex;
-  font-size: 11px;
-  gap: 8px;
-  padding: 8px 13px;
+  font-size: clamp(11px, 1vw, 14px);
+  gap: 0;
+  letter-spacing: -0.035em;
+  padding: 4px;
 }
 
-.eyebrow-dot {
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 50%;
-  height: 8px;
-  position: relative;
-  width: 8px;
+.eyebrow-tag,
+.eyebrow-message {
+  align-items: center;
+  display: inline-flex;
+  min-height: 31px;
 }
 
-.eyebrow-dot::after {
-  background: rgba(255, 255, 255, 0.65);
-  border-radius: 50%;
-  content: "";
-  inset: 2px;
-  position: absolute;
+.eyebrow-tag {
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.93);
+  padding: 0 17px;
+}
+
+.eyebrow-message {
+  color: rgba(255, 255, 255, 0.78);
+  padding: 0 17px;
+}
+
+.eyebrow-arrow {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 18px;
+  line-height: 1;
+  margin-left: 8px;
+  transform: translateY(-1px);
 }
 
 h1 {
@@ -642,6 +653,23 @@ h1 {
 
   .nav-cta {
     padding: 9px 10px;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    max-width: 100%;
+  }
+
+  .eyebrow-tag,
+  .eyebrow-message {
+    min-height: 28px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .eyebrow-arrow {
+    font-size: 15px;
+    margin-left: 6px;
   }
 
   .hero {
