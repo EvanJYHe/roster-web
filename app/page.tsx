@@ -9,6 +9,14 @@ const tools = [
   { name: "Serper", action: "search", score: "0.42", latency: "224ms", tone: "serper", mark: "S" },
 ];
 
+const clients = [
+  { name: "Claude Code", mark: "✳" },
+  { name: "Codex", mark: "⌘" },
+  { name: "Cursor", mark: "↗" },
+  { name: "OpenClaw", mark: "◈" },
+  { name: "Any MCP client", mark: "∞" },
+];
+
 function RosterMark() {
   return (
     <span className="roster-mark" aria-hidden="true">
@@ -339,13 +347,109 @@ export default function Home() {
         </section>
       </section>
 
+      <section className="principles-section" id="why-roster">
+        <div className="section-heading">
+          <span className="section-kicker">WHY ROSTER</span>
+          <h2>Keep your agent focused.<br />Let Roster handle the tool surface.</h2>
+        </div>
+
+        <div className="principles-grid">
+          <article className="principle-card principle-card-search">
+            <div className="principle-card-top"><span>01</span><span>SEARCH WHEN NEEDED</span></div>
+            <div className="principle-copy">
+              <h3>Only the right tools enter context.</h3>
+              <p>Roster searches your connected MCP surface when a task needs it, then returns the smallest useful set.</p>
+            </div>
+            <div className="mini-search-demo">
+              <div className="mini-query"><span>⌕</span><span>find the latest MCP news</span></div>
+              <div className="mini-result"><ToolMark tool={tools[0]} /><span>Exa Search</span><b>0.94</b></div>
+              <div className="mini-result mini-result-muted"><ToolMark tool={tools[1]} /><span>Brave Search</span><b>0.79</b></div>
+            </div>
+          </article>
+
+          <article className="principle-card principle-card-learning">
+            <div className="principle-card-top"><span>02</span><span>LEARN WHAT WORKS</span></div>
+            <div className="principle-copy">
+              <h3>Every successful route leaves a local signal.</h3>
+              <p>Good outcomes strengthen future matches. Nothing leaves the machine unless you choose to send it.</p>
+            </div>
+            <div className="mini-learning-demo">
+              <div className="learning-bars" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
+              <div><strong>local outcome memory</strong><small>Exa Search · +0.08 this session</small></div>
+            </div>
+          </article>
+
+          <article className="principle-card principle-card-clients">
+            <div className="principle-card-top"><span>03</span><span>WORKS EVERYWHERE</span></div>
+            <div className="principle-copy">
+              <h3>One router. Any MCP client.</h3>
+              <p>Put Roster in front of the clients and servers you already use. The interface stays the same.</p>
+            </div>
+            <div className="client-mark-row">
+              {clients.slice(0, 4).map((client) => (
+                <span className="client-mark" key={client.name} title={client.name}>{client.mark}</span>
+              ))}
+              <span className="client-mark client-mark-more">+</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="client-section">
+        <div className="client-section-copy">
+          <span className="section-kicker">ONE ROUTER / EVERY CLIENT</span>
+          <h2>Bring your tool surface with you.</h2>
+          <p>Roster sits in front of your MCP servers, finds the right capability, and keeps improving from the outcomes it sees locally.</p>
+          <a className="button button-primary" href="#get-started">Get Started <Arrow diagonal /></a>
+        </div>
+
+        <div className="client-surface">
+          <div className="client-surface-top"><span>ROSTER / CLIENTS</span><span><i /> 5 compatible surfaces</span></div>
+          <div className="client-list">
+            {clients.map((client, index) => (
+              <div className={`client-list-row ${index === 0 ? "client-list-row-active" : ""}`} key={client.name}>
+                <span className="client-list-mark">{client.mark}</span>
+                <strong>{client.name}</strong>
+                <small>{index === clients.length - 1 ? "MCP protocol" : "connected"}</small>
+                <i />
+              </div>
+            ))}
+          </div>
+          <div className="client-command"><span>$</span><code>npx @roster/cli init</code><b>ready</b></div>
+        </div>
+      </section>
+
+      <section className="closing-cta">
+        <div className="closing-cta-inner">
+          <span className="section-kicker">READY WHEN YOU ARE</span>
+          <h2>Let your agent<br />use less to do more.</h2>
+          <p>Start with one local router in front of your MCP servers.</p>
+          <div className="closing-actions">
+            <a className="button button-primary" href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">Get Started <Arrow diagonal /></a>
+            <a className="button button-secondary" href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">View on GitHub <Arrow diagonal /></a>
+          </div>
+        </div>
+      </section>
+
       <footer className="site-footer">
-        <a className="brand" href="#top">
-          <RosterMark />
-          <span>Roster</span>
-        </a>
-        <span>Self-healing, self-learning tool routing for MCP.</span>
-        <a href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">Open source ↗</a>
+        <div className="footer-main">
+          <div className="footer-brand-block">
+            <a className="brand" href="#top">
+              <RosterMark />
+              <span>Roster</span>
+            </a>
+            <p>The self-healing, self-learning<br />tool router for MCP.</p>
+          </div>
+          <a className="footer-cta" href="#get-started">Start routing <Arrow diagonal /></a>
+        </div>
+
+        <div className="footer-links">
+          <div><span>PRODUCT</span><a href="#why-roster">Why Roster</a><a href="#get-started">Get started</a><a href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">Documentation</a></div>
+          <div><span>COMMUNITY</span><a href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">GitHub</a><a href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">Issues</a><a href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">Contribute</a></div>
+          <div><span>COMPATIBLE WITH</span><a href="#why-roster">Claude Code</a><a href="#why-roster">Codex</a><a href="#why-roster">Cursor &amp; OpenClaw</a></div>
+        </div>
+
+        <div className="footer-bottom"><span>© 2026 Roster</span><span>Local by default · open source</span><a href="#top">Back to top ↑</a></div>
       </footer>
     </main>
   );
