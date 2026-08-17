@@ -3,18 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 
 const tools = [
-  { name: "Exa Search", action: "web_search", score: "0.94", latency: "82ms", tone: "exa", mark: "✦" },
-  { name: "Brave Search", action: "web_search", score: "0.79", latency: "146ms", tone: "brave", mark: "B" },
-  { name: "Tavily", action: "search", score: "0.64", latency: "181ms", tone: "tavily", mark: "T" },
-  { name: "Serper", action: "search", score: "0.42", latency: "224ms", tone: "serper", mark: "S" },
+  { name: "Exa Search", action: "web_search", score: "0.94", latency: "82ms", tone: "exa", icon: "https://exa.ai/images/favicon-32x32.png" },
+  { name: "Brave Search", action: "web_search", score: "0.79", latency: "146ms", tone: "brave", icon: "https://brave.com/favicon.ico" },
+  { name: "Tavily", action: "search", score: "0.64", latency: "181ms", tone: "tavily", icon: "https://tavily.com/favicon.ico" },
+  { name: "Serper", action: "search", score: "0.42", latency: "224ms", tone: "serper", icon: "https://res.cloudinary.com/apideck/image/upload/v1679535605/icons/serper-dev.png" },
 ];
 
 const clients = [
-  { name: "Claude Code", mark: "✳" },
-  { name: "Codex", mark: "⌘" },
-  { name: "Cursor", mark: "↗" },
-  { name: "OpenClaw", mark: "◈" },
-  { name: "Any MCP client", mark: "∞" },
+  { name: "Claude Code", icon: "https://cdn.simpleicons.org/claude/ffffff" },
+  { name: "Codex", icon: "https://api.iconify.design/logos/openai-icon.svg?color=%23ffffff" },
+  { name: "Cursor", icon: "https://cdn.simpleicons.org/cursor/ffffff" },
+  { name: "OpenClaw", icon: "https://raw.githubusercontent.com/openclaw/openclaw/main/docs/assets/pixel-lobster.svg" },
 ];
 
 function RosterMark() {
@@ -38,7 +37,15 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 function ToolMark({ tool }: { tool: (typeof tools)[number] }) {
   return (
     <span className={`provider-mark provider-mark-${tool.tone}`} aria-hidden="true">
-      {tool.mark}
+      <img src={tool.icon} alt="" />
+    </span>
+  );
+}
+
+function ClientMark({ client }: { client: (typeof clients)[number] }) {
+  return (
+    <span className="client-logo" aria-hidden="true">
+      <img src={client.icon} alt="" />
     </span>
   );
 }
@@ -319,14 +326,13 @@ export default function Home() {
             </span>
             <span className="sr-only">{copied ? "Copied" : "Copy command"}</span>
           </button>
-          <p className="command-note">CLI preview · local by default</p>
         </div>
 
         <section className="routing-demo" aria-label="How Roster routes tools">
           <div className="demo-column">
             <div className="demo-label"><span>1</span> MCP CLIENT REQUEST</div>
             <div className="request-card">
-              <p>Summarize the latest errors<br />and open the related files.</p>
+              <p>Find the latest news<br />about MCP servers.</p>
               <div className="request-meta">
                 <span>client</span>
                 <span>any MCP client</span>
@@ -339,8 +345,8 @@ export default function Home() {
           <div className="demo-column engine-column">
             <div className="demo-label"><span>2</span> ROSTER MATCH ENGINE</div>
             <div className="engine-card">
-              <div className="engine-row"><span className="engine-key">Intent</span><span>analyze_error · open_file</span></div>
-              <div className="engine-row"><span className="engine-key">Context</span><span>project: api-gateway</span></div>
+              <div className="engine-row"><span className="engine-key">Intent</span><span>web_search</span></div>
+              <div className="engine-row"><span className="engine-key">Context</span><span>any MCP client</span></div>
               <div className="engine-row"><span className="engine-key">Search</span><span>BM25 + vector</span></div>
               <div className="score-stack">
                 <span className="engine-key">Tool scoring</span>
@@ -357,14 +363,9 @@ export default function Home() {
           <div className="demo-column matched-column">
             <div className="demo-label"><span>3</span> MATCHED TOOLS</div>
             <div className="matched-card">
-              {[
-                { name: "Filesystem", score: "0.92", active: true },
-                { name: "Git", score: "0.71", active: false },
-                { name: "Web Search", score: "0.46", active: false },
-                { name: "Slack", score: "0.32", active: false },
-              ].map((tool) => (
-                <div className={`tool-row ${tool.active ? "tool-row-active" : ""}`} key={tool.name}>
-                  <span className={`tool-dot ${tool.active ? "tool-dot-active" : ""}`} />
+              {tools.map((tool, index) => (
+                <div className={`tool-row ${index === 0 ? "tool-row-active" : ""}`} key={tool.name}>
+                  <ToolMark tool={tool} />
                   <span>{tool.name}</span>
                   <span className="tool-score">{tool.score}</span>
                 </div>
@@ -380,87 +381,116 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="principles-section" id="why-roster">
-        <div className="section-heading">
-          <span className="section-kicker">WHY ROSTER</span>
-          <h2>Keep your agent focused.<br />Let Roster handle the tool surface.</h2>
+      <section className="routing-section" id="how-it-works">
+        <div className="routing-section-intro">
+          <div>
+            <span className="section-kicker">HOW ROSTER WORKS</span>
+            <h2>One request.<br />The right tool.</h2>
+          </div>
+          <p>Roster reads the request, searches the connected MCP surface, and returns the best-fit tool. The route improves locally after the result.</p>
         </div>
 
-        <div className="principles-grid">
-          <article className="principle-card principle-card-search">
-            <div className="principle-card-top"><span>01</span><span>SEARCH WHEN NEEDED</span></div>
-            <div className="principle-copy">
-              <h3>Only the right tools enter context.</h3>
-              <p>Roster searches your connected MCP surface when a task needs it, then returns the smallest useful set.</p>
-            </div>
-            <div className="mini-search-demo">
-              <div className="mini-query"><span>⌕</span><span>find the latest MCP news</span></div>
-              <div className="mini-result"><ToolMark tool={tools[0]} /><span>Exa Search</span><b>0.94</b></div>
-              <div className="mini-result mini-result-muted"><ToolMark tool={tools[1]} /><span>Brave Search</span><b>0.79</b></div>
-            </div>
-          </article>
+        <section className="routing-showcase" aria-label="Roster routes a request to the best tool">
+          <div className="route-showcase-topline">
+            <span className="route-showcase-label"><i /> ROSTER / ROUTING</span>
+            <span className="route-showcase-state">LOCAL-FIRST <i /> ACTIVE</span>
+          </div>
 
-          <article className="principle-card principle-card-learning">
-            <div className="principle-card-top"><span>02</span><span>LEARN WHAT WORKS</span></div>
-            <div className="principle-copy">
-              <h3>Every successful route leaves a local signal.</h3>
-              <p>Good outcomes strengthen future matches. Nothing leaves the machine unless you choose to send it.</p>
+          <div className="route-flow">
+            <div className="route-card route-request-card">
+              <div className="route-card-kicker"><span>01</span> REQUEST</div>
+              <div className="route-client-pill">ANY MCP CLIENT <i /></div>
+              <div className="route-query-card">
+                <span className="route-query-mark" aria-hidden="true">⌕</span>
+                <p>Find the latest news<br />about MCP servers.</p>
+              </div>
+              <div className="route-data-row"><span>intent</span><strong>web_search</strong></div>
             </div>
-            <div className="mini-learning-demo">
-              <div className="learning-bars" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
-              <div><strong>local outcome memory</strong><small>Exa Search · +0.08 this session</small></div>
-            </div>
-          </article>
 
-          <article className="principle-card principle-card-clients">
-            <div className="principle-card-top"><span>03</span><span>WORKS EVERYWHERE</span></div>
-            <div className="principle-copy">
-              <h3>One router. Any MCP client.</h3>
-              <p>Put Roster in front of the clients and servers you already use. The interface stays the same.</p>
+            <div className="route-bridge" aria-hidden="true"><span /></div>
+
+            <div className="route-card route-match-card">
+              <div className="route-card-kicker"><span>02</span> MATCH</div>
+              <div className="route-match-heading"><strong>Search the tool surface</strong><span>BM25 + vector</span></div>
+              <div className="route-tool-list">
+                {tools.map((tool, index) => (
+                  <div className={`route-tool ${index === 0 ? "route-tool-selected" : ""} ${index === scanningToolIndex ? "route-tool-scanning" : ""}`} key={tool.name}>
+                    <ToolMark tool={tool} />
+                    <span className="route-tool-name"><strong>{tool.name}</strong><small>{tool.action}</small></span>
+                    <span className="route-tool-score"><span><i style={{ width: `${Number(tool.score) * 100}%` }} /></span><b>{tool.score}</b></span>
+                  </div>
+                ))}
+              </div>
+              <div className="route-match-foot"><i /> ranked from {tools.length} available tools</div>
             </div>
-            <div className="client-mark-row">
-              {clients.slice(0, 4).map((client) => (
-                <span className="client-mark" key={client.name} title={client.name}>{client.mark}</span>
-              ))}
-              <span className="client-mark client-mark-more">+</span>
+
+            <div className="route-bridge" aria-hidden="true"><span /></div>
+
+            <div className="route-card route-result-card">
+              <div className="route-card-kicker"><span>03</span> RESULT</div>
+              <div className="route-result-heading">Best match selected</div>
+              <div className="route-selected-tool">
+                <ToolMark tool={tools[0]} />
+                <span><strong>{tools[0].name}</strong><small>{tools[0].action} · {tools[0].latency}</small></span>
+                <b>{tools[0].score}</b>
+              </div>
+              <div className="route-result-status"><span><i /> 200 OK</span><small>result returned</small></div>
+              <div className="route-learning">
+                <div className="route-learning-bars" aria-hidden="true"><i /><i /><i /></div>
+                <span><strong>Local outcome memory</strong><small>next route learns from the result</small></span>
+              </div>
             </div>
-          </article>
-        </div>
+          </div>
+        </section>
       </section>
 
-      <section className="client-section">
-        <div className="client-section-copy">
-          <span className="section-kicker">ONE ROUTER / EVERY CLIENT</span>
-          <h2>Bring your tool surface with you.</h2>
-          <p>Roster sits in front of your MCP servers, finds the right capability, and keeps improving from the outcomes it sees locally.</p>
-          <a className="button button-primary" href="#get-started">Get Started <Arrow diagonal /></a>
+      <section className="memory-section" id="why-roster">
+        <div className="memory-copy">
+          <span className="section-kicker">LOCAL OUTCOME MEMORY</span>
+          <h2>Every route leaves a signal.</h2>
+          <p>When a tool works, Roster remembers that outcome on your machine. Future searches can use the signal without turning your history into a shared ranking system.</p>
+          <div className="memory-rule"><i /> local by default</div>
         </div>
 
-        <div className="client-surface">
-          <div className="client-surface-top"><span>ROSTER / CLIENTS</span><span><i /> 5 compatible surfaces</span></div>
-          <div className="client-list">
-            {clients.map((client, index) => (
-              <div className={`client-list-row ${index === 0 ? "client-list-row-active" : ""}`} key={client.name}>
-                <span className="client-list-mark">{client.mark}</span>
-                <strong>{client.name}</strong>
-                <small>{index === clients.length - 1 ? "MCP protocol" : "connected"}</small>
-                <i />
+        <div className="memory-ledger">
+          <div className="memory-ledger-head"><span>ROSTER / OUTCOME MEMORY</span><span><i /> THIS SESSION</span></div>
+          <div className="memory-query"><span>LAST ROUTE</span><strong>Find the latest news about MCP servers.</strong></div>
+          <div className="memory-rows">
+            {[
+              { tool: tools[0], signal: "+0.08", note: "successful result" },
+              { tool: tools[1], signal: "+0.01", note: "available fallback" },
+              { tool: tools[2], signal: "0.00", note: "not selected" },
+            ].map((entry) => (
+              <div className="memory-row" key={entry.tool.name}>
+                <ToolMark tool={entry.tool} />
+                <span><strong>{entry.tool.name}</strong><small>{entry.note}</small></span>
+                <b>{entry.signal}</b>
               </div>
             ))}
           </div>
-          <div className="client-command"><span>$</span><code>npx @roster/cli init</code><b>ready</b></div>
+          <div className="memory-ledger-foot"><span>stored locally</span><span>next search uses this signal ↗</span></div>
         </div>
       </section>
 
-      <section className="closing-cta">
-        <div className="closing-cta-inner">
-          <span className="section-kicker">READY WHEN YOU ARE</span>
-          <h2>Let your agent<br />use less to do more.</h2>
-          <p>Start with one local router in front of your MCP servers.</p>
-          <div className="closing-actions">
-            <a className="button button-primary" href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">Get Started <Arrow diagonal /></a>
-            <a className="button button-secondary" href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">View on GitHub <Arrow diagonal /></a>
+      <section className="compatibility-section" id="compatibility">
+        <div className="compatibility-copy">
+          <span className="section-kicker">WORKS EVERYWHERE</span>
+          <h2>One local router.<br />Any MCP client.</h2>
+          <p>Claude Code, Codex, Cursor, OpenClaw, or the next client you try. Roster speaks MCP at the edge, so the client does not need to know how the tool surface is organized.</p>
+          <a className="button button-primary" href="#get-started">Get Started <Arrow diagonal /></a>
+        </div>
+
+        <div className="compatibility-panel">
+          <div className="compatibility-panel-head"><span>ROSTER / CLIENTS</span><span>ONE ROUTER IN FRONT OF EVERY MCP SERVER</span></div>
+          <div className="client-logo-grid">
+            {clients.map((client) => (
+              <div className="client-logo-item" key={client.name}>
+                <ClientMark client={client} />
+                <span>{client.name}</span>
+              </div>
+            ))}
           </div>
+          <div className="compatibility-panel-foot"><span><i /> MCP protocol</span><span>local-first · client agnostic</span></div>
         </div>
       </section>
 
