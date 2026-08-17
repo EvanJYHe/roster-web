@@ -127,12 +127,12 @@ function SignalField() {
         float shapedTexture = smoothstep(0.34, 0.74, texture);
         float signal = haze * (0.35 + shapedTexture * 0.65) * sideMask * verticalFade;
         float balance = smoothstep(-0.5, 0.5, point.x);
-        vec3 leftColor = vec3(0.035, 0.19, 0.18);
-        vec3 rightColor = vec3(0.035, 0.12, 0.22);
+        vec3 leftColor = vec3(0.09, 0.12, 0.115);
+        vec3 rightColor = vec3(0.09, 0.105, 0.13);
         vec3 color = mix(leftColor, rightColor, balance);
-        color = mix(color, vec3(0.08, 0.27, 0.22), shapedTexture * 0.22);
+        color = mix(color, vec3(0.17, 0.18, 0.18), shapedTexture * 0.2);
         float grain = 0.94 + 0.06 * hash21(floor(uv * 42.0) + vec2(u_time * 0.02));
-        float alpha = signal * 0.36 * grain;
+        float alpha = signal * 0.3 * grain;
 
         gl_FragColor = vec4(color * alpha, alpha);
       }
@@ -283,6 +283,14 @@ export default function Home() {
 
       <section className="hero" id="top">
         <div className="hero-copy">
+          <div className="eyebrow" aria-label="Latest update: Beta v0.1 now live">
+            <span className="eyebrow-tag">Latest update</span>
+            <span className="eyebrow-message">
+              Beta v0.1 Now Live
+              <span className="eyebrow-arrow" aria-hidden="true">↗</span>
+            </span>
+          </div>
+
           <h1>
             The self-learning
             <br />
@@ -311,61 +319,65 @@ export default function Home() {
             </span>
             <span className="sr-only">{copied ? "Copied" : "Copy command"}</span>
           </button>
+          <p className="command-note">CLI preview · local by default</p>
         </div>
 
-        <section className="routing-showcase" aria-label="Live Roster tool routing showcase">
-          <span className="border-light" aria-hidden="true" />
-          <div className="route-showcase-topline">
-            <span className="route-showcase-label"><i className="live-dot" /> ROSTER / ROUTING</span>
-            <span className="route-showcase-state">LOCAL-FIRST <i /> ACTIVE</span>
+        <section className="routing-demo" aria-label="How Roster routes tools">
+          <div className="demo-column">
+            <div className="demo-label"><span>1</span> MCP CLIENT REQUEST</div>
+            <div className="request-card">
+              <p>Summarize the latest errors<br />and open the related files.</p>
+              <div className="request-meta">
+                <span>client</span>
+                <span>any MCP client</span>
+              </div>
+            </div>
           </div>
 
-          <div className="route-flow">
-            <article className="route-card route-request-card">
-              <div className="route-card-kicker"><span>01</span> REQUEST</div>
-              <div className="route-client-pill">ANY MCP CLIENT <i /></div>
-              <div className="route-query-card">
-                <span className="route-query-mark" aria-hidden="true">⌕</span>
-                <p>Find the latest news about MCP servers.</p>
-              </div>
-              <div className="route-data-row"><span>intent</span><strong>web_search</strong></div>
-            </article>
+          <div className="flow-arrow" aria-hidden="true">→</div>
 
-            <div className="route-bridge" aria-hidden="true"><span /></div>
-
-            <article className="route-card route-match-card">
-              <div className="route-card-kicker"><span>02</span> MATCH</div>
-              <div className="route-match-heading">
-                <strong>Search the tool surface</strong>
-                <span>BM25 + vector</span>
+          <div className="demo-column engine-column">
+            <div className="demo-label"><span>2</span> ROSTER MATCH ENGINE</div>
+            <div className="engine-card">
+              <div className="engine-row"><span className="engine-key">Intent</span><span>analyze_error · open_file</span></div>
+              <div className="engine-row"><span className="engine-key">Context</span><span>project: api-gateway</span></div>
+              <div className="engine-row"><span className="engine-key">Search</span><span>BM25 + vector</span></div>
+              <div className="score-stack">
+                <span className="engine-key">Tool scoring</span>
+                <div className="score-line"><i style={{ width: "92%" }} /><b>0.92</b></div>
+                <div className="score-line"><i style={{ width: "71%" }} /><b>0.71</b></div>
+                <div className="score-line"><i style={{ width: "46%" }} /><b>0.46</b></div>
+                <div className="score-line"><i style={{ width: "32%" }} /><b>0.32</b></div>
               </div>
-              <div className="route-tool-list">
-                {tools.map((tool, index) => (
-                  <div className={`route-tool ${index === scanningToolIndex ? "route-tool-scanning" : ""} ${index === 0 ? "route-tool-selected" : ""}`} key={tool.name}>
-                    <ToolMark tool={tool} />
-                    <div className="route-tool-name"><strong>{tool.name}</strong><small>{tool.action}</small></div>
-                    <div className="route-tool-score"><span><i style={{ width: `${Number(tool.score) * 100}%` }} /></span><b>{tool.score}</b></div>
-                  </div>
-                ))}
-              </div>
-              <div className="route-match-foot"><i /> ranked from 4 available tools</div>
-            </article>
+            </div>
+          </div>
 
-            <div className="route-bridge" aria-hidden="true"><span /></div>
+          <div className="flow-arrow" aria-hidden="true">→</div>
 
-            <article className="route-card route-result-card-wrap">
-              <div className="route-card-kicker"><span>03</span> RESULT</div>
-              <div className="route-result-heading">Best match selected</div>
-              <div className="route-selected-tool">
-                <ToolMark tool={tools[0]} />
-                <div><strong>{tools[0].name}</strong><small>{tools[0].action} · {tools[0].latency}</small></div>
-                <b>{tools[0].score}</b>
-              </div>
-              <div className="route-result-status"><span><i /> 200 OK</span><small>result returned</small></div>
-              <div className="route-learning"><span className="route-learning-bars" aria-hidden="true"><i /><i /><i /></span><div><strong>Local outcome memory</strong><small>next route learns from the result</small></div></div>
-            </article>
+          <div className="demo-column matched-column">
+            <div className="demo-label"><span>3</span> MATCHED TOOLS</div>
+            <div className="matched-card">
+              {[
+                { name: "Filesystem", score: "0.92", active: true },
+                { name: "Git", score: "0.71", active: false },
+                { name: "Web Search", score: "0.46", active: false },
+                { name: "Slack", score: "0.32", active: false },
+              ].map((tool) => (
+                <div className={`tool-row ${tool.active ? "tool-row-active" : ""}`} key={tool.name}>
+                  <span className={`tool-dot ${tool.active ? "tool-dot-active" : ""}`} />
+                  <span>{tool.name}</span>
+                  <span className="tool-score">{tool.score}</span>
+                </div>
+              ))}
+            </div>
+            <p className="best-match">Best match selected</p>
           </div>
         </section>
+
+        <div className="demo-caption">
+          <span>ROSTER / MATCH / 0001</span>
+          <span><i className="status-dot" /> Learning locally from tool outcomes</span>
+        </div>
       </section>
 
       <section className="principles-section" id="why-roster">
