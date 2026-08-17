@@ -192,6 +192,7 @@ function SignalField() {
 
 export default function Home() {
   const [copied, setCopied] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [scanningToolIndex, setScanningToolIndex] = useState(0);
 
   useEffect(() => {
@@ -200,6 +201,17 @@ export default function Home() {
     }, 950);
 
     return () => window.clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    function updateNavState() {
+      setIsScrolled(window.scrollY > 24);
+    }
+
+    updateNavState();
+    window.addEventListener("scroll", updateNavState, { passive: true });
+
+    return () => window.removeEventListener("scroll", updateNavState);
   }, []);
 
   async function copyInstallCommand() {
@@ -213,7 +225,7 @@ export default function Home() {
       <SignalField />
       <div className="grain" aria-hidden="true" />
 
-      <header className="site-nav">
+      <header className={`site-nav ${isScrolled ? "site-nav-scrolled" : ""}`}>
         <a className="brand" href="#top" aria-label="Roster home">
           <RosterMark />
           <span>Roster</span>

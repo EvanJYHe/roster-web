@@ -175,17 +175,30 @@ button {
 
 .site-nav {
   align-items: center;
-  border-bottom: 1px solid var(--line-soft);
+  background: transparent;
+  border-bottom: 1px solid transparent;
   display: flex;
   font-family: var(--ui);
   height: 68px;
   justify-content: space-between;
   min-width: 0;
   padding: 0 clamp(20px, 3.2vw, 56px);
-  position: relative;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  transition: background 240ms ease, border-color 240ms ease, box-shadow 240ms ease, backdrop-filter 240ms ease;
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
-  z-index: 5;
+  width: 100%;
+  z-index: 30;
+}
+
+.site-nav-scrolled {
+  background: rgba(7, 7, 7, 0.86);
+  border-bottom-color: var(--line-soft);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(14px) saturate(1.1);
 }
 
 .brand {
@@ -258,7 +271,7 @@ button {
   margin: 0 auto;
   max-width: 1840px;
   min-height: 850px;
-  padding: 76px clamp(24px, 5vw, 72px) 42px;
+  padding: calc(76px + 68px) clamp(24px, 5vw, 72px) 42px;
   position: relative;
   width: 100%;
   z-index: 1;
@@ -1757,7 +1770,7 @@ h1 {
 
   .hero {
     min-height: auto;
-    padding: 64px 20px 38px;
+    padding: calc(64px + 68px) 20px 38px;
   }
 
   h1 {
