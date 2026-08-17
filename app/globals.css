@@ -81,39 +81,46 @@ button {
 
 .signal-field {
   background:
-    radial-gradient(ellipse at 0% 50%, rgba(54, 110, 116, 0.22), transparent 38%),
-    radial-gradient(ellipse at 100% 50%, rgba(54, 110, 116, 0.22), transparent 38%);
-  height: 760px;
+    linear-gradient(to right, transparent 0%, transparent 29%, rgba(0, 0, 0, 0.55) 40%, rgba(0, 0, 0, 0.88) 50%, rgba(0, 0, 0, 0.55) 60%, transparent 71%),
+    radial-gradient(ellipse 31% 58% at 0% 50%, rgba(35, 105, 104, 0.2), transparent 62%),
+    radial-gradient(ellipse 31% 58% at 100% 50%, rgba(35, 105, 104, 0.2), transparent 62%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 16%, transparent 82%, rgba(0, 0, 0, 0.88));
+  height: 840px;
   inset: 68px 0 auto;
-  opacity: 0.9;
+  opacity: 0.8;
   overflow: hidden;
   pointer-events: none;
   position: absolute;
   width: 100%;
   z-index: -1;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 17%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 17%, #000 78%, transparent 100%);
 }
 
 .signal-field::before,
 .signal-field::after {
   background:
-    repeating-linear-gradient(112deg, transparent 0 42px, rgba(20, 74, 105, 0.10) 43px 51px, rgba(23, 119, 94, 0.08) 52px 58px, transparent 59px 126px),
-    radial-gradient(ellipse at 40% 50%, rgba(37, 103, 111, 0.15), transparent 65%);
+    radial-gradient(ellipse at 100% 50%, rgba(132, 184, 165, 0.12), transparent 47%),
+    repeating-radial-gradient(ellipse at 100% 50%, transparent 0 12%, rgba(165, 205, 188, 0.04) 12.35% 12.58%, transparent 13% 24%);
   content: "";
-  filter: saturate(1.2) contrast(1.12);
-  height: 100%;
+  filter: blur(0.55px) saturate(0.86);
+  height: 88%;
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.32) 24%, #000 62%, #000 100%);
   position: absolute;
-  top: 0;
-  width: 34%;
-  animation: signal-shift 14s ease-in-out infinite alternate;
+  top: 6%;
+  width: 42%;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.32) 24%, #000 62%, #000 100%);
+  animation: signal-breathe 13s ease-in-out infinite alternate;
 }
 
 .signal-field::before {
-  left: -3%;
+  left: -4%;
 }
 
 .signal-field::after {
-  right: -3%;
+  right: -4%;
   transform: scaleX(-1);
+  animation-name: signal-breathe-right;
 }
 
 .signal-field canvas {
@@ -123,13 +130,27 @@ button {
   width: 100%;
 }
 
-@keyframes signal-shift {
+@keyframes signal-breathe {
   from {
-    background-position: -3% center, center;
+    background-position: 0% 50%, 0% 50%;
+    opacity: 0.52;
   }
 
   to {
-    background-position: 3% center, center;
+    background-position: 11% 45%, 9% 55%;
+    opacity: 0.92;
+  }
+}
+
+@keyframes signal-breathe-right {
+  from {
+    background-position: 0% 50%, 0% 50%;
+    opacity: 0.48;
+  }
+
+  to {
+    background-position: -10% 55%, -11% 45%;
+    opacity: 0.86;
   }
 }
 

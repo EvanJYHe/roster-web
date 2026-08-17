@@ -64,39 +64,38 @@ function SignalField() {
         return fract(point.x * point.y);
       }
 
+      float softRing(float distanceToCenter, float radius, float width) {
+        return exp(-pow((distanceToCenter - radius) / width, 2.0));
+      }
+
       void main() {
         vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-        float leftSide = 1.0 - smoothstep(0.02, 0.46, uv.x);
-        float rightSide = 1.0 - smoothstep(0.02, 0.46, 1.0 - uv.x);
-        float side = max(leftSide, rightSide);
-        float edgeDistance = min(uv.x, 1.0 - uv.x);
-        float ribbons = 0.0;
-        float colorShift = 0.0;
+        float verticalFade = smoothstep(0.02, 0.16, uv.y) * smoothstep(0.98, 0.84, uv.y);
+        float leftSide = 1.0 - smoothstep(0.03, 0.40, uv.x);
+        float rightSide = 1.0 - smoothstep(0.03, 0.40, 1.0 - uv.x);
+        float side = pow(max(leftSide, rightSide), 2.35);
 
-        for (int index = 0; index < 9; index++) {
+        vec2 leftPoint = (uv - vec2(-0.08, 0.52)) * vec2(0.62, 1.16);
+        vec2 rightPoint = (uv - vec2(1.08, 0.48)) * vec2(0.62, 1.16);
+        float leftRadius = length(leftPoint);
+        float rightRadius = length(rightPoint);
+        float rings = 0.0;
+
+        for (int index = 0; index < 8; index++) {
           float layer = float(index);
-          float center = 0.08
-            + layer * 0.105
-            + 0.065 * sin(edgeDistance * 5.0 + layer * 1.2 + u_time * 0.12)
-            + 0.025 * sin(edgeDistance * 16.0 - layer * 1.4 - u_time * 0.18);
-          float width = 0.015 + layer * 0.0018;
-          float ribbon = exp(-pow((uv.y - center) / width, 2.0));
-          float cell = hash21(floor(vec2(edgeDistance * 28.0, uv.y * 20.0)) + vec2(layer));
-          float segments = smoothstep(0.22, 0.78, cell + 0.24 * sin(edgeDistance * 48.0 - u_time * 0.4 + layer));
-          float texture = 0.62 + 0.38 * hash21(floor(vec2(edgeDistance * 46.0, uv.y * 32.0)) + vec2(layer * 2.0));
-
-          ribbons += ribbon * (0.18 + 0.82 * segments) * texture;
-          colorShift += ribbon * layer;
+          float radius = 0.075 + layer * 0.085 + 0.018 * sin(u_time * 0.23 + layer * 0.7);
+          float width = 0.004 + layer * 0.0005;
+          rings += softRing(leftRadius, radius, width);
+          rings += softRing(rightRadius, radius, width);
         }
 
-        float edgeMask = pow(side, 1.12);
-        float scan = 0.92 + 0.08 * sin(uv.y * u_resolution.y * 0.14 + u_time * 1.3);
-        vec3 cool = vec3(0.08, 0.18, 0.40);
-        vec3 signal = vec3(0.12, 0.52, 0.38);
-        vec3 color = mix(cool, signal, 0.5 + 0.5 * sin(colorShift * 0.3 + u_time * 0.08));
-        float glow = ribbons * edgeMask * 0.20;
-        float haze = edgeMask * 0.032 * (0.5 + 0.5 * sin(uv.y * 8.0 + u_time * 0.15));
-        float alpha = (glow + haze) * scan;
+        float leftHaze = exp(-pow(leftRadius / 0.66, 2.0));
+        float rightHaze = exp(-pow(rightRadius / 0.66, 2.0));
+        float grain = 0.92 + 0.08 * hash21(floor(uv * 38.0) + vec2(u_time * 0.03));
+        vec3 cool = vec3(0.035, 0.12, 0.19);
+        vec3 signal = vec3(0.10, 0.34, 0.30);
+        vec3 color = mix(cool, signal, 0.45 + 0.18 * sin(u_time * 0.12 + uv.y * 3.0));
+        float alpha = (rings * 0.052 + (leftHaze + rightHaze) * 0.014) * pow(side, 1.35) * verticalFade * grain;
 
         gl_FragColor = vec4(color * alpha, alpha);
       }
