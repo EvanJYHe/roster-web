@@ -235,7 +235,7 @@ export default function Home() {
           </div>
 
           <h1>
-            The self-healing
+            The self-learning
             <br />
             tool router for MCP.
           </h1>
