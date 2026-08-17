@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 
 const tools = [
-  { name: "Filesystem", score: "0.92", active: true },
-  { name: "Git", score: "0.71", active: false },
-  { name: "Web Search", score: "0.46", active: false },
-  { name: "Slack", score: "0.32", active: false },
+  { name: "Filesystem", action: "open_file", score: "0.92", latency: "18ms" },
+  { name: "Git", action: "show_commit", score: "0.71", latency: "42ms" },
+  { name: "Web Search", action: "search", score: "0.46", latency: "160ms" },
+  { name: "Slack", action: "search_messages", score: "0.32", latency: "210ms" },
 ];
 
 function RosterMark() {
@@ -193,6 +193,15 @@ function SignalField() {
 
 export default function Home() {
   const [copied, setCopied] = useState(false);
+  const [scanningToolIndex, setScanningToolIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setScanningToolIndex((index) => (index + 1) % tools.length);
+    }, 950);
+
+    return () => window.clearInterval(interval);
+  }, []);
 
   async function copyInstallCommand() {
     await navigator.clipboard?.writeText("npx @roster/cli init");
@@ -265,66 +274,89 @@ export default function Home() {
           <p className="command-note">CLI preview · local by default</p>
         </div>
 
-        <section className="routing-demo" aria-label="How Roster routes tools">
-          <div className="demo-column">
-            <div className="demo-label"><span>1</span> MCP CLIENT REQUEST</div>
-            <div className="request-card">
-              <p>Summarize the latest errors<br />and open the related files.</p>
-              <div className="request-meta">
-                <span>client</span>
+        <section className="routing-showcase" aria-label="Live Roster tool routing showcase">
+          <div className="showcase-header">
+            <span className="showcase-title"><i className="live-dot" /> ROSTER / LIVE ROUTING</span>
+            <span className="showcase-session">SESSION / 0001</span>
+          </div>
+
+          <div className="showcase-grid">
+            <article className="showcase-panel request-panel">
+              <div className="showcase-panel-label"><span>01</span> MCP CLIENT REQUEST</div>
+              <div className="request-orbit" aria-hidden="true">
+                <span />
+              </div>
+              <p className="showcase-request">Summarize the latest errors<br />and open the related files.</p>
+              <div className="showcase-meta">
                 <span>any MCP client</span>
+                <span>received · 00:01</span>
               </div>
-            </div>
-          </div>
+            </article>
 
-          <div className="flow-arrow" aria-hidden="true">→</div>
+            <div className="showcase-link" aria-hidden="true"><span /></div>
 
-          <div className="demo-column engine-column">
-            <div className="demo-label"><span>2</span> ROSTER MATCH ENGINE</div>
-            <div className="engine-card">
-              <div className="engine-row">
-                <span className="engine-key">Intent</span>
-                <span>analyze_error · open_file</span>
+            <article className="showcase-panel router-panel">
+              <div className="showcase-panel-label">
+                <span>02</span> ROSTER MATCH ENGINE
+                <em>SCANNING</em>
               </div>
-              <div className="engine-row">
-                <span className="engine-key">Context</span>
-                <span>project: api-gateway</span>
-              </div>
-              <div className="engine-row">
-                <span className="engine-key">Search</span>
-                <span>BM25 + vector</span>
-              </div>
-              <div className="score-stack">
-                <span className="engine-key">Tool scoring</span>
-                <div className="score-line"><i style={{ width: "92%" }} /><b>0.92</b></div>
-                <div className="score-line"><i style={{ width: "71%" }} /><b>0.71</b></div>
-                <div className="score-line"><i style={{ width: "46%" }} /><b>0.46</b></div>
-                <div className="score-line"><i style={{ width: "32%" }} /><b>0.32</b></div>
-              </div>
-            </div>
-          </div>
 
-          <div className="flow-arrow" aria-hidden="true">→</div>
-
-          <div className="demo-column matched-column">
-            <div className="demo-label"><span>3</span> MATCHED TOOLS</div>
-            <div className="matched-card">
-              {tools.map((tool) => (
-                <div className={`tool-row ${tool.active ? "tool-row-active" : ""}`} key={tool.name}>
-                  <span className={`tool-dot ${tool.active ? "tool-dot-active" : ""}`} />
-                  <span>{tool.name}</span>
-                  <span className="tool-score">{tool.score}</span>
+              <div className="router-intent">
+                <div className="router-core" aria-hidden="true"><span /></div>
+                <div>
+                  <span className="router-kicker">Intent + context</span>
+                  <strong>analyze_error · open_file</strong>
                 </div>
-              ))}
-            </div>
-            <p className="best-match">Best match selected</p>
+              </div>
+
+              <div className="router-facts">
+                <div><span>Search</span><strong>BM25 + vector</strong></div>
+                <div><span>Memory</span><strong>184 local outcomes</strong></div>
+              </div>
+
+              <div className="rank-list">
+                <div className="rank-list-header"><span>TOOL SCORING</span><span>CONFIDENCE</span></div>
+                {tools.map((tool, index) => (
+                  <div className={`rank-row ${index === scanningToolIndex ? "rank-row-scanning" : ""} ${index === 0 ? "rank-row-selected" : ""}`} key={tool.name}>
+                    <span className="rank-index">0{index + 1}</span>
+                    <span className="rank-name">{tool.name}<small>{tool.action}</small></span>
+                    <span className="rank-bar"><i style={{ width: `${Number(tool.score) * 100}%` }} /></span>
+                    <b>{tool.score}</b>
+                  </div>
+                ))}
+              </div>
+
+              <div className="router-status"><span className="status-pulse" /> evaluating the tool surface <i>·</i> local-first</div>
+            </article>
+
+            <div className="showcase-link" aria-hidden="true"><span /></div>
+
+            <article className="showcase-panel result-panel">
+              <div className="showcase-panel-label"><span>03</span> ROUTE SELECTED</div>
+              <div className="selected-tool">
+                <div className="tool-glyph" aria-hidden="true"><span /></div>
+                <div className="selected-tool-copy">
+                  <strong>Filesystem</strong>
+                  <small>open_file</small>
+                </div>
+                <b>0.92</b>
+              </div>
+
+              <div className="route-complete"><span><i /> ROUTE COMPLETE</span><b>{tools[0].latency}</b></div>
+              <p className="result-summary">Best match selected for this request.</p>
+
+              <div className="learning-signal">
+                <div className="signal-bars" aria-hidden="true"><i /><i /><i /><i /><i /></div>
+                <div><strong>Outcome saved locally</strong><small>+0.08 preference signal</small></div>
+              </div>
+            </article>
+          </div>
+
+          <div className="showcase-caption">
+            <span>ONE ROUTER IN FRONT OF EVERY MCP SERVER</span>
+            <span><i className="status-dot" /> Learning locally from tool outcomes</span>
           </div>
         </section>
-
-        <div className="demo-caption">
-          <span>ROSTER / MATCH / 0001</span>
-          <span><i className="status-dot" /> Learning locally from tool outcomes</span>
-        </div>
       </section>
 
       <footer className="site-footer">
