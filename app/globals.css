@@ -78,14 +78,14 @@ button {
     repeating-radial-gradient(ellipse at 68% 52%, transparent 0 30px, rgba(255, 255, 255, 0.05) 31px 33px, transparent 34px 70px),
     radial-gradient(ellipse at 72% 52%, rgba(255, 255, 255, 0.31) 0%, rgba(255, 255, 255, 0.12) 16%, rgba(255, 255, 255, 0.035) 31%, transparent 60%);
   filter: blur(0.5px) contrast(1.25);
-  height: 800px;
+  height: 720px;
   opacity: 0.84;
   pointer-events: none;
   position: absolute;
-  right: -6vw;
-  top: 76px;
+  right: -7vw;
+  top: 68px;
   transform: rotate(-8deg);
-  width: min(76vw, 1180px);
+  width: min(72vw, 1100px);
   z-index: -1;
 }
 
@@ -103,10 +103,10 @@ button {
   border-bottom: 1px solid var(--line-soft);
   display: flex;
   font-family: var(--ui);
-  height: 78px;
+  height: 68px;
   justify-content: space-between;
   min-width: 0;
-  padding: 0 clamp(24px, 4vw, 74px);
+  padding: 0 clamp(20px, 3.2vw, 56px);
   position: relative;
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
@@ -116,8 +116,8 @@ button {
 .brand {
   align-items: center;
   display: inline-flex;
-  gap: 13px;
-  font-size: 20px;
+  gap: 11px;
+  font-size: 18px;
   font-weight: 400;
   letter-spacing: -0.045em;
 }
@@ -141,9 +141,9 @@ button {
 .nav-links {
   align-items: center;
   display: flex;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
-  gap: clamp(20px, 3vw, 42px);
+  gap: clamp(18px, 2.4vw, 32px);
   letter-spacing: -0.035em;
   min-width: 0;
 }
@@ -162,7 +162,7 @@ button {
 .nav-cta {
   border: 1px solid var(--line);
   font-weight: 400;
-  padding: 13px 18px;
+  padding: 11px 15px;
   transition: background 180ms ease, border-color 180ms ease;
 }
 
@@ -181,9 +181,9 @@ button {
 
 .hero {
   margin: 0 auto;
-  max-width: 1520px;
-  min-height: 970px;
-  padding: 102px 7vw 62px;
+  max-width: 1440px;
+  min-height: 850px;
+  padding: 76px clamp(24px, 5vw, 72px) 42px;
   position: relative;
   width: 100%;
   z-index: 1;
@@ -197,6 +197,8 @@ button {
   position: relative;
   text-align: center;
   width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
   z-index: 2;
 }
 
@@ -206,9 +208,9 @@ button {
   border-radius: 999px;
   color: rgba(255, 255, 255, 0.77);
   display: inline-flex;
-  font-size: 12px;
-  gap: 9px;
-  padding: 9px 15px;
+  font-size: 11px;
+  gap: 8px;
+  padding: 8px 13px;
 }
 
 .eyebrow-dot {
@@ -228,35 +230,35 @@ button {
 }
 
 h1 {
-  font-size: clamp(48px, 6vw, 88px);
+  font-size: clamp(46px, 4.5vw, 72px);
   font-weight: 400;
   letter-spacing: -0.105em;
   line-height: 0.96;
-  margin: 34px 0 31px;
-  max-width: 960px;
+  margin: 28px 0 24px;
+  max-width: 840px;
   width: 100%;
 }
 
 .hero-subtitle {
   color: var(--muted);
-  font-size: clamp(13px, 1.25vw, 16px);
-  line-height: 1.75;
+  font-size: clamp(12px, 1.05vw, 14px);
+  line-height: 1.65;
   margin: 0;
 }
 
 .hero-actions {
   display: flex;
-  gap: 14px;
-  margin-top: 35px;
+  gap: 12px;
+  margin-top: 27px;
 }
 
 .button {
   align-items: center;
   display: inline-flex;
-  font-size: 14px;
+  font-size: 13px;
   justify-content: center;
-  min-height: 48px;
-  padding: 0 22px;
+  min-height: 44px;
+  padding: 0 20px;
   transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
 }
 
@@ -291,14 +293,14 @@ h1 {
   background: rgba(0, 0, 0, 0.28);
   border: 1px solid rgba(255, 255, 255, 0.27);
   display: flex;
-  font-size: 14px;
+  font-size: 13px;
   justify-content: space-between;
-  margin-top: 33px;
-  min-width: 338px;
-  padding: 14px 15px 14px 17px;
+  margin-top: 25px;
+  min-width: 320px;
+  padding: 12px 14px 12px 15px;
   text-align: left;
   transition: background 180ms ease, border-color 180ms ease;
-  width: min(100%, 338px);
+  width: min(100%, 320px);
 }
 
 .install-command:hover {
@@ -312,13 +314,13 @@ h1 {
 
 .copy-icon {
   color: rgba(255, 255, 255, 0.72);
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .command-note {
   color: rgba(255, 255, 255, 0.31);
-  font-size: 10px;
-  margin: 9px 0 0;
+  font-size: 9px;
+  margin: 8px 0 0;
 }
 
 .routing-demo {
@@ -328,9 +330,9 @@ h1 {
   display: grid;
   gap: 0;
   grid-template-columns: 1.05fr 20px 1.35fr 20px 1.02fr;
-  margin: 68px auto 0;
-  max-width: 1260px;
-  padding: 23px 28px 25px;
+  margin: 48px auto 0;
+  max-width: 1140px;
+  padding: 18px 21px 20px;
   position: relative;
   text-align: left;
   backdrop-filter: blur(5px);
@@ -342,9 +344,9 @@ h1 {
 
 .demo-label {
   color: rgba(255, 255, 255, 0.5);
-  font-size: 10px;
+  font-size: 9px;
   letter-spacing: 0.02em;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 .demo-label span {
@@ -358,20 +360,20 @@ h1 {
 .matched-card {
   background: rgba(0, 0, 0, 0.38);
   border: 1px solid var(--line-soft);
-  min-height: 215px;
+  min-height: 180px;
 }
 
 .request-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 25px 22px 17px;
+  padding: 20px 18px 14px;
 }
 
 .request-card p {
   color: rgba(255, 255, 255, 0.9);
-  font-size: clamp(14px, 1.35vw, 17px);
-  line-height: 1.55;
+  font-size: clamp(13px, 1.15vw, 15px);
+  line-height: 1.5;
   margin: 0;
 }
 
@@ -379,32 +381,32 @@ h1 {
   border-top: 1px solid var(--line-soft);
   color: var(--faint);
   display: flex;
-  font-size: 10px;
+  font-size: 9px;
   justify-content: space-between;
-  padding-top: 13px;
+  padding-top: 11px;
 }
 
 .flow-arrow {
   align-items: center;
   color: rgba(255, 255, 255, 0.35);
   display: flex;
-  font-size: 22px;
+  font-size: 19px;
   justify-content: center;
-  padding-top: 26px;
+  padding-top: 23px;
 }
 
 .engine-card {
-  padding: 19px 20px;
+  padding: 16px 17px;
 }
 
 .engine-row {
   align-items: baseline;
   color: rgba(255, 255, 255, 0.72);
   display: flex;
-  font-size: 10px;
-  gap: 13px;
+  font-size: 9px;
+  gap: 10px;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 11px;
   white-space: nowrap;
 }
 
@@ -414,47 +416,47 @@ h1 {
 
 .score-stack {
   border-top: 1px solid var(--line-soft);
-  margin-top: 18px;
-  padding-top: 14px;
+  margin-top: 14px;
+  padding-top: 11px;
 }
 
 .score-stack > .engine-key {
   display: block;
-  font-size: 10px;
-  margin-bottom: 12px;
+  font-size: 9px;
+  margin-bottom: 9px;
 }
 
 .score-line {
   align-items: center;
   display: flex;
-  gap: 11px;
-  margin: 9px 0;
+  gap: 9px;
+  margin: 7px 0;
 }
 
 .score-line i {
   background: rgba(255, 255, 255, 0.78);
   display: block;
-  height: 5px;
+  height: 4px;
 }
 
 .score-line b {
   color: rgba(255, 255, 255, 0.63);
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 400;
 }
 
 .matched-card {
-  padding: 13px 13px 11px;
+  padding: 10px 10px 9px;
 }
 
 .tool-row {
   align-items: center;
   color: rgba(255, 255, 255, 0.59);
   display: flex;
-  font-size: 12px;
-  gap: 10px;
-  min-height: 39px;
-  padding: 0 10px;
+  font-size: 11px;
+  gap: 9px;
+  min-height: 34px;
+  padding: 0 9px;
 }
 
 .tool-row-active {
@@ -481,7 +483,7 @@ h1 {
 .best-match {
   color: rgba(255, 255, 255, 0.3);
   font-size: 9px;
-  margin: 12px 0 0;
+  margin: 9px 0 0;
   text-align: right;
 }
 
@@ -491,7 +493,7 @@ h1 {
   font-size: 9px;
   justify-content: space-between;
   margin: 13px auto 0;
-  max-width: 1260px;
+  max-width: 1140px;
   padding: 0 2px;
 }
 
@@ -510,7 +512,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin: 0 auto;
-  max-width: 1380px;
+  max-width: 1240px;
   position: relative;
   z-index: 2;
 }
@@ -518,9 +520,9 @@ h1 {
 .feature-cell {
   align-items: flex-start;
   display: flex;
-  gap: 20px;
-  min-height: 145px;
-  padding: 32px 34px;
+  gap: 16px;
+  min-height: 120px;
+  padding: 26px 28px;
 }
 
 .feature-cell + .feature-cell {
@@ -534,14 +536,14 @@ h1 {
 }
 
 .feature-cell h2 {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
-  margin: 0 0 11px;
+  margin: 0 0 9px;
 }
 
 .feature-cell p {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1.6;
   margin: 0;
   max-width: 260px;
@@ -555,15 +557,15 @@ h1 {
   gap: 30px;
   justify-content: space-between;
   margin: 0 auto;
-  max-width: 1380px;
-  padding: 34px 34px 42px;
+  max-width: 1240px;
+  padding: 28px 28px 34px;
   position: relative;
   z-index: 2;
 }
 
 .site-footer .brand {
   color: var(--foreground);
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .site-footer > span {
@@ -582,6 +584,7 @@ h1 {
 
 @media (max-width: 900px) {
   .hero {
+    min-height: auto;
     padding-left: 24px;
     padding-right: 24px;
   }
@@ -624,12 +627,13 @@ h1 {
   }
 
   .brand {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .nav-links {
     gap: 14px;
-    font-size: 11px;
+    flex: 0 0 auto;
+    font-size: 10px;
   }
 
   .nav-links > a:not(.nav-cta) {
@@ -637,23 +641,26 @@ h1 {
   }
 
   .nav-cta {
-    padding: 10px 12px;
+    padding: 9px 10px;
   }
 
   .hero {
     min-height: auto;
-    padding: 76px 20px 42px;
+    padding: 64px 20px 38px;
   }
 
   h1 {
-    font-size: clamp(42px, 12vw, 64px);
-    letter-spacing: -0.11em;
-    margin-top: 29px;
-    overflow-wrap: break-word;
+    font-size: clamp(32px, 10vw, 48px);
+    letter-spacing: -0.09em;
+    margin-top: 25px;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .hero-subtitle {
-    font-size: 12px;
+  font-size: 12px;
+    max-width: 330px;
   }
 
   .desktop-break {
@@ -671,7 +678,7 @@ h1 {
   }
 
   .routing-demo {
-    margin-top: 55px;
+    margin-top: 44px;
     padding: 18px;
   }
 
