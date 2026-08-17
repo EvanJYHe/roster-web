@@ -73,29 +73,65 @@ button {
   z-index: 20;
 }
 
-.tunnel-art {
+.signal-field {
   background:
-    repeating-radial-gradient(ellipse at 68% 52%, transparent 0 30px, rgba(255, 255, 255, 0.05) 31px 33px, transparent 34px 70px),
-    radial-gradient(ellipse at 72% 52%, rgba(255, 255, 255, 0.31) 0%, rgba(255, 255, 255, 0.12) 16%, rgba(255, 255, 255, 0.035) 31%, transparent 60%);
-  filter: blur(0.5px) contrast(1.25);
-  height: 720px;
-  opacity: 0.84;
+    radial-gradient(ellipse at 0% 50%, rgba(54, 110, 116, 0.22), transparent 38%),
+    radial-gradient(ellipse at 100% 50%, rgba(54, 110, 116, 0.22), transparent 38%);
+  height: 760px;
+  inset: 68px 0 auto;
+  opacity: 0.9;
+  overflow: hidden;
   pointer-events: none;
   position: absolute;
-  right: -7vw;
-  top: 68px;
-  transform: rotate(-8deg);
-  width: min(72vw, 1100px);
+  width: 100%;
   z-index: -1;
 }
 
-.tunnel-art::after {
-  background: radial-gradient(ellipse at 68% 52%, rgba(255, 255, 255, 0.16), transparent 35%);
-  border-radius: 50%;
+.signal-field::before,
+.signal-field::after {
+  background:
+    repeating-linear-gradient(112deg, transparent 0 42px, rgba(20, 74, 105, 0.10) 43px 51px, rgba(23, 119, 94, 0.08) 52px 58px, transparent 59px 126px),
+    radial-gradient(ellipse at 40% 50%, rgba(37, 103, 111, 0.15), transparent 65%);
   content: "";
-  filter: blur(28px);
-  inset: 18% 8% 12% 20%;
+  filter: saturate(1.2) contrast(1.12);
+  height: 100%;
   position: absolute;
+  top: 0;
+  width: 34%;
+  animation: signal-shift 14s ease-in-out infinite alternate;
+}
+
+.signal-field::before {
+  left: -3%;
+}
+
+.signal-field::after {
+  right: -3%;
+  transform: scaleX(-1);
+}
+
+.signal-field canvas {
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  width: 100%;
+}
+
+@keyframes signal-shift {
+  from {
+    background-position: -3% center, center;
+  }
+
+  to {
+    background-position: 3% center, center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal-field::before,
+  .signal-field::after {
+    animation: none;
+  }
 }
 
 .site-nav {
@@ -672,10 +708,8 @@ h1 {
     order: 3;
   }
 
-  .tunnel-art {
+  .signal-field {
     height: 520px;
-    right: -45vw;
-    top: 120px;
-    width: 130vw;
+    inset: 120px 0 auto;
   }
 }
