@@ -163,30 +163,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="feature-strip" aria-label="Roster capabilities">
-        <div className="feature-cell">
-          <span className="feature-number">01</span>
-          <div>
-            <h2>Search when needed</h2>
-            <p>Keep your agent focused while Roster searches the full MCP surface.</p>
-          </div>
-        </div>
-        <div className="feature-cell">
-          <span className="feature-number">02</span>
-          <div>
-            <h2>Learn what works</h2>
-            <p>Local outcome signals make future tool selection more reliable.</p>
-          </div>
-        </div>
-        <div className="feature-cell">
-          <span className="feature-number">03</span>
-          <div>
-            <h2>Works everywhere</h2>
-            <p>One local router for Claude, Cursor, Codex, OpenClaw, and more.</p>
-          </div>
-        </div>
-      </section>
-
       <footer className="site-footer">
         <a className="brand" href="#top">
           <RosterMark />
