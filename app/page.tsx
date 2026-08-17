@@ -80,38 +80,59 @@ function SignalField() {
         return fract(point.x * point.y);
       }
 
-      float softRing(float distanceToCenter, float radius, float width) {
-        return exp(-pow((distanceToCenter - radius) / width, 2.0));
+      float noise21(vec2 point) {
+        vec2 cell = floor(point);
+        vec2 local = fract(point);
+        local = local * local * (3.0 - 2.0 * local);
+
+        float bottom = mix(hash21(cell), hash21(cell + vec2(1.0, 0.0)), local.x);
+        float top = mix(hash21(cell + vec2(0.0, 1.0)), hash21(cell + vec2(1.0, 1.0)), local.x);
+        return mix(bottom, top, local.y);
+      }
+
+      float cloud(vec2 point) {
+        float value = 0.0;
+        float weight = 0.5;
+
+        for (int index = 0; index < 5; index++) {
+          value += weight * noise21(point);
+          point = point * 2.03 + vec2(7.1, 3.7);
+          weight *= 0.5;
+        }
+
+        return value;
+      }
+
+      float softBlob(vec2 point, vec2 center, vec2 scale) {
+        vec2 delta = (point - center) / scale;
+        return exp(-dot(delta, delta) * 1.35);
       }
 
       void main() {
         vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-        float verticalFade = smoothstep(0.02, 0.16, uv.y) * smoothstep(0.98, 0.84, uv.y);
-        float leftSide = 1.0 - smoothstep(0.03, 0.40, uv.x);
-        float rightSide = 1.0 - smoothstep(0.03, 0.40, 1.0 - uv.x);
-        float side = pow(max(leftSide, rightSide), 2.35);
+        float verticalFade = smoothstep(0.02, 0.18, uv.y) * smoothstep(0.98, 0.78, uv.y);
+        float sideDistance = abs(uv.x - 0.5) * 2.0;
+        float sideMask = pow(smoothstep(0.08, 0.72, sideDistance), 1.35);
+        vec2 point = vec2((uv.x - 0.5) * 1.65, uv.y);
+        vec2 drift = vec2(u_time * 0.018, -u_time * 0.012);
 
-        vec2 leftPoint = (uv - vec2(-0.08, 0.52)) * vec2(0.62, 1.16);
-        vec2 rightPoint = (uv - vec2(1.08, 0.48)) * vec2(0.62, 1.16);
-        float leftRadius = length(leftPoint);
-        float rightRadius = length(rightPoint);
-        float rings = 0.0;
-
-        for (int index = 0; index < 8; index++) {
-          float layer = float(index);
-          float radius = 0.075 + layer * 0.085 + 0.018 * sin(u_time * 0.23 + layer * 0.7);
-          float width = 0.004 + layer * 0.0005;
-          rings += softRing(leftRadius, radius, width);
-          rings += softRing(rightRadius, radius, width);
-        }
-
-        float leftHaze = exp(-pow(leftRadius / 0.66, 2.0));
-        float rightHaze = exp(-pow(rightRadius / 0.66, 2.0));
-        float grain = 0.92 + 0.08 * hash21(floor(uv * 38.0) + vec2(u_time * 0.03));
-        vec3 cool = vec3(0.035, 0.12, 0.19);
-        vec3 signal = vec3(0.10, 0.34, 0.30);
-        vec3 color = mix(cool, signal, 0.45 + 0.18 * sin(u_time * 0.12 + uv.y * 3.0));
-        float alpha = (rings * 0.052 + (leftHaze + rightHaze) * 0.014) * pow(side, 1.35) * verticalFade * grain;
+        float slowCloud = cloud(point * 2.3 + drift);
+        float fineCloud = cloud(point * 4.8 - drift * 1.7);
+        float texture = mix(slowCloud, fineCloud, 0.26);
+        float leftBlob = softBlob(point, vec2(-0.64, 0.38), vec2(0.72, 0.5));
+        float rightBlob = softBlob(point, vec2(0.64, 0.42), vec2(0.72, 0.52));
+        float upperLeft = softBlob(point, vec2(-0.48, 0.12), vec2(0.5, 0.32));
+        float upperRight = softBlob(point, vec2(0.48, 0.16), vec2(0.5, 0.34));
+        float haze = (leftBlob + rightBlob) * 0.72 + (upperLeft + upperRight) * 0.44;
+        float shapedTexture = smoothstep(0.34, 0.74, texture);
+        float signal = haze * (0.35 + shapedTexture * 0.65) * sideMask * verticalFade;
+        float balance = smoothstep(-0.5, 0.5, point.x);
+        vec3 leftColor = vec3(0.035, 0.19, 0.18);
+        vec3 rightColor = vec3(0.035, 0.12, 0.22);
+        vec3 color = mix(leftColor, rightColor, balance);
+        color = mix(color, vec3(0.08, 0.27, 0.22), shapedTexture * 0.22);
+        float grain = 0.94 + 0.06 * hash21(floor(uv * 42.0) + vec2(u_time * 0.02));
+        float alpha = signal * 0.36 * grain;
 
         gl_FragColor = vec4(color * alpha, alpha);
       }
