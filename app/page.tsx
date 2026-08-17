@@ -246,14 +246,6 @@ export default function Home() {
 
       <section className="hero" id="top">
         <div className="hero-copy">
-          <div className="eyebrow">
-            <span className="eyebrow-tag">Latest update</span>
-            <span className="eyebrow-message">
-              Beta v0.1 Now Live
-              <span className="eyebrow-arrow" aria-hidden="true">↗</span>
-            </span>
-          </div>
-
           <h1>
             The self-learning
             <br />
@@ -282,7 +274,6 @@ export default function Home() {
             </span>
             <span className="sr-only">{copied ? "Copied" : "Copy command"}</span>
           </button>
-          <p className="command-note">CLI preview · local by default</p>
         </div>
 
         <section className="routing-showcase" aria-label="Live Roster tool routing showcase">
