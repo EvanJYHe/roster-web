@@ -275,86 +275,127 @@ export default function Home() {
         </div>
 
         <section className="routing-showcase" aria-label="Live Roster tool routing showcase">
+          <span className="border-light" aria-hidden="true" />
           <div className="showcase-header">
             <span className="showcase-title"><i className="live-dot" /> ROSTER / LIVE ROUTING</span>
-            <span className="showcase-session">SESSION / 0001</span>
+            <span className="showcase-session">LOCAL-FIRST MCP ROUTER <i /> ACTIVE</span>
           </div>
 
           <div className="showcase-grid">
-            <article className="showcase-panel request-panel">
-              <div className="showcase-panel-label"><span>01</span> MCP CLIENT REQUEST</div>
-              <div className="request-orbit" aria-hidden="true">
-                <span />
-              </div>
-              <p className="showcase-request">Summarize the latest errors<br />and open the related files.</p>
-              <div className="showcase-meta">
-                <span>any MCP client</span>
-                <span>received · 00:01</span>
-              </div>
-            </article>
-
-            <div className="showcase-link" aria-hidden="true"><span /></div>
-
-            <article className="showcase-panel router-panel">
-              <div className="showcase-panel-label">
-                <span>02</span> ROSTER MATCH ENGINE
-                <em>SCANNING</em>
+            <aside className="showcase-panel search-panel">
+              <div className="showcase-panel-label"><span>01</span> ROSTER_SEARCH_TOOLS</div>
+              <div className="tool-search-field">
+                <span className="search-icon" aria-hidden="true">⌕</span>
+                <span>summarize errors and open files</span>
+                <small>4 found</small>
               </div>
 
-              <div className="router-intent">
-                <div className="router-core" aria-hidden="true"><span /></div>
-                <div>
-                  <span className="router-kicker">Intent + context</span>
-                  <strong>analyze_error · open_file</strong>
-                </div>
-              </div>
-
-              <div className="router-facts">
-                <div><span>Search</span><strong>BM25 + vector</strong></div>
-                <div><span>Memory</span><strong>184 local outcomes</strong></div>
-              </div>
-
-              <div className="rank-list">
-                <div className="rank-list-header"><span>TOOL SCORING</span><span>CONFIDENCE</span></div>
+              <div className="search-results">
                 {tools.map((tool, index) => (
-                  <div className={`rank-row ${index === scanningToolIndex ? "rank-row-scanning" : ""} ${index === 0 ? "rank-row-selected" : ""}`} key={tool.name}>
-                    <span className="rank-index">0{index + 1}</span>
-                    <span className="rank-name">{tool.name}<small>{tool.action}</small></span>
-                    <span className="rank-bar"><i style={{ width: `${Number(tool.score) * 100}%` }} /></span>
-                    <b>{tool.score}</b>
+                  <div className={`search-result ${index === scanningToolIndex ? "search-result-scanning" : ""} ${index === 0 ? "search-result-best" : ""}`} key={tool.name}>
+                    <span className="result-glyph" aria-hidden="true"><i /></span>
+                    <span className="search-result-copy">
+                      <strong>{tool.name.toUpperCase().replace(" ", "_")}_{tool.action.toUpperCase()}</strong>
+                      <small>{tool.action} · {tool.latency} response</small>
+                    </span>
+                    <em>{index === 0 ? "BEST" : "MATCH"}</em>
                   </div>
                 ))}
               </div>
 
-              <div className="router-status"><span className="status-pulse" /> evaluating the tool surface <i>·</i> local-first</div>
-            </article>
+              <div className="side-plan">
+                <div className="side-section-label">ROUTING PLAN</div>
+                <div className="plan-step"><span>01</span><strong>Read request intent</strong></div>
+                <div className="plan-step"><span>02</span><strong>Search the tool surface</strong></div>
+                <div className="plan-step"><span>03</span><strong>Return the best match</strong></div>
+              </div>
+            </aside>
 
             <div className="showcase-link" aria-hidden="true"><span /></div>
 
-            <article className="showcase-panel result-panel">
-              <div className="showcase-panel-label"><span>03</span> ROUTE SELECTED</div>
-              <div className="selected-tool">
-                <div className="tool-glyph" aria-hidden="true"><span /></div>
-                <div className="selected-tool-copy">
-                  <strong>Filesystem</strong>
-                  <small>open_file</small>
+            <main className="showcase-panel router-panel">
+              <div className="router-surface">
+                <div className="router-surface-header">
+                  <div className="router-identity">
+                    <div className="router-core" aria-hidden="true"><span /></div>
+                    <div><strong>Roster Router</strong><small>self-learning MCP layer</small></div>
+                  </div>
+                  <span className="router-client"><i /> any MCP client</span>
                 </div>
-                <b>0.92</b>
+
+                <div className="router-request-bubble">
+                  <span>CLIENT REQUEST</span>
+                  <p>Summarize the latest errors and open the related files.</p>
+                </div>
+
+                <div className="router-flow" aria-hidden="true">
+                  <div className="flow-node flow-node-active"><i /> intent</div>
+                  <span />
+                  <div className="flow-node"><i /> search</div>
+                  <span />
+                  <div className="flow-node"><i /> outcome</div>
+                </div>
+
+                <div className="router-query-header">
+                  <span>ROSTER MATCH ENGINE</span>
+                  <em><i /> SCANNING TOOL SURFACE</em>
+                </div>
+
+                <div className="router-facts">
+                  <div><span>Intent</span><strong>analyze_error · open_file</strong></div>
+                  <div><span>Context</span><strong>project: api-gateway</strong></div>
+                  <div><span>Search</span><strong>BM25 + vector</strong></div>
+                  <div><span>Memory</span><strong>184 local outcomes</strong></div>
+                </div>
+
+                <div className="rank-list">
+                  <div className="rank-list-header"><span>TOOL SCORING</span><span>CONFIDENCE</span></div>
+                  {tools.map((tool, index) => (
+                    <div className={`rank-row ${index === scanningToolIndex ? "rank-row-scanning" : ""} ${index === 0 ? "rank-row-selected" : ""}`} key={tool.name}>
+                      <span className="rank-index">0{index + 1}</span>
+                      <span className="rank-name">{tool.name}<small>{tool.action}</small></span>
+                      <span className="rank-bar"><i style={{ width: `${Number(tool.score) * 100}%` }} /></span>
+                      <b>{tool.score}</b>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="router-composer"><span>Ask Roster to find the right tool...</span><small>BM25 + vector</small><b>↑</b></div>
+              </div>
+            </main>
+
+            <div className="showcase-link" aria-hidden="true"><span /></div>
+
+            <aside className="showcase-panel outcome-panel">
+              <div className="showcase-panel-label"><span>03</span> ROSTER_OUTCOME_MEMORY</div>
+              <div className="memory-summary">
+                <strong>184</strong>
+                <span>local outcome signals</span>
+                <em>+12 this session</em>
               </div>
 
-              <div className="route-complete"><span><i /> ROUTE COMPLETE</span><b>{tools[0].latency}</b></div>
-              <p className="result-summary">Best match selected for this request.</p>
+              <div className="memory-list">
+                <div><span className="memory-tool"><i /> Filesystem</span><b>+0.08</b></div>
+                <div><span className="memory-tool"><i /> Git</span><b>+0.03</b></div>
+                <div><span className="memory-tool"><i /> Web Search</span><b>-0.01</b></div>
+              </div>
+
+              <div className="execution-block">
+                <div className="side-section-label">ROUTE_EXECUTION <span>SESSION / 0001</span></div>
+                <div className="execution-tool"><span className="tool-glyph" aria-hidden="true"><i /></span><strong>Filesystem<br /><small>open_file</small></strong><b>18ms</b></div>
+                <div className="execution-result"><i /> 200 OK · result returned</div>
+              </div>
 
               <div className="learning-signal">
                 <div className="signal-bars" aria-hidden="true"><i /><i /><i /><i /><i /></div>
-                <div><strong>Outcome saved locally</strong><small>+0.08 preference signal</small></div>
+                <div><strong>Learning locally from tool outcomes</strong><small>next route improves automatically</small></div>
               </div>
-            </article>
+            </aside>
           </div>
 
           <div className="showcase-caption">
             <span>ONE ROUTER IN FRONT OF EVERY MCP SERVER</span>
-            <span><i className="status-dot" /> Learning locally from tool outcomes</span>
+            <span><i className="status-dot" /> SELF-HEALING · SELF-LEARNING</span>
           </div>
         </section>
       </section>
