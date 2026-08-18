@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 function SignalField() {
   const routePaths = [
     "M -70 574 C 70 548 150 615 285 584 S 510 540 655 580 S 520 665 335 650 S 90 710 -55 690",
@@ -29,6 +31,9 @@ function SignalField() {
     [575, 520, 360],
     [700, 518, 410],
   ];
+
+  const floorRows = [548, 568, 592, 621, 656, 699, 750, 811, 878];
+  const floorRays = [-420, -280, -140, 0, 140, 280, 420, 560, 700, 800, 900, 1040, 1180, 1320, 1460, 1600, 1740, 1880, 2020];
 
   return (
     <div className="signal-field" aria-hidden="true">
@@ -62,6 +67,11 @@ function SignalField() {
         </defs>
 
         <ellipse className="field-horizon-glow" cx="800" cy="510" rx="720" ry="190" fill="url(#signal-horizon-glow)" />
+
+        <g className="field-grid" mask="url(#signal-vertical-mask)">
+          {floorRows.map((y) => <path key={`floor-row-${y}`} d={`M -80 ${y} H 1680`} />)}
+          {floorRays.map((x) => <path key={`floor-ray-${x}`} d={`M 800 510 L ${x} 920`} />)}
+        </g>
 
         <g className="field-towers" mask="url(#signal-vertical-mask)">
           <g>
@@ -106,9 +116,14 @@ function SignalField() {
 
 function RosterMark() {
   return (
-    <span className="roster-mark" aria-hidden="true">
-      {Array.from({ length: 9 }, (_, index) => <i key={index} />)}
-    </span>
+    <Image
+      className="roster-mark"
+      src="/roster-mark.png"
+      alt=""
+      width={395}
+      height={512}
+      priority
+    />
   );
 }
 
@@ -132,7 +147,7 @@ export default function Home() {
       <header className="site-nav">
         <a className="brand" href="#top" aria-label="Roster home">
           <RosterMark />
-          <span>Roster</span>
+          <span className="brand-name">roster</span>
         </a>
 
         <nav className="nav-links" aria-label="Primary navigation">

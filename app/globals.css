@@ -168,10 +168,10 @@ a {
 .site-nav {
   align-items: center;
   display: flex;
-  height: 88px;
+  height: 78px;
   justify-content: space-between;
   left: 0;
-  padding: 16px 46px;
+  padding: 12px 40px;
   position: absolute;
   right: 0;
   top: 0;
@@ -181,34 +181,32 @@ a {
 .brand {
   align-items: center;
   display: inline-flex;
-  gap: 15px;
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: -0.055em;
+  gap: 11px;
+  font-family: var(--ui-font);
+  font-size: 23px;
+  font-weight: 300;
+  letter-spacing: -0.075em;
   line-height: 1;
 }
 
 .roster-mark {
-  display: grid;
-  gap: 4px;
-  grid-template-columns: repeat(3, 4px);
-  height: 20px;
-  width: 20px;
+  display: block;
+  flex: 0 0 auto;
+  height: 31px;
+  object-fit: contain;
+  width: 24px;
 }
 
-.roster-mark i {
-  background: currentColor;
-  border-radius: 50%;
-  display: block;
-  height: 4px;
-  width: 4px;
+.brand-name {
+  display: inline-block;
+  transform: translateY(-1px);
 }
 
 .nav-links {
   align-items: center;
   display: flex;
-  gap: 34px;
-  font-size: 18px;
+  gap: 30px;
+  font-size: 17px;
   letter-spacing: -0.035em;
 }
 
@@ -225,12 +223,11 @@ a {
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.4);
   display: inline-flex;
-  height: 56px;
-  justify-content: space-between;
+  gap: 22px;
+  height: 50px;
   margin-left: 0;
-  padding: 0 22px;
+  padding: 0 18px;
   transition: background 180ms ease, border-color 180ms ease;
-  width: 177px;
 }
 
 .nav-button:hover {
@@ -329,37 +326,36 @@ a {
 
 .hero-actions {
   display: flex;
-  gap: 18px;
+  gap: 14px;
   margin-top: 30px;
 }
 
 .hero-button {
   align-items: center;
   display: inline-flex;
-  font-size: 17px;
-  gap: 14px;
-  height: 58px;
+  font-size: 16px;
+  gap: 12px;
+  height: 46px;
   justify-content: center;
   letter-spacing: -0.035em;
+  padding: 0 23px;
   transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .hero-button-primary {
   background: #f1f1f1;
-  box-shadow: 0 0 28px rgba(255, 255, 255, 0.11), 0 12px 22px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 22px rgba(255, 255, 255, 0.09), 0 8px 16px rgba(0, 0, 0, 0.24);
   color: #0c0c0c;
-  width: 184px;
 }
 
 .hero-button-primary:hover {
   background: #ffffff;
-  box-shadow: 0 0 36px rgba(255, 255, 255, 0.18), 0 12px 22px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.15), 0 8px 16px rgba(0, 0, 0, 0.24);
 }
 
 .hero-button-secondary {
   border: 1px solid rgba(255, 255, 255, 0.38);
   color: rgba(255, 255, 255, 0.88);
-  width: 174px;
 }
 
 .hero-button-secondary:hover {
@@ -369,12 +365,12 @@ a {
 
 @media (max-width: 900px) {
   .site-nav {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .nav-links {
-    gap: 16px;
+    gap: 14px;
   }
 
   .nav-links > a:not(.nav-button) {
@@ -382,8 +378,9 @@ a {
   }
 
   .nav-button {
-    height: 48px;
-    width: auto;
+    height: 46px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .hero h1 {
@@ -393,25 +390,18 @@ a {
 
 @media (max-width: 620px) {
   .site-nav {
-    height: 76px;
-    padding: 14px 18px;
+    height: 70px;
+    padding: 12px 16px;
   }
 
   .brand {
     font-size: 21px;
-    gap: 10px;
+    gap: 9px;
   }
 
   .roster-mark {
-    gap: 3px;
-    grid-template-columns: repeat(3, 4px);
-    height: 18px;
-    width: 18px;
-  }
-
-  .roster-mark i {
-    height: 4px;
-    width: 4px;
+    height: 29px;
+    width: 22px;
   }
 
   .nav-links {
@@ -419,8 +409,8 @@ a {
   }
 
   .nav-button {
-    gap: 10px;
-    height: 44px;
+    gap: 8px;
+    height: 42px;
     padding: 0 12px;
   }
 
@@ -510,8 +500,4 @@ a {
     transition: none;
   }
 
-  .signal-art {
-    animation: none;
-    opacity: 0.7;
-  }
 }
