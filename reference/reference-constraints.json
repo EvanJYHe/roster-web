@@ -1,0 +1,292 @@
+{
+  "source": {
+    "path": "/Users/evanhe/.codex/attachments/12f23fd3-04db-4eea-8415-95a2fcb2c367/image-1.png",
+    "width": 1672,
+    "height": 941,
+    "coordinateOrigin": "top-left",
+    "pixelBounds": "inclusive",
+    "rowTraceMethod": "vertical luminance edge trace, fitted over outer-wall distance u=0..350",
+    "logoBBoxMethod": "luminance >=45, grouped with a 2px neighborhood; low-contrast tail marks are marked approximate"
+  },
+  "viewport": {
+    "width": 1672,
+    "height": 941,
+    "aspectRatio": 1.776833,
+    "background": "#000000"
+  },
+  "corridor": {
+    "outerEdges": {
+      "leftX": 0,
+      "rightX": 1671,
+      "innerScreenX": 836,
+      "horizonYRange": [416, 436],
+      "note": "The line extensions collapse into a dark, occluded horizon zone; inner endpoints are geometric extrapolations, not bright visible pixels."
+    },
+    "left": {
+      "outerX": 0,
+      "innerX": 836,
+      "boundaries": [
+        { "id": "L0", "outerY": 100.0, "slope": 0.379, "yAt300": 213.7, "yAt600": 327.4, "yAt835": 416.5, "confidence": "low: top fade" },
+        { "id": "L1", "outerY": 184.57, "slope": 0.27863, "yAt300": 268.16, "yAt600": 351.75, "yAt835": 417.23 },
+        { "id": "L2", "outerY": 200.744, "slope": 0.25727, "yAt300": 277.93, "yAt600": 355.11, "yAt835": 415.56 },
+        { "id": "L3", "outerY": 279.307, "slope": 0.16471, "yAt300": 328.72, "yAt600": 378.13, "yAt835": 416.84 },
+        { "id": "L4", "outerY": 297.533, "slope": 0.14170, "yAt300": 340.04, "yAt600": 382.55, "yAt835": 415.85 },
+        { "id": "L5", "outerY": 377.398, "slope": 0.05532, "yAt300": 393.99, "yAt600": 410.59, "yAt835": 423.59 },
+        { "id": "L6", "outerY": 400.223, "slope": 0.02816, "yAt300": 408.67, "yAt600": 417.12, "yAt835": 423.73 },
+        { "id": "L7", "outerY": 489.699, "slope": -0.07533, "yAt300": 467.10, "yAt600": 444.50, "yAt835": 426.80 },
+        { "id": "L8", "outerY": 514.735, "slope": -0.10400, "yAt300": 483.54, "yAt600": 452.34, "yAt835": 427.90 },
+        { "id": "L9", "outerY": 604.111, "slope": -0.20392, "yAt300": 542.94, "yAt600": 481.76, "yAt835": 433.84 },
+        { "id": "L10", "outerY": 636.968, "slope": -0.24438, "yAt300": 563.65, "yAt600": 490.34, "yAt835": 432.91 },
+        { "id": "L11", "outerY": 742.483, "slope": -0.35713, "yAt300": 635.34, "yAt600": 528.21, "yAt835": 444.28 },
+        { "id": "L12", "outerY": 788.064, "slope": -0.41000, "yAt300": 665.06, "yAt600": 542.06, "yAt835": 445.71 },
+        { "id": "L13", "outerY": 901.884, "slope": -0.53318, "yAt300": 742.93, "yAt600": 582.0, "yAt835": 456.68 },
+        { "id": "L14", "outerY": 947.856, "slope": -0.58377, "yAt300": 772.73, "yAt600": 597.59, "yAt835": 460.41 }
+      ]
+    },
+    "right": {
+      "outerX": 1671,
+      "innerX": 836,
+      "distanceVariable": "u=1671-x",
+      "boundaries": [
+        { "id": "R0", "outerY": 100.0, "slope": 0.390, "yAt300": 217.0, "yAt600": 334.0, "yAt835": 425.65, "confidence": "low: top fade" },
+        { "id": "R1", "outerY": 188.675, "slope": 0.28840, "yAt300": 275.20, "yAt600": 361.72, "yAt835": 429.49 },
+        { "id": "R2", "outerY": 204.480, "slope": 0.26645, "yAt300": 284.42, "yAt600": 364.35, "yAt835": 426.96 },
+        { "id": "R3", "outerY": 279.317, "slope": 0.17899, "yAt300": 333.01, "yAt600": 386.71, "yAt835": 428.78 },
+        { "id": "R4", "outerY": 297.066, "slope": 0.15529, "yAt300": 343.65, "yAt600": 390.24, "yAt835": 426.73 },
+        { "id": "R5", "outerY": 378.519, "slope": 0.05852, "yAt300": 396.08, "yAt600": 413.63, "yAt835": 427.39 },
+        { "id": "R6", "outerY": 401.366, "slope": 0.02813, "yAt300": 409.81, "yAt600": 418.24, "yAt835": 424.85 },
+        { "id": "R7", "outerY": 491.304, "slope": -0.08162, "yAt300": 466.82, "yAt600": 442.33, "yAt835": 423.15 },
+        { "id": "R8", "outerY": 515.567, "slope": -0.11026, "yAt300": 482.49, "yAt600": 449.41, "yAt835": 423.50 },
+        { "id": "R9", "outerY": 602.391, "slope": -0.21193, "yAt300": 538.81, "yAt600": 475.23, "yAt835": 425.43 },
+        { "id": "R10", "outerY": 632.693, "slope": -0.24814, "yAt300": 558.25, "yAt600": 483.81, "yAt835": 425.49 },
+        { "id": "R11", "outerY": 736.017, "slope": -0.36037, "yAt300": 627.91, "yAt600": 519.80, "yAt835": 435.11 },
+        { "id": "R12", "outerY": 779.316, "slope": -0.41496, "yAt300": 654.83, "yAt600": 530.34, "yAt835": 432.82 },
+        { "id": "R13", "outerY": 889.817, "slope": -0.54635, "yAt300": 725.91, "yAt600": 562.01, "yAt835": 433.61 },
+        { "id": "R14", "outerY": 935.593, "slope": -0.59927, "yAt300": 755.81, "yAt600": 576.03, "yAt835": 435.20 }
+      ]
+    },
+    "rows": [
+      {
+        "row": 1,
+        "leftBoundaries": ["L0", "L1"],
+        "rightBoundaries": ["R0", "R1"],
+        "leftHeightAtOuterU300U600Inner": [84.6, 54.5, 24.3, 0.8],
+        "rightHeightAtOuterU300U600Inner": [88.7, 58.2, 27.7, 3.8],
+        "leftCorners": { "outerTop": [0, 100.0], "innerTop": [836, 416.5], "innerBottom": [836, 417.2], "outerBottom": [0, 184.57] },
+        "rightCorners": { "innerTop": [836, 425.65], "outerTop": [1671, 100.0], "outerBottom": [1671, 188.675], "innerBottom": [836, 429.49] },
+        "gapAfterAtOuterU300U600": { "left": [16.2, 9.8, 3.4], "right": [15.8, 9.2, 2.6] }
+      },
+      {
+        "row": 2,
+        "leftBoundaries": ["L2", "L3"],
+        "rightBoundaries": ["R2", "R3"],
+        "leftHeightAtOuterU300U600Inner": [78.6, 50.8, 23.0, 1.3],
+        "rightHeightAtOuterU300U600Inner": [74.8, 48.6, 22.4, 1.8],
+        "leftCorners": { "outerTop": [0, 200.744], "innerTop": [836, 415.56], "innerBottom": [836, 416.84], "outerBottom": [0, 279.307] },
+        "rightCorners": { "innerTop": [836, 426.96], "outerTop": [1671, 204.48], "outerBottom": [1671, 279.317], "innerBottom": [836, 428.78] },
+        "gapAfterAtOuterU300U600": { "left": [18.2, 11.3, 4.4], "right": [17.7, 10.6, 3.5] }
+      },
+      {
+        "row": 3,
+        "leftBoundaries": ["L4", "L5"],
+        "rightBoundaries": ["R4", "R5"],
+        "leftHeightAtOuterU300U600Inner": [79.9, 54.0, 28.0, 7.7],
+        "rightHeightAtOuterU300U600Inner": [81.5, 52.4, 23.4, 0.7],
+        "leftCorners": { "outerTop": [0, 297.533], "innerTop": [836, 415.85], "innerBottom": [836, 423.59], "outerBottom": [0, 377.398] },
+        "rightCorners": { "innerTop": [836, 426.73], "outerTop": [1671, 297.066], "outerBottom": [1671, 378.519], "innerBottom": [836, 427.39] },
+        "gapAfterAtOuterU300U600": { "left": [22.8, 14.7, 6.5], "right": [22.8, 13.7, 4.6] }
+      },
+      {
+        "row": 4,
+        "leftBoundaries": ["L6", "L7"],
+        "rightBoundaries": ["R6", "R7"],
+        "leftHeightAtOuterU300U600Inner": [89.5, 58.4, 27.4, 3.1],
+        "rightHeightAtOuterU300U600Inner": [89.9, 57.0, 24.1, -1.7],
+        "leftCorners": { "outerTop": [0, 400.223], "innerTop": [836, 423.73], "innerBottom": [836, 426.80], "outerBottom": [0, 489.699] },
+        "rightCorners": { "innerTop": [836, 424.85], "outerTop": [1671, 401.366], "outerBottom": [1671, 491.304], "innerBottom": [836, 423.15] },
+        "gapAfterAtOuterU300U600": { "left": [25.0, 16.4, 7.8], "right": [24.3, 15.7, 7.1] }
+      },
+      {
+        "row": 5,
+        "leftBoundaries": ["L8", "L9"],
+        "rightBoundaries": ["R8", "R9"],
+        "leftHeightAtOuterU300U600Inner": [89.4, 59.4, 29.4, 5.9],
+        "rightHeightAtOuterU300U600Inner": [86.8, 56.3, 25.8, 1.9],
+        "leftCorners": { "outerTop": [0, 514.735], "innerTop": [836, 427.90], "innerBottom": [836, 433.84], "outerBottom": [0, 604.111] },
+        "rightCorners": { "innerTop": [836, 423.50], "outerTop": [1671, 515.567], "outerBottom": [1671, 602.391], "innerBottom": [836, 425.43] },
+        "gapAfterAtOuterU300U600": { "left": [32.9, 20.7, 8.6], "right": [30.3, 19.4, 8.6] }
+      },
+      {
+        "row": 6,
+        "leftBoundaries": ["L10", "L11"],
+        "rightBoundaries": ["R10", "R11"],
+        "leftHeightAtOuterU300U600Inner": [105.5, 71.7, 37.9, 11.4],
+        "rightHeightAtOuterU300U600Inner": [103.3, 69.7, 36.0, 9.6],
+        "leftCorners": { "outerTop": [0, 636.968], "innerTop": [836, 432.91], "innerBottom": [836, 444.28], "outerBottom": [0, 742.483] },
+        "rightCorners": { "innerTop": [836, 425.49], "outerTop": [1671, 632.693], "outerBottom": [1671, 736.017], "innerBottom": [836, 435.11] },
+        "gapAfterAtOuterU300U600": { "left": [45.6, 29.7, 13.9], "right": [43.3, 26.9, 10.5] }
+      },
+      {
+        "row": 7,
+        "leftBoundaries": ["L12", "L13"],
+        "rightBoundaries": ["R12", "R13"],
+        "leftHeightAtOuterU300U600Inner": [113.8, 76.9, 39.9, 11.0],
+        "rightHeightAtOuterU300U600Inner": [110.5, 71.1, 31.7, 0.8],
+        "leftCorners": { "outerTop": [0, 788.064], "innerTop": [836, 445.71], "innerBottom": [836, 456.68], "outerBottom": [0, 901.884] },
+        "rightCorners": { "innerTop": [836, 432.82], "outerTop": [1671, 779.316], "outerBottom": [1671, 889.817], "innerBottom": [836, 433.61] },
+        "gapAfterAtOuterU300U600": { "left": [45.97, 30.0, 14.8], "right": [45.78, 30.0, 15.0] }
+      },
+      {
+        "row": 8,
+        "leftBoundaries": ["L14", "offscreen"],
+        "rightBoundaries": ["R14", "offscreen"],
+        "note": "Only the inner portions of this row are visible; its outer top boundary is below the viewport while the line slopes up toward the horizon."
+      }
+    ]
+  },
+  "logoTransform": {
+    "model": "row-local affine shear in screen coordinates",
+    "svgMatrix": "matrix(1, b, 0, 1, x, y)",
+    "bCoefficientMeaning": "signed center-line slope of the row; right-wall values are mirrored into screen-x coordinates",
+    "leftRowShears": [0.328815, 0.21099, 0.098505, -0.023585, -0.15396, -0.300755, -0.47159, -0.631885],
+    "rightRowShears": [-0.3392, -0.22272, -0.106905, 0.026745, 0.161095, 0.304255, 0.480655, 0.629635],
+    "row8ContinuationSlopes": { "left": -0.68, "right": -0.66 },
+    "note": "Use shear rather than rotation: the reference keeps vertical stems and square sides upright while baselines follow the strip."
+  },
+  "logos": [
+    { "side": "left", "row": 1, "label": "Google", "center": [46.5, 163.1], "bbox": [13, 149, 75, 179], "distanceToRowEdges": [45.5, 34.4], "confidence": "high" },
+    { "side": "left", "row": 1, "label": "Apple", "center": [136.7, 190.7], "bbox": [128, 176, 146, 204], "distanceToRowEdges": [38.9, 32.0], "confidence": "high" },
+    { "side": "left", "row": 1, "label": "OpenAI", "center": [201.9, 214.3], "bbox": [196, 200, 213, 225], "distanceToRowEdges": [37.8, 26.5], "confidence": "high" },
+    { "side": "left", "row": 2, "label": "Microsoft", "center": [68.0, 249.0], "bbox": [20, 226, 116, 270], "distanceToRowEdges": [30.8, 41.5], "confidence": "high" },
+    { "side": "left", "row": 2, "label": "GitHub", "center": [176.5, 273.1], "bbox": [163, 258, 190, 289], "distanceToRowEdges": [26.9, 35.3], "confidence": "high" },
+    { "side": "left", "row": 2, "label": "Notion", "center": [251.6, 290.7], "bbox": [241, 276, 262, 305], "distanceToRowEdges": [25.2, 30.0], "confidence": "high" },
+    { "side": "left", "row": 2, "label": "Microsoft", "center": [306.3, 302.5], "bbox": [300, 292, 313, 313], "distanceToRowEdges": [23.0, 27.2], "confidence": "medium" },
+    { "side": "left", "row": 3, "label": "Apple", "center": [47.1, 341.5], "bbox": [33, 320, 61, 359], "distanceToRowEdges": [37.3, 38.5], "confidence": "high" },
+    { "side": "left", "row": 3, "label": "OpenAI", "center": [143.2, 349.9], "bbox": [129, 332, 158, 368], "distanceToRowEdges": [32.1, 35.4], "confidence": "high" },
+    { "side": "left", "row": 3, "label": "GitHub", "center": [242.3, 359.8], "bbox": [215, 346, 272, 371], "distanceToRowEdges": [27.9, 31.0], "confidence": "medium" },
+    { "side": "left", "row": 3, "label": "Google", "center": [330.1, 369.2], "bbox": [312, 357, 349, 381], "distanceToRowEdges": [24.9, 26.5], "confidence": "high" },
+    { "side": "left", "row": 4, "label": "Microsoft", "center": [102.0, 442.0], "bbox": [44, 424, 160, 460], "distanceToRowEdges": [39.0, 40.0], "confidence": "high" },
+    { "side": "left", "row": 4, "label": "Google", "center": [239.0, 438.9], "bbox": [214, 426, 265, 452], "distanceToRowEdges": [32.0, 32.8], "confidence": "high" },
+    { "side": "left", "row": 4, "label": "Apple", "center": [313.2, 434.9], "bbox": [306, 420, 320, 447], "distanceToRowEdges": [25.9, 31.2], "confidence": "high" },
+    { "side": "left", "row": 5, "label": "Notion", "center": [85.0, 544.9], "bbox": [70, 526, 100, 564], "distanceToRowEdges": [39.0, 42.3], "confidence": "high" },
+    { "side": "left", "row": 5, "label": "Vercel", "center": [208.0, 526.5], "bbox": [177, 513, 237, 542], "distanceToRowEdges": [33.4, 35.1], "confidence": "high" },
+    { "side": "left", "row": 5, "label": "AWS", "center": [299.3, 514.0], "bbox": [286, 501, 313, 528], "distanceToRowEdges": [30.4, 29.1], "confidence": "high" },
+    { "side": "left", "row": 6, "label": "Apple", "center": [42.5, 676.7], "bbox": [26, 650, 58, 698], "distanceToRowEdges": [50.1, 50.6], "confidence": "high" },
+    { "side": "left", "row": 6, "label": "OpenAI", "center": [154.4, 642.9], "bbox": [139, 623, 170, 663], "distanceToRowEdges": [43.7, 44.5], "confidence": "high" },
+    { "side": "left", "row": 6, "label": "AWS", "center": [255.0, 612.2], "bbox": [244, 592, 265, 629], "distanceToRowEdges": [37.6, 39.3], "confidence": "high" },
+    { "side": "left", "row": 6, "label": "Vercel", "center": [344.3, 586.2], "bbox": [331, 571, 358, 601], "distanceToRowEdges": [33.3, 33.4], "confidence": "medium" },
+    { "side": "left", "row": 7, "label": "Google", "center": [84.7, 804.2], "bbox": [43, 773, 125, 831], "distanceToRowEdges": [50.9, 52.5], "confidence": "high" },
+    { "side": "left", "row": 7, "label": "Notion", "center": [232.0, 739.0], "bbox": [193, 711, 271, 767], "distanceToRowEdges": [45.0, 39.4], "confidence": "medium" },
+    { "side": "left", "row": 7, "label": "Microsoft", "center": [330.6, 688.4], "bbox": [321, 672, 341, 705], "distanceToRowEdges": [35.8, 37.1], "confidence": "medium" },
+    { "side": "left", "row": 8, "label": "Stripe", "center": [163.0, 901.5], "bbox": [130, 888, 174, 928], "distanceToRowEdges": [48.6, null], "confidence": "high: partial row" },
+
+    { "side": "right", "row": 1, "label": "Stripe", "center": [1471.6, 218.1], "bbox": [1458, 208, 1485, 228], "distanceToRowEdges": [39.0, 28.2], "confidence": "medium" },
+    { "side": "right", "row": 1, "label": "Microsoft", "center": [1549.8, 193.7], "bbox": [1522, 176, 1585, 213], "distanceToRowEdges": [46.5, 30.0], "confidence": "high" },
+    { "side": "right", "row": 1, "label": "OpenAI", "center": [1645.2, 160.2], "bbox": [1632, 143, 1658, 178], "distanceToRowEdges": [34.4, 36.2], "confidence": "high" },
+    { "side": "right", "row": 2, "label": "Apple", "center": [1631.8, 247.7], "bbox": [1621, 228, 1642, 264], "distanceToRowEdges": [32.8, 38.5], "confidence": "high" },
+    { "side": "right", "row": 2, "label": "Google", "center": [1479.6, 282.9], "bbox": [1460, 270, 1499, 293], "distanceToRowEdges": [27.4, 30.7], "confidence": "high" },
+    { "side": "right", "row": 2, "label": "AWS", "center": [1412.8, 298.9], "bbox": [1402, 287, 1425, 311], "distanceToRowEdges": [25.6, 26.5], "confidence": "high" },
+    { "side": "right", "row": 3, "label": "OpenAI", "center": [1615.5, 341.7], "bbox": [1601, 322, 1632, 361], "distanceToRowEdges": [34.9, 40.4], "confidence": "high" },
+    { "side": "right", "row": 3, "label": "Notion", "center": [1517.5, 352.3], "bbox": [1508, 337, 1529, 368], "distanceToRowEdges": [32.2, 34.7], "confidence": "high" },
+    { "side": "right", "row": 3, "label": "Google", "center": [1436.5, 362.5], "bbox": [1416, 349, 1457, 374], "distanceToRowEdges": [30.0, 29.7], "confidence": "high" },
+    { "side": "right", "row": 3, "label": "GitHub", "center": [1362.2, 369.5], "bbox": [1348, 360, 1379, 380], "distanceToRowEdges": [25.3, 26.7], "confidence": "medium" },
+    { "side": "right", "row": 4, "label": "Apple", "center": [1438.4, 436.8], "bbox": [1430, 420, 1447, 451], "distanceToRowEdges": [35.2, 35.8], "confidence": "medium" },
+    { "side": "right", "row": 4, "label": "Notion", "center": [1513.4, 439.3], "bbox": [1502, 422, 1527, 456], "distanceToRowEdges": [34.0, 35.3], "confidence": "medium" },
+    { "side": "right", "row": 4, "label": "OpenAI", "center": [1615.2, 442.6], "bbox": [1600, 421, 1633, 464], "distanceToRowEdges": [35.0, 38.9], "confidence": "high" },
+    { "side": "right", "row": 5, "label": "Microsoft", "center": [1523.0, 535.4], "bbox": [1489, 515, 1567, 552], "distanceToRowEdges": [35.2, 32.0], "confidence": "medium" },
+    { "side": "right", "row": 5, "label": "Vercel", "center": [1429.7, 518.6], "bbox": [1419, 504, 1440, 534], "distanceToRowEdges": [31.0, 29.0], "confidence": "medium" },
+    { "side": "right", "row": 5, "label": "Google", "center": [1653.6, 555.7], "bbox": [1638, 541, 1671, 568], "distanceToRowEdges": [34.2, null], "confidence": "partial edge" },
+    { "side": "right", "row": 6, "label": "Apple", "center": [1663.3, 678.7], "bbox": [1653, 659, 1671, 701], "distanceToRowEdges": [45.6, null], "confidence": "high: clipped at edge" },
+    { "side": "right", "row": 6, "label": "Microsoft", "center": [1571.4, 654.3], "bbox": [1550, 634, 1593, 676], "distanceToRowEdges": [39.6, 43.2], "confidence": "medium" },
+    { "side": "right", "row": 6, "label": "Vercel", "center": [1463.8, 621.1], "bbox": [1437, 604, 1490, 636], "distanceToRowEdges": [34.0, 33.1], "confidence": "medium" },
+    { "side": "right", "row": 6, "label": "OpenAI", "center": [1389.3, 598.7], "bbox": [1380, 583, 1407, 615], "distanceToRowEdges": [31.0, 34.4], "confidence": "medium" },
+    { "side": "right", "row": 7, "label": "Microsoft", "center": [1580.9, 790.6], "bbox": [1544, 762, 1620, 819], "distanceToRowEdges": [47.5, 47.4], "confidence": "medium" },
+    { "side": "right", "row": 7, "label": "Notion", "center": [1528.9, 764.5], "bbox": [1517, 742, 1545, 787], "distanceToRowEdges": [40.5, 45.2], "confidence": "high" },
+    { "side": "right", "row": 7, "label": "Google", "center": [1437.5, 722.2], "bbox": [1418, 703, 1459, 739], "distanceToRowEdges": [35.0, 35.0], "confidence": "medium" },
+    { "side": "right", "row": 7, "label": "GitHub", "center": [1353.1, 682.2], "bbox": [1332, 664, 1377, 699], "distanceToRowEdges": [33.0, 35.0], "confidence": "medium" },
+    { "side": "right", "row": 8, "label": "Apple", "center": [1577.0, 924.5], "bbox": [1567, 911, 1590, 939], "distanceToRowEdges": [44.0, null], "confidence": "high: partial row" },
+    { "side": "right", "row": 8, "label": "Microsoft", "center": [1487.8, 871.9], "bbox": [1471, 847, 1518, 894], "distanceToRowEdges": [39.0, null], "confidence": "high: partial row" },
+    { "side": "right", "row": 8, "label": "Notion", "center": [1397.2, 811.5], "bbox": [1377, 786, 1424, 836], "distanceToRowEdges": [35.0, null], "confidence": "high: partial row" },
+    { "side": "right", "row": 8, "label": "GitHub", "center": [1327.9, 764.4], "bbox": [1312, 747, 1343, 782], "distanceToRowEdges": [32.0, null], "confidence": "medium: partial row" }
+  ],
+  "fade": {
+    "model": "corridor-following opacity, not a flat centered black gradient",
+    "wallDistanceVariable": "u from the outer edge toward x=836",
+    "observations": [
+      "The top row is already low contrast at the outer edge because the upper fade overlaps the wall start.",
+      "Mid-wall row strokes are strongest around u=0..150, weaken toward u=300..400, and are effectively absent in the central u>=500 zone unless a foreground gap exposes them.",
+      "The row gaps are visible as true negative space: their outer-edge widths grow from about 16..25px in rows 1..4 to about 33..46px in rows 5..7, while the same gaps taper toward the horizon.",
+      "The darkest region is the central corridor around x=700..970; it follows the converging row geometry and is not explained by a uniform radial overlay alone.",
+      "Marks and line strokes retain more brightness near the outside walls than at equal global radius near the center; lower rows are also dimmed as they approach the bottom vignette."
+    ],
+    "lineContrastMedianByOuterDistance": {
+      "uBins": ["0..49", "50..99", "100..149", "150..199", "200..249", "250..299", "300..349", "350..399", "400..449", "450..499", "500..549", "550..599"],
+      "leftRow1Bottom": [9.5, 5.8, 4.5, 5.6, 7.3, 5.2, 3.4, 2.0, 0.7, -0.1, 0.0, -0.1],
+      "leftRow4Top": [15.0, 14.7, 13.4, 8.9, 6.3, 3.4, 1.0, 0.7, 0.1, 0.0, -0.1, 0.0],
+      "leftRow7Top": [9.3, 11.5, 8.1, 7.0, 8.8, 6.6, 3.9, 1.0, -2.5, -0.5, -0.1, -0.3],
+      "rightRow1Bottom": [6.6, 4.9, 6.6, 4.0, 7.0, 4.5, 5.1, 2.0, -0.3, -0.4, -0.8, 0.0],
+      "rightRow4Top": [14.1, 9.5, 8.6, 6.3, 5.4, 5.3, 3.4, 1.0, -0.1, 0.0, 0.0, 0.0]
+    },
+    "implementationConstraint": "Apply the fade to each corridor wall/row group in wall coordinates, with a separate central occlusion region that follows the inner endpoints. Do not use one page-wide radial gradient as the only fade."
+  },
+  "foreground": {
+    "measurementThreshold": "luminance >=120 unless noted",
+    "header": {
+      "brandMarkRaster": [64, 36, 111, 100],
+      "brandWordRaster": [135, 55, 239, 80],
+      "docsRaster": [1218, 61, 1261, 78],
+      "githubRaster": [1317, 61, 1379, 78],
+      "getStartedNavBorder": [1431, 36, 1622, 100],
+      "headerHorizontalPadding": { "left": 64, "right": 49 },
+      "navGapDocsToGithub": 55,
+      "navGapGithubToButton": 52
+    },
+    "updatePill": {
+      "outerRaster": [639, 188, 1029, 247],
+      "outerVisualBoxApprox": [638, 188, 1031, 248],
+      "dotRaster": [667, 212, 680, 227],
+      "latestUpdateTextRaster": [704, 211, 812, 227],
+      "messageTextRaster": [839, 211, 978, 227],
+      "arrowRaster": [992, 211, 1003, 227],
+      "center": [834, 218]
+    },
+    "heroTitle": {
+      "line1Raster": [446, 307, 1251, 391],
+      "line2Raster": [373, 424, 1319, 508],
+      "line1Text": "The self-learning",
+      "line2Text": "tool router for MCP.",
+      "centerX": 836,
+      "lineGapBetweenRasterBoxes": 32
+    },
+    "description": {
+      "line1Raster": [616, 563, 1079, 587],
+      "line2Raster": [538, 601, 1167, 625],
+      "centerX": 836,
+      "line1Text": "Roster finds the right tools when needed,",
+      "line2Text": "learns from what works, and works with any MCP client."
+    },
+    "heroActions": {
+      "primaryRasterFill": [570, 675, 831, 759],
+      "primaryVisualBoxApprox": [569, 675, 832, 759],
+      "secondaryBorder": [853, 676, 1110, 756],
+      "secondaryVisualBoxApprox": [853, 675, 1111, 758],
+      "gap": 21,
+      "primaryTextRaster": [621, 707, 750, 729],
+      "primaryArrowRaster": [770, 707, 785, 727],
+      "secondaryTextRaster": [905, 707, 1027, 725],
+      "secondaryArrowRaster": [1043, 707, 1057, 725]
+    }
+  },
+  "assertionTolerances": {
+    "viewportPx": 0,
+    "strongBoundaryRmsPx": 2.0,
+    "boundaryOuterInterceptPx": 3.0,
+    "boundarySlope": 0.012,
+    "rowHeightPx": 3.0,
+    "gapPx": 3.0,
+    "logoCenterPx": 4.0,
+    "logoSizePx": 5.0,
+    "foregroundRasterBoundsPx": 4.0,
+    "fadeVisibilityRatio": 0.2
+  }
+}

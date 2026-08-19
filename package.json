@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "verify:reference": "node scripts/verify-reference-geometry.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",
