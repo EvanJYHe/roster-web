@@ -118,136 +118,45 @@ type LogoKind =
   | "stripe"
   | "vercel";
 
-type MicrosoftLayout = {
-  iconX: number;
-  iconY: number;
-  squareWidth: number;
-  squareHeight: number;
-  columnStep: number;
-  rowStep: number;
-  labelX: number;
-  labelY: number;
-  labelFontSize: number;
-  labelLetterSpacing: string;
-};
-
 type LogoSpec = {
   side: Side;
   row: number;
+  slot: number;
   kind: LogoKind;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  opacity: number;
-  microsoftLayout?: MicrosoftLayout;
+  depth: number;
 };
 
-// These are screen-space anchors from the reference. Keeping them explicit
-// avoids letting a perspective formula bunch marks at the far end of a wall.
-const LOGOS: LogoSpec[] = [
-  { side: "left", row: 1, kind: "google", x: 46.5, y: 163.1, width: 63, height: 31, opacity: 0.5 },
-  { side: "left", row: 1, kind: "apple", x: 136.7, y: 190.7, width: 19, height: 29, opacity: 0.65 },
-  { side: "left", row: 1, kind: "openai", x: 201.9, y: 214.3, width: 18, height: 26, opacity: 0.4 },
-  // These two instances are the clearest depth pair in the reference. Their
-  // row matrices differ, and their internal Microsoft marks do too: the
-  // upper mark is narrower/taller while the lower mark is wider with a
-  // larger wordmark. Keep those measurements local to the instance instead
-  // of forcing one brand layout across the wall.
-  {
-    side: "left",
-    row: 2,
-    kind: "microsoft",
-    x: 68,
-    y: 249,
-    width: 97,
-    height: 45,
-    opacity: 0.48,
-    microsoftLayout: {
-      iconX: 2.5,
-      iconY: 11.2,
-      squareWidth: 12,
-      squareHeight: 14.5,
-      columnStep: 13,
-      rowStep: 15.5,
-      labelX: 31,
-      labelY: 28,
-      labelFontSize: 20,
-      labelLetterSpacing: "-0.12em",
-    },
-  },
-  { side: "left", row: 2, kind: "github", x: 176.5, y: 273.1, width: 28, height: 32, opacity: 0.4 },
-  { side: "left", row: 2, kind: "notion", x: 251.6, y: 290.7, width: 22, height: 30, opacity: 0.35 },
-  { side: "left", row: 2, kind: "microsoft", x: 306.3, y: 302.5, width: 15, height: 22, opacity: 0.22 },
-  { side: "left", row: 3, kind: "apple", x: 47.1, y: 341.5, width: 29, height: 40, opacity: 0.9 },
-  { side: "left", row: 3, kind: "openai", x: 143.2, y: 349.9, width: 30, height: 37, opacity: 0.65 },
-  { side: "left", row: 3, kind: "github", x: 242.3, y: 359.8, width: 58, height: 26, opacity: 0.55 },
-  { side: "left", row: 3, kind: "google", x: 330.1, y: 369.2, width: 38, height: 25, opacity: 0.3 },
-  {
-    side: "left",
-    row: 4,
-    kind: "microsoft",
-    x: 102,
-    y: 442,
-    width: 117,
-    height: 37,
-    opacity: 0.85,
-    microsoftLayout: {
-      iconX: 2.5,
-      iconY: 1.2,
-      squareWidth: 13,
-      squareHeight: 16,
-      columnStep: 15,
-      rowStep: 17,
-      labelX: 37,
-      labelY: 20.5,
-      labelFontSize: 25,
-      labelLetterSpacing: "-0.133em",
-    },
-  },
-  { side: "left", row: 4, kind: "google", x: 239, y: 438.9, width: 52, height: 27, opacity: 0.43 },
-  { side: "left", row: 4, kind: "apple", x: 313.2, y: 434.9, width: 15, height: 28, opacity: 0.7 },
-  { side: "left", row: 5, kind: "notion", x: 85, y: 544.9, width: 31, height: 39, opacity: 0.58 },
-  { side: "left", row: 5, kind: "vercel", x: 208, y: 526.5, width: 61, height: 30, opacity: 0.48 },
-  { side: "left", row: 5, kind: "aws", x: 299.3, y: 514, width: 28, height: 28, opacity: 0.5 },
-  { side: "left", row: 6, kind: "apple", x: 42.5, y: 676.7, width: 33, height: 49, opacity: 0.63 },
-  { side: "left", row: 6, kind: "openai", x: 154.4, y: 642.9, width: 32, height: 41, opacity: 0.72 },
-  { side: "left", row: 6, kind: "aws", x: 255, y: 612.2, width: 22, height: 38, opacity: 0.68 },
-  { side: "left", row: 6, kind: "vercel", x: 344.3, y: 586.2, width: 28, height: 31, opacity: 0.56 },
-  { side: "left", row: 7, kind: "google", x: 84.7, y: 804.2, width: 83, height: 59, opacity: 0.65 },
-  { side: "left", row: 7, kind: "notion", x: 232, y: 739, width: 79, height: 57, opacity: 0.72 },
-  { side: "left", row: 7, kind: "microsoft", x: 330.6, y: 688.4, width: 21, height: 34, opacity: 0.62 },
-  { side: "left", row: 8, kind: "stripe", x: 163, y: 901.5, width: 45, height: 41, opacity: 0.8 },
-
-  { side: "right", row: 1, kind: "stripe", x: 1471.6, y: 218.1, width: 28, height: 21, opacity: 0.35 },
-  { side: "right", row: 1, kind: "microsoft", x: 1549.8, y: 193.7, width: 64, height: 38, opacity: 0.35 },
-  { side: "right", row: 1, kind: "openai", x: 1645.2, y: 160.2, width: 27, height: 36, opacity: 0.52 },
-  { side: "right", row: 2, kind: "apple", x: 1631.8, y: 247.7, width: 22, height: 37, opacity: 0.7 },
-  { side: "right", row: 2, kind: "google", x: 1479.6, y: 282.9, width: 40, height: 24, opacity: 0.38 },
-  { side: "right", row: 2, kind: "aws", x: 1412.8, y: 298.9, width: 24, height: 25, opacity: 0.52 },
-  { side: "right", row: 3, kind: "openai", x: 1615.5, y: 341.7, width: 32, height: 40, opacity: 0.63 },
-  { side: "right", row: 3, kind: "notion", x: 1517.5, y: 352.3, width: 22, height: 32, opacity: 0.62 },
-  { side: "right", row: 3, kind: "google", x: 1436.5, y: 362.5, width: 42, height: 26, opacity: 0.37 },
-  { side: "right", row: 3, kind: "github", x: 1362.2, y: 369.5, width: 32, height: 21, opacity: 0.3 },
-  { side: "right", row: 4, kind: "apple", x: 1438.4, y: 436.8, width: 18, height: 32, opacity: 0.85 },
-  { side: "right", row: 4, kind: "notion", x: 1513.4, y: 439.3, width: 26, height: 35, opacity: 0.45 },
-  { side: "right", row: 4, kind: "openai", x: 1615.2, y: 442.6, width: 34, height: 44, opacity: 0.65 },
-  { side: "right", row: 5, kind: "vercel", x: 1429.7, y: 518.6, width: 22, height: 31, opacity: 0.32 },
-  { side: "right", row: 5, kind: "microsoft", x: 1523, y: 535.4, width: 79, height: 38, opacity: 0.5 },
-  { side: "right", row: 5, kind: "google", x: 1653.6, y: 555.7, width: 35, height: 28, opacity: 0.43 },
-  { side: "right", row: 6, kind: "openai", x: 1389.3, y: 598.7, width: 28, height: 33, opacity: 0.65 },
-  { side: "right", row: 6, kind: "vercel", x: 1463.8, y: 621.1, width: 54, height: 33, opacity: 0.65 },
-  { side: "right", row: 6, kind: "microsoft", x: 1571.4, y: 654.3, width: 44, height: 43, opacity: 0.65 },
-  { side: "right", row: 6, kind: "apple", x: 1663.3, y: 678.7, width: 20, height: 43, opacity: 0.55 },
-  { side: "right", row: 7, kind: "github", x: 1353.1, y: 682.2, width: 46, height: 36, opacity: 0.46 },
-  { side: "right", row: 7, kind: "google", x: 1437.5, y: 722.2, width: 42, height: 37, opacity: 0.65 },
-  { side: "right", row: 7, kind: "notion", x: 1528.9, y: 764.5, width: 29, height: 46, opacity: 0.65 },
-  { side: "right", row: 7, kind: "microsoft", x: 1580.9, y: 790.6, width: 77, height: 58, opacity: 0.72 },
-  { side: "right", row: 8, kind: "github", x: 1327.9, y: 764.4, width: 32, height: 36, opacity: 0.5 },
-  { side: "right", row: 8, kind: "notion", x: 1397.2, y: 811.5, width: 48, height: 51, opacity: 0.5 },
-  { side: "right", row: 8, kind: "microsoft", x: 1487.8, y: 871.9, width: 48, height: 48, opacity: 0.55 },
-  { side: "right", row: 8, kind: "apple", x: 1577, y: 924.5, width: 24, height: 30, opacity: 0.5 },
+// Logos use normalized positions along each wall instead of screen-space
+// coordinates. The reference's rows are a useful visual target; the slots
+// below are the clean, reusable system that recreates its rhythm without
+// preserving AI-generated per-instance distortions.
+const SECTION_DEPTHS = [0.06, 0.18, 0.3, 0.42, 0.54, 0.66, 0.78, 0.88] as const;
+const ROW_KIND_PATTERNS: LogoKind[][] = [
+  ["google", "apple", "openai", "stripe", "microsoft", "notion", "github", "vercel"],
+  ["microsoft", "github", "notion", "microsoft", "openai", "google", "aws", "vercel"],
+  ["apple", "openai", "github", "google", "aws", "notion", "microsoft", "stripe"],
+  ["microsoft", "google", "apple", "vercel", "notion", "openai", "github", "aws"],
+  ["notion", "vercel", "aws", "microsoft", "google", "stripe", "openai", "github"],
+  ["apple", "openai", "aws", "vercel", "microsoft", "notion", "google", "stripe"],
+  ["google", "notion", "microsoft", "github", "openai", "vercel", "aws", "stripe"],
+  ["stripe", "microsoft", "notion", "github", "apple", "google", "openai", "vercel"],
 ];
+
+const SIDE_SLOT_PHASE: Record<Side, number> = { left: 0, right: 3 };
+
+function buildLogoSpecs(side: Side): LogoSpec[] {
+  return ROW_KIND_PATTERNS.flatMap((pattern, rowIndex) =>
+    SECTION_DEPTHS.map((depth, slot) => ({
+      side,
+      row: rowIndex + 1,
+      slot,
+      kind: pattern[(slot + SIDE_SLOT_PHASE[side]) % pattern.length],
+      depth,
+    })),
+  );
+}
+
+const ALL_LOGOS = (Object.keys(SIDE_SLOT_PHASE) as Side[]).flatMap(buildLogoSpecs);
 
 function wallCenterY(side: Side, row: number, x: number): number {
   const top = boundaryPoint(side, (row - 1) * 2, x).y;
@@ -258,70 +167,88 @@ function wallCenterY(side: Side, row: number, x: number): number {
   return (top + bottom) / 2;
 }
 
-const TAIL_LOGO_KINDS: LogoKind[] = ["openai", "google", "notion", "github", "aws", "vercel", "microsoft", "stripe"];
-const TAIL_LOGOS: LogoSpec[] = (["left", "right"] as Side[]).flatMap((side) =>
-  Array.from({ length: 7 }, (_, rowIndex) =>
-    [390, 470, 550, 630, 710, 780].map((distance, markIndex) => {
-      const x = side === "left" ? distance : RIGHT_EDGE - distance;
-      const size = Math.max(9, 25 - distance * 0.014);
-
-      return {
-        side,
-        row: rowIndex + 1,
-        kind: TAIL_LOGO_KINDS[(rowIndex * 2 + markIndex + (side === "right" ? 3 : 0)) % TAIL_LOGO_KINDS.length],
-        x,
-        y: wallCenterY(side, rowIndex + 1, x),
-        width: size * (markIndex % 3 === 0 ? 1.25 : 1),
-        height: size,
-        opacity: Math.max(0.07, 0.18 - distance * 0.00008),
-      };
-    }),
-  ).flat(),
-);
-
-const ALL_LOGOS = [...LOGOS, ...TAIL_LOGOS];
-
-// The strips are sheared planes, not rotated cards. These are the measured
-// center-line slopes of each row's top/bottom boundary pair. Applying them
-// as the b term of an SVG matrix keeps vertical glyph strokes vertical while
-// carrying their baselines along the strip.
-const ROW_SHEARS: Record<Side, number[]> = {
-  left: [
-    (LEFT_BOUNDARIES[0].slope + LEFT_BOUNDARIES[1].slope) / 2,
-    (LEFT_BOUNDARIES[2].slope + LEFT_BOUNDARIES[3].slope) / 2,
-    (LEFT_BOUNDARIES[4].slope + LEFT_BOUNDARIES[5].slope) / 2,
-    (LEFT_BOUNDARIES[6].slope + LEFT_BOUNDARIES[7].slope) / 2,
-    (LEFT_BOUNDARIES[8].slope + LEFT_BOUNDARIES[9].slope) / 2,
-    (LEFT_BOUNDARIES[10].slope + LEFT_BOUNDARIES[11].slope) / 2,
-    (LEFT_BOUNDARIES[12].slope + LEFT_BOUNDARIES[13].slope) / 2,
-    (LEFT_BOUNDARIES[14].slope + -0.68) / 2,
-  ],
-  right: [
-    -(RIGHT_BOUNDARIES[0].slope + RIGHT_BOUNDARIES[1].slope) / 2,
-    -(RIGHT_BOUNDARIES[2].slope + RIGHT_BOUNDARIES[3].slope) / 2,
-    -(RIGHT_BOUNDARIES[4].slope + RIGHT_BOUNDARIES[5].slope) / 2,
-    -(RIGHT_BOUNDARIES[6].slope + RIGHT_BOUNDARIES[7].slope) / 2,
-    -(RIGHT_BOUNDARIES[8].slope + RIGHT_BOUNDARIES[9].slope) / 2,
-    -(RIGHT_BOUNDARIES[10].slope + RIGHT_BOUNDARIES[11].slope) / 2,
-    -(RIGHT_BOUNDARIES[12].slope + RIGHT_BOUNDARIES[13].slope) / 2,
-    -(RIGHT_BOUNDARIES[14].slope + -0.66) / 2,
-  ],
+const LOGO_HEIGHT_FACTORS: Record<LogoKind, number> = {
+  apple: 0.47,
+  aws: 0.4,
+  github: 0.44,
+  google: 0.4,
+  microsoft: 0.5,
+  notion: 0.44,
+  openai: 0.47,
+  stripe: 0.4,
+  vercel: 0.42,
 };
 
-function LogoGlyph({ logo }: { logo: LogoSpec }) {
-  const shear = ROW_SHEARS[logo.side][logo.row - 1];
-  const microsoftLayout = logo.microsoftLayout ?? {
-    iconX: logo.height * 0.06,
-    iconY: 10,
-    squareWidth: Math.max(5, logo.height * 0.27),
-    squareHeight: Math.max(5, logo.height * 0.27),
-    columnStep: Math.max(5, logo.height * 0.3),
-    rowStep: Math.max(5, logo.height * 0.32),
-    labelX: logo.height * 0.72,
-    labelY: logo.height * 0.56,
-    labelFontSize: 18,
+const LOGO_ASPECTS: Record<LogoKind, number> = {
+  apple: 0.72,
+  aws: 0.95,
+  github: 2.15,
+  google: 2.05,
+  microsoft: 3.25,
+  notion: 2.15,
+  openai: 0.72,
+  stripe: 1.45,
+  vercel: 2.1,
+};
+
+const ROW_LOGO_OPACITY = [0.62, 0.56, 0.68, 0.82, 0.66, 0.58, 0.5, 0.38];
+
+type LogoGeometry = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  opacity: number;
+};
+
+function rowShear(side: Side, row: number): number {
+  const top = BOUNDARIES[side][(row - 1) * 2];
+  const bottom = row === 8
+    ? (side === "left" ? { slope: -0.68 } : { slope: -0.66 })
+    : BOUNDARIES[side][(row - 1) * 2 + 1];
+  const screenDirection = side === "left" ? 1 : -1;
+
+  return screenDirection * (top.slope + bottom.slope) / 2;
+}
+
+function logoGeometry(logo: LogoSpec): LogoGeometry {
+  const distanceFromEdge = logo.depth * (CENTER_X - 1);
+  const x = logo.side === "left" ? distanceFromEdge : RIGHT_EDGE - distanceFromEdge;
+  const top = boundaryPoint(logo.side, (logo.row - 1) * 2, x).y;
+  const bottom = logo.row === 8
+    ? partialBoundaryPoint(logo.side, x).y
+    : boundaryPoint(logo.side, (logo.row - 1) * 2 + 1, x).y;
+  const sectionHeight = Math.max(8, Math.abs(bottom - top));
+  const depthScale = 0.94 - logo.depth * 0.18;
+  const height = Math.max(7, sectionHeight * LOGO_HEIGHT_FACTORS[logo.kind] * depthScale);
+
+  return {
+    x,
+    y: (top + bottom) / 2,
+    width: height * LOGO_ASPECTS[logo.kind],
+    height,
+    opacity: Math.max(0.07, ROW_LOGO_OPACITY[logo.row - 1] * (0.92 - logo.depth * 0.38)),
+  };
+}
+
+function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
+  const geometry = logoGeometry(sourceLogo);
+  const logo: LogoSpec & LogoGeometry = { ...sourceLogo, ...geometry };
+  const shear = rowShear(logo.side, logo.row);
+  const microsoftSquare = logo.height * 0.3;
+  const microsoftGap = logo.height * 0.055;
+  const microsoftLayout = {
+    iconX: logo.width * 0.035,
+    iconY: logo.height * 0.15,
+    squareWidth: microsoftSquare,
+    squareHeight: microsoftSquare,
+    columnStep: microsoftSquare + microsoftGap,
+    rowStep: microsoftSquare + microsoftGap,
+    labelX: logo.width * 0.3,
+    labelY: logo.height * 0.52,
+    labelFontSize: logo.height * 0.62,
     labelLetterSpacing: "-0.085em",
-  } satisfies MicrosoftLayout;
+  };
   const commonImageProps = {
     className: "depth-logo-image",
     height: logo.height,
@@ -540,8 +467,8 @@ function PerspectiveMarquee() {
               <g mask="url(#top-fade-mask)">
                 <g mask="url(#bottom-fade-mask)">
                   <g className="depth-lane-content">
-                    {LOGOS.filter((logo) => logo.side === side).map((logo, index) => (
-                      <LogoGlyph key={`${side}-${logo.row}-${logo.kind}-${index}`} logo={logo} />
+                    {ALL_LOGOS.filter((logo) => logo.side === side).map((logo) => (
+                      <LogoGlyph key={`${side}-${logo.row}-${logo.slot}`} logo={logo} />
                     ))}
                   </g>
                 </g>
@@ -550,20 +477,6 @@ function PerspectiveMarquee() {
           </g>
         );
       })}
-
-      <g className="depth-tail-overlays">
-        {sides.map((side) => (
-          <g key={`${side}-tail-logo-mask`} mask={`url(#${side}-logo-mask)`}>
-            <g mask="url(#top-fade-mask)">
-              <g mask="url(#bottom-fade-mask)">
-                {TAIL_LOGOS.filter((logo) => logo.side === side).map((logo, index) => (
-                  <LogoGlyph key={`tail-${logo.side}-${logo.row}-${logo.kind}-${index}`} logo={logo} />
-                ))}
-              </g>
-            </g>
-          </g>
-        ))}
-      </g>
 
       <rect className="center-occlusion" fill="url(#center-occlusion-left)" height={VIEWPORT_HEIGHT} width={CENTER_X} x="0" y="0" />
       <rect className="center-occlusion" fill="url(#center-occlusion-right)" height={VIEWPORT_HEIGHT} width={CENTER_X} x={CENTER_X} y="0" />

@@ -10,6 +10,11 @@ The corridor rows were measured from the luminance edge response of the source i
 
 Logo boxes are luminance-thresholded raster bounds (`luminance >=45`) grouped with a 2 px neighborhood. These are visible pixel bounds, not source SVG view boxes. A logo whose center is in the central black/hero region is either occluded or below a reliable threshold; the JSON records the visible high-confidence clusters and marks approximate/partial clusters explicitly.
 
+The logo boxes are diagnostic evidence, not implementation coordinates. The
+implementation intentionally discards these AI-generated per-instance
+inconsistencies and rebuilds marks from normalized wall-depth slots, local row
+height, brand aspect ratios, and the row's derived affine shear.
+
 ## Viewport and foreground
 
 | Element | Measured bounds / position |
