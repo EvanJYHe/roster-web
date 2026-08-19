@@ -51,10 +51,101 @@ a {
   z-index: 0;
 }
 
+.perspective-marquee {
+  display: block;
+  height: 100%;
+  inset: 0;
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.72) 7%,
+    #000 17%,
+    #000 92%,
+    rgba(0, 0, 0, 0.88) 100%
+  );
+  overflow: visible;
+  position: absolute;
+  opacity: 0.84;
+  width: 100%;
+  z-index: 1;
+}
+
+.depth-lane-line {
+  fill: none;
+  stroke: rgba(218, 229, 225, 0.16);
+  stroke-width: 0.75;
+  vector-effect: non-scaling-stroke;
+}
+
+.depth-band-fill {
+  mix-blend-mode: screen;
+}
+
+.depth-lane-content {
+  isolation: isolate;
+}
+
+.depth-mark {
+  mix-blend-mode: screen;
+}
+
+.depth-inline-icon {
+  fill: #f1f6f3;
+}
+
+.depth-logo-image {
+  filter: grayscale(1) invert(1) brightness(1.7) contrast(0.72);
+}
+
+.depth-wordmark,
+.depth-combo-label {
+  fill: #f1f6f3;
+  font-family: var(--ui-font);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+}
+
+.depth-wordmark {
+  font-size: 28px;
+}
+
+.depth-combo-label {
+  font-size: 25px;
+}
+
+.depth-microsoft-icon {
+  fill: #f1f6f3;
+}
+
+.signal-center-veil,
+.signal-vignette {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.signal-center-veil {
+  background: radial-gradient(
+    ellipse 39% 64% at 50% 50%,
+    rgba(3, 3, 3, 0.995) 0%,
+    rgba(3, 3, 3, 0.98) 50%,
+    rgba(3, 3, 3, 0.78) 75%,
+    rgba(3, 3, 3, 0.02) 100%
+  );
+  z-index: 2;
+}
+
+.signal-vignette {
+  background:
+    linear-gradient(180deg, rgba(3, 3, 3, 0.88), transparent 20%, transparent 78%, rgba(3, 3, 3, 0.76)),
+    radial-gradient(ellipse at center, transparent 24%, rgba(0, 0, 0, 0.34) 66%, rgba(0, 0, 0, 0.82) 100%);
+  z-index: 3;
+}
+
 .signal-art {
   display: block;
   height: 100%;
-  opacity: 0.78;
+  opacity: 0.34;
   width: 100%;
   animation: signal-art-breathe 8s ease-in-out infinite;
   -webkit-mask-image: radial-gradient(
@@ -90,11 +181,11 @@ a {
 @keyframes signal-art-breathe {
   0%,
   100% {
-    opacity: 0.52;
+    opacity: 0.22;
   }
 
   50% {
-    opacity: 0.84;
+    opacity: 0.38;
   }
 }
 
@@ -431,6 +522,14 @@ a {
   .hero-button,
   .nav-links > a:not(.nav-button) {
     transition: none;
+  }
+
+  .signal-art {
+    animation-play-state: paused;
+  }
+
+  .depth-mark {
+    display: none;
   }
 
 }
