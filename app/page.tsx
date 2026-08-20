@@ -577,6 +577,38 @@ function DiagonalArrow() {
 
 const REPO_URL = "https://github.com/ManagementMO/roster";
 
+const SCHEMA_WALL_TOOLS = [
+  "github.create_issue", "github.list_prs", "slack.post_message", "slack.list_channels",
+  "notion.create_page", "notion.search", "jira.create_ticket", "jira.transition_issue",
+  "gmail.send", "gmail.search_threads", "googledrive.upload", "googlecalendar.create_event",
+  "docker.build_image", "docker.push", "kubernetes.apply", "kubernetes.get_logs",
+  "amazonaws.s3_put_object", "amazonaws.invoke_lambda", "postgresql.query", "redis.get",
+  "stripe.create_charge", "sentry.list_issues", "datadog.query_metrics", "figma.export_frame",
+  "linear.create_issue", "asana.add_task", "trello.move_card", "zapier.trigger_zap",
+  "supabase.rpc", "elasticsearch.search", "confluence.create_page", "dropbox.upload",
+];
+
+const DRAFT_RESULTS = [
+  { icon: "github", tool: "github.open_pull_request", score: 96 },
+  { icon: "git", tool: "git.push", score: 93 },
+  { icon: "slack", tool: "slack.post_message", score: 91 },
+  { icon: "sentry", tool: "sentry.resolve_issue", score: 88 },
+  { icon: "datadog", tool: "datadog.check_deploy", score: 85 },
+];
+
+const OUTCOME_ROWS = [
+  { tool: "slack.post_message", rate: 98 },
+  { tool: "github.open_pull_request", rate: 95 },
+  { tool: "git.push", rate: 94 },
+];
+
+function MockIcon({ kind }: { kind: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img alt="" aria-hidden="true" className="mock-icon" src={`/mcp-logos/${kind}.svg`} />
+  );
+}
+
 function WhySection() {
   return (
     <section className="section" id="why" aria-labelledby="why-title">
@@ -607,6 +639,50 @@ function WhySection() {
           <span>public MCP tools to route between, and the haystack keeps growing</span>
         </div>
       </div>
+
+      <div className="compare-grid">
+        <div className="compare-col">
+          <div className="compare-header"><span>Without roster</span><i /></div>
+          <div className="compare-panel">
+            <div className="schema-wall" aria-hidden="true">
+              {SCHEMA_WALL_TOOLS.map((tool) => (
+                <span className="schema-chip" key={tool}>{tool}</span>
+              ))}
+            </div>
+            <p className="schema-wall-more">&hellip;and 168 more schemas, loaded on every turn</p>
+            <div className="compare-footnotes">
+              <span>200 tools loaded</span>
+              <span>143K tokens of schemas</span>
+              <span>14% pick accuracy</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="compare-col">
+          <div className="compare-header"><span>With roster</span><i /></div>
+          <div className="compare-panel">
+            <div className="mock-endpoint">
+              <span className="mock-endpoint-name"><i className="mock-dot" />roster &middot; one MCP endpoint</span>
+              <span className="mock-endpoint-status">connected</span>
+            </div>
+            <div className="score-rows">
+              {DRAFT_RESULTS.map(({ icon, tool, score }) => (
+                <div className="score-row" key={tool}>
+                  <MockIcon kind={icon} />
+                  <span className="score-name">{tool}</span>
+                  <span className="score-bar"><i style={{ width: `${score}%` }} /></span>
+                  <span className="score-value">{score}</span>
+                </div>
+              ))}
+            </div>
+            <div className="compare-footnotes">
+              <span>1 endpoint</span>
+              <span>best 5 tools per task</span>
+              <span>learns your stack</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -619,28 +695,72 @@ function HowItWorks() {
 
       <ol className="step-grid">
         <li className="step-card">
-          <span className="step-number">01</span>
-          <h3>Sync your servers</h3>
+          <div className="step-heading">
+            <span className="step-number">Step 1</span>
+            <h3>Sync your servers</h3>
+          </div>
+          <div className="mock-terminal" aria-hidden="true">
+            <div className="mock-terminal-bar"><i /><i /><i /></div>
+            <pre>{`$ roster sync
+
+  claude code   12 servers -> 1   synced
+  cursor         9 servers -> 1   synced
+  codex          7 servers -> 1   synced
+
+  originals backed up · eject anytime`}</pre>
+          </div>
           <p>
             <code>roster sync</code> swaps N config entries for one local MCP
-            endpoint across Claude Code, Cursor, Codex, and OpenClaw.
-            Originals are backed up first &mdash; <code>roster eject</code>{" "}
-            puts every config back exactly as found.
+            endpoint across Claude Code, Cursor, Codex, and OpenClaw &mdash;{" "}
+            <code>roster eject</code> puts every config back exactly as found.
           </p>
         </li>
+
         <li className="step-card">
-          <span className="step-number">02</span>
-          <h3>Draft the best five</h3>
+          <div className="step-heading">
+            <span className="step-number">Step 2</span>
+            <h3>Draft the best five</h3>
+          </div>
+          <div className="mock-draft" aria-hidden="true">
+            <div className="mock-query">
+              <span className="mock-query-fn">draft</span>(&ldquo;ship a hotfix and tell the team&rdquo;)
+            </div>
+            <div className="score-rows">
+              {DRAFT_RESULTS.map(({ icon, tool, score }) => (
+                <div className="score-row" key={tool}>
+                  <MockIcon kind={icon} />
+                  <span className="score-name">{tool}</span>
+                  <span className="score-value">{score}</span>
+                </div>
+              ))}
+            </div>
+          </div>
           <p>
             Instead of every schema at once, your agent calls{" "}
             <code>draft(need)</code> and gets the best five tools for the
-            task. If a drafted tool hard-fails, the next-ranked equivalent is
-            suggested.
+            task. If one hard-fails, the next-ranked equivalent is suggested.
           </p>
         </li>
+
         <li className="step-card">
-          <span className="step-number">03</span>
-          <h3>Learn what works</h3>
+          <div className="step-heading">
+            <span className="step-number">Step 3</span>
+            <h3>Learn what works</h3>
+          </div>
+          <div className="mock-outcomes" aria-hidden="true">
+            {OUTCOME_ROWS.map(({ tool, rate }) => (
+              <div className="outcome-row" key={tool}>
+                <span className="outcome-name">{tool}</span>
+                <span className="score-bar"><i style={{ width: `${rate}%` }} /></span>
+                <span className="score-value">{rate}%</span>
+              </div>
+            ))}
+            <div className="outcome-row outcome-row-benched">
+              <span className="outcome-name">jira.create_ticket</span>
+              <span className="score-bar"><i style={{ width: "12%" }} /></span>
+              <span className="score-value">benched</span>
+            </div>
+          </div>
           <p>
             The Coach records derived outcomes on your machine &mdash; never
             prompts, arguments, or results &mdash; and refines routing toward

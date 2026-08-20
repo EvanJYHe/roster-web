@@ -516,6 +516,281 @@ html {
   white-space: nowrap;
 }
 
+.step-heading {
+  margin-bottom: calc(26 * var(--u));
+}
+
+.step-card .step-heading h3 {
+  margin-top: calc(14 * var(--u));
+}
+
+.step-card > p {
+  margin-top: calc(22 * var(--u));
+}
+
+/* --- comparison panels ------------------------------------------------ */
+
+.compare-grid {
+  display: grid;
+  gap: calc(24 * var(--u));
+  grid-template-columns: 1fr 1fr;
+  margin-top: calc(70 * var(--u));
+}
+
+.compare-header {
+  align-items: center;
+  color: rgba(255, 255, 255, 0.42);
+  display: flex;
+  font-size: max(11px, calc(14 * var(--u)));
+  gap: calc(20 * var(--u));
+  letter-spacing: 0.24em;
+  margin-bottom: calc(20 * var(--u));
+  text-transform: uppercase;
+}
+
+.compare-header i {
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  flex: 1;
+}
+
+.compare-panel {
+  background: #050505;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: calc(30 * var(--u)) calc(30 * var(--u)) calc(24 * var(--u));
+}
+
+.schema-wall {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(8 * var(--u));
+  mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+  max-height: calc(300 * var(--u));
+  overflow: hidden;
+}
+
+.schema-chip {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.34);
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: max(10px, calc(12.5 * var(--u)));
+  padding: calc(5 * var(--u)) calc(10 * var(--u));
+  white-space: nowrap;
+}
+
+.schema-wall-more {
+  color: rgba(255, 255, 255, 0.32);
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: max(10px, calc(12.5 * var(--u)));
+  margin: calc(14 * var(--u)) 0 0;
+}
+
+.compare-footnotes {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.42);
+  display: flex;
+  font-size: max(11px, calc(14 * var(--u)));
+  justify-content: space-between;
+  letter-spacing: -0.01em;
+  margin-top: auto;
+  padding-top: calc(20 * var(--u));
+}
+
+.compare-panel .schema-wall + .schema-wall-more {
+  margin-bottom: calc(24 * var(--u));
+}
+
+/* --- shared mock pieces ------------------------------------------------ */
+
+.mock-endpoint {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+  display: flex;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: max(11px, calc(14 * var(--u)));
+  justify-content: space-between;
+  margin-bottom: calc(18 * var(--u));
+  padding: calc(12 * var(--u)) calc(14 * var(--u));
+}
+
+.mock-endpoint-name {
+  align-items: center;
+  color: rgba(255, 255, 255, 0.82);
+  display: inline-flex;
+  gap: calc(10 * var(--u));
+}
+
+.mock-dot {
+  background: #86d8a8;
+  border-radius: 50%;
+  box-shadow: 0 0 6px 1px rgba(134, 216, 168, 0.45);
+  display: inline-block;
+  height: 7px;
+  width: 7px;
+}
+
+.mock-endpoint-status {
+  color: #86d8a8;
+}
+
+.mock-icon {
+  display: block;
+  filter: brightness(0) invert(0.9);
+  height: max(13px, calc(16 * var(--u)));
+  opacity: 0.9;
+  width: max(13px, calc(16 * var(--u)));
+}
+
+.score-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.score-row {
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  display: grid;
+  gap: calc(14 * var(--u));
+  grid-template-columns: auto minmax(0, 1fr) minmax(30%, 38%) auto;
+  padding: calc(13 * var(--u)) 0;
+}
+
+.mock-draft .score-row {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.score-rows .score-row:last-child {
+  border-bottom: 0;
+}
+
+.score-name {
+  color: rgba(255, 255, 255, 0.68);
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: max(11px, calc(13.5 * var(--u)));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.score-bar {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  display: block;
+  height: 3px;
+  overflow: hidden;
+}
+
+.score-bar i {
+  background: #e8f0ec;
+  border-radius: 2px;
+  display: block;
+  height: 100%;
+}
+
+.score-value {
+  color: rgba(255, 255, 255, 0.8);
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: max(11px, calc(13.5 * var(--u)));
+  text-align: right;
+}
+
+/* --- step-card mocks --------------------------------------------------- */
+
+.mock-terminal {
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.mock-terminal-bar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  gap: 6px;
+  padding: calc(11 * var(--u)) calc(14 * var(--u));
+}
+
+.mock-terminal-bar i {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  display: block;
+  height: 8px;
+  width: 8px;
+}
+
+.mock-terminal pre {
+  color: rgba(255, 255, 255, 0.62);
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: max(10px, calc(12.5 * var(--u)));
+  line-height: 1.8;
+  margin: 0;
+  overflow-x: auto;
+  padding: calc(14 * var(--u)) calc(16 * var(--u));
+}
+
+.mock-draft,
+.mock-outcomes {
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: calc(6 * var(--u)) calc(16 * var(--u));
+}
+
+.mock-query {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.55);
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: max(11px, calc(13 * var(--u)));
+  overflow: hidden;
+  padding: calc(13 * var(--u)) 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mock-query-fn {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.outcome-row {
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  display: grid;
+  gap: calc(12 * var(--u));
+  grid-template-columns: minmax(0, 1fr) minmax(20%, 24%) auto;
+  padding: calc(13 * var(--u)) 0;
+}
+
+.mock-outcomes .outcome-row:last-child {
+  border-bottom: 0;
+}
+
+.outcome-name {
+  color: rgba(255, 255, 255, 0.68);
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: max(10px, calc(12.5 * var(--u)));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outcome-row .score-value {
+  font-size: max(10px, calc(12.5 * var(--u)));
+}
+
+.outcome-row-benched .outcome-name,
+.outcome-row-benched .score-value {
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.outcome-row-benched .score-bar i {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 .site-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin-top: calc(30 * var(--u));
@@ -704,9 +979,15 @@ html {
   }
 
   .stat-grid,
-  .step-grid {
+  .step-grid,
+  .compare-grid {
     grid-template-columns: 1fr;
     margin-top: 40px;
+  }
+
+  .compare-footnotes {
+    flex-wrap: wrap;
+    gap: 8px 20px;
   }
 
   .stat-card strong {
