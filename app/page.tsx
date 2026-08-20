@@ -597,12 +597,6 @@ const DRAFT_RESULTS = [
   { icon: "datadog", tool: "datadog.check_deploy", score: 85 },
 ];
 
-const OUTCOME_ROWS = [
-  { tool: "slack.post_message", rate: 98 },
-  { tool: "github.open_pull_request", rate: 95 },
-  { tool: "git.push", rate: 94 },
-];
-
 function MockIcon({ kind }: { kind: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -612,7 +606,7 @@ function MockIcon({ kind }: { kind: string }) {
 
 function WhySection() {
   return (
-    <section className="section section-ivory" id="why" aria-labelledby="why-title">
+    <section className="section" id="why" aria-labelledby="why-title">
       <div className="section-inner">
         <p className="section-label reveal">Why roster</p>
         <h2 className="reveal" id="why-title" style={{ transitionDelay: "90ms" }}>
@@ -630,7 +624,7 @@ function WhySection() {
         <div className="compare-grid">
           <div className="compare-col reveal">
             <div className="compare-header"><span>Without roster</span><i /></div>
-            <div className="compare-panel compare-panel-without">
+            <div className="compare-panel">
               <div className="schema-wall" aria-hidden="true">
                 {SCHEMA_WALL_TOOLS.map((tool) => (
                   <span className="schema-chip" key={tool}>{tool}</span>
@@ -647,7 +641,7 @@ function WhySection() {
 
           <div className="compare-col reveal" style={{ transitionDelay: "150ms" }}>
             <div className="compare-header"><span>With roster</span><i /></div>
-            <div className="compare-panel compare-panel-with">
+            <div className="compare-panel">
               <div className="mock-endpoint">
                 <span className="mock-endpoint-name"><i className="mock-dot" />roster &middot; one MCP endpoint</span>
                 <span className="mock-endpoint-status">connected</span>
@@ -675,88 +669,144 @@ function WhySection() {
   );
 }
 
+const SYNC_CONNECTIONS = [
+  { icon: "github", name: "github", detail: "stdio · 31 tools" },
+  { icon: "slack", name: "slack", detail: "stdio · 12 tools" },
+  { icon: "notion", name: "notion", detail: "stdio · 18 tools" },
+];
+
+const COACH_FEED = [
+  "outcome ok · slack.post_message · 320ms",
+  "rank up · github.open_pull_request",
+  "drift check · 3 servers · clean",
+  "outcome ok · git.push · 180ms",
+  "benched · jira.create_ticket · drift",
+  "outcome ok · sentry.resolve_issue · 540ms",
+  "maintenance · index refreshed",
+];
+
 function HowItWorks() {
   return (
     <section className="section" id="how-it-works" aria-labelledby="how-title">
       <div className="section-inner">
-      <p className="section-label reveal">How it works</p>
-      <h2 className="reveal" id="how-title" style={{ transitionDelay: "90ms" }}>One endpoint. A starting five.</h2>
+        <p className="section-label reveal">How it works</p>
+        <h2 className="reveal" id="how-title" style={{ transitionDelay: "90ms" }}>One endpoint. A starting five.</h2>
 
-      <ol className="step-grid">
-        <li className="step-card reveal">
-          <div className="step-heading">
-            <span className="step-number">Step 1</span>
-            <h3>Sync your servers</h3>
-          </div>
-          <div className="mock-terminal" aria-hidden="true">
-            <div className="mock-terminal-bar"><i /><i /><i /></div>
-            <pre>{`$ roster sync
+        <div className="diagram reveal" aria-hidden="true" style={{ transitionDelay: "180ms" }}>
+          <i className="diagram-line diagram-line-left" />
+          <i className="diagram-line diagram-line-right" />
 
-  claude code   12 servers -> 1   synced
-  cursor         9 servers -> 1   synced
-  codex          7 servers -> 1   synced
-
-  originals backed up · eject anytime`}</pre>
-          </div>
-          <p>
-            <code>roster sync</code> swaps N config entries for one local MCP
-            endpoint across Claude Code, Cursor, Codex, and OpenClaw &mdash;{" "}
-            <code>roster eject</code> puts every config back exactly as found.
-          </p>
-        </li>
-
-        <li className="step-card reveal" style={{ transitionDelay: "130ms" }}>
-          <div className="step-heading">
-            <span className="step-number">Step 2</span>
-            <h3>Draft the best five</h3>
-          </div>
-          <div className="mock-draft" aria-hidden="true">
-            <div className="mock-query">
-              <span className="mock-query-fn">draft</span>(&ldquo;ship a hotfix and tell the team&rdquo;)
+          <div className="diagram-col">
+            <div className="diagram-panel diagram-panel-draft">
+              <div className="panel-title">roster_draft</div>
+              <div className="mock-query">
+                <span className="mock-query-fn">draft</span>(&ldquo;ship a hotfix and tell the team&rdquo;<span className="mock-caret" />)
+              </div>
+              <div className="score-rows draft-loop">
+                {DRAFT_RESULTS.map(({ icon, tool, score }, index) => (
+                  <div className="score-row draft-row" key={tool} style={{ animationDelay: `${index * 0.5}s` }}>
+                    <span className="mock-tile"><MockIcon kind={icon} /></span>
+                    <span className="score-name">{tool}</span>
+                    <span className="score-value">{score}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="panel-foot">best 5 of 200 &middot; ranked locally</div>
             </div>
-            <div className="score-rows">
-              {DRAFT_RESULTS.map(({ icon, tool, score }) => (
-                <div className="score-row" key={tool}>
-                  <MockIcon kind={icon} />
-                  <span className="score-name">{tool}</span>
-                  <span className="score-value">{score}</span>
+          </div>
+
+          <div className="diagram-col diagram-col-center">
+            <div className="agent-card">
+              <div className="agent-head">
+                <span className="client-cycle">
+                  <span>Claude Code</span>
+                  <span>Cursor</span>
+                  <span>Codex</span>
+                </span>
+              </div>
+              <div className="agent-bubble">
+                Ship the hotfix and post the changelog to #eng.
+              </div>
+              <div className="agent-tag">
+                <i className="mock-dot" />
+                roster drafted 5 tools
+              </div>
+              <div className="agent-reply">
+                <span>Reply&hellip;</span>
+                <span className="agent-reply-note">any MCP client</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="diagram-col">
+            <div className="diagram-panel">
+              <div className="panel-title">roster_sync</div>
+              {SYNC_CONNECTIONS.map(({ icon, name, detail }) => (
+                <div className="conn-row" key={name}>
+                  <span className="mock-tile"><MockIcon kind={icon} /></span>
+                  <span className="conn-name">
+                    {name}
+                    <span className="conn-detail">{detail}</span>
+                  </span>
+                  <span className="conn-status"><i className="mock-dot" />connected</span>
                 </div>
               ))}
             </div>
-          </div>
-          <p>
-            Instead of every schema at once, your agent calls{" "}
-            <code>draft(need)</code> and gets the best five tools for the
-            task. If one hard-fails, the next-ranked equivalent is suggested.
-          </p>
-        </li>
 
-        <li className="step-card reveal" style={{ transitionDelay: "260ms" }}>
-          <div className="step-heading">
-            <span className="step-number">Step 3</span>
-            <h3>Learn what works</h3>
-          </div>
-          <div className="mock-outcomes" aria-hidden="true">
-            {OUTCOME_ROWS.map(({ tool, rate }) => (
-              <div className="outcome-row" key={tool}>
-                <span className="outcome-name">{tool}</span>
-                <span className="score-bar"><i style={{ width: `${rate}%` }} /></span>
-                <span className="score-value">{rate}%</span>
+            <div className="diagram-panel">
+              <div className="panel-title">roster_call</div>
+              <div className="call-name">slack.post_message</div>
+              <div className="call-args">
+                <span>channel</span><span>#eng</span>
               </div>
-            ))}
-            <div className="outcome-row outcome-row-benched">
-              <span className="outcome-name">jira.create_ticket</span>
-              <span className="score-bar"><i style={{ width: "12%" }} /></span>
-              <span className="score-value">benched</span>
+              <div className="call-args">
+                <span>text</span><span>changelog v0.1.3</span>
+              </div>
+              <div className="call-ok">200 OK &middot; posted</div>
+            </div>
+
+            <div className="diagram-panel diagram-panel-coach">
+              <div className="panel-title">coach_log</div>
+              <div className="coach-feed">
+                <div className="coach-feed-track">
+                  {[...COACH_FEED, ...COACH_FEED].map((line, index) => (
+                    <span className="coach-line" key={index}>{line}</span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-          <p>
-            The Coach records derived outcomes on your machine &mdash; never
-            prompts, arguments, or results &mdash; and refines routing toward
-            the tools that actually work on your stack.
-          </p>
-        </li>
-      </ol>
+        </div>
+
+        <ol className="step-line">
+          <li className="reveal">
+            <span className="step-number">01</span>
+            <h3>Sync your servers</h3>
+            <p>
+              <code>roster sync</code> swaps N config entries for one local
+              endpoint across Claude Code, Cursor, Codex, and OpenClaw.{" "}
+              <code>roster eject</code> puts everything back exactly as found.
+            </p>
+          </li>
+          <li className="reveal" style={{ transitionDelay: "130ms" }}>
+            <span className="step-number">02</span>
+            <h3>Draft the best five</h3>
+            <p>
+              Your agent calls <code>draft(need)</code> and gets the five best
+              tools for the task instead of every schema at once. If one
+              hard-fails, the next-ranked equivalent is suggested.
+            </p>
+          </li>
+          <li className="reveal" style={{ transitionDelay: "260ms" }}>
+            <span className="step-number">03</span>
+            <h3>Learn what works</h3>
+            <p>
+              The Coach records derived outcomes on your machine &mdash; never
+              prompts, arguments, or results &mdash; and refines routing toward
+              the tools that work on your stack.
+            </p>
+          </li>
+        </ol>
       </div>
     </section>
   );
