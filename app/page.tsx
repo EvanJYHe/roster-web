@@ -575,55 +575,175 @@ function DiagonalArrow() {
   );
 }
 
+const REPO_URL = "https://github.com/ManagementMO/roster";
+
+function WhySection() {
+  return (
+    <section className="section" id="why" aria-labelledby="why-title">
+      <p className="section-label">Why roster</p>
+      <h2 id="why-title">
+        Your agent has 200 tools.
+        <br />
+        Only five get to start.
+      </h2>
+      <p className="section-lede">
+        Tool schemas can eat most of a 200K context window before the first
+        user query, and selection accuracy collapses as the toolset grows.
+        Roster fronts all of your MCP servers behind one endpoint and serves
+        the best five tools for the task at hand.
+      </p>
+
+      <div className="stat-grid">
+        <div className="stat-card">
+          <strong>72%</strong>
+          <span>of a 200K context window consumed by tool schemas before the first user query</span>
+        </div>
+        <div className="stat-card">
+          <strong>43% &rarr; 14%</strong>
+          <span>tool-selection accuracy collapse as toolsets grow past a handful of servers</span>
+        </div>
+        <div className="stat-card">
+          <strong>177,000+</strong>
+          <span>public MCP tools to route between, and the haystack keeps growing</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HowItWorks() {
+  return (
+    <section className="section" id="how-it-works" aria-labelledby="how-title">
+      <p className="section-label">How it works</p>
+      <h2 id="how-title">One endpoint. A starting five.</h2>
+
+      <ol className="step-grid">
+        <li className="step-card">
+          <span className="step-number">01</span>
+          <h3>Sync your servers</h3>
+          <p>
+            <code>roster sync</code> swaps N config entries for one local MCP
+            endpoint across Claude Code, Cursor, Codex, and OpenClaw.
+            Originals are backed up first &mdash; <code>roster eject</code>{" "}
+            puts every config back exactly as found.
+          </p>
+        </li>
+        <li className="step-card">
+          <span className="step-number">02</span>
+          <h3>Draft the best five</h3>
+          <p>
+            Instead of every schema at once, your agent calls{" "}
+            <code>draft(need)</code> and gets the best five tools for the
+            task. If a drafted tool hard-fails, the next-ranked equivalent is
+            suggested.
+          </p>
+        </li>
+        <li className="step-card">
+          <span className="step-number">03</span>
+          <h3>Learn what works</h3>
+          <p>
+            The Coach records derived outcomes on your machine &mdash; never
+            prompts, arguments, or results &mdash; and refines routing toward
+            the tools that actually work on your stack.
+          </p>
+        </li>
+      </ol>
+    </section>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <div className="footer-top">
+        <div className="footer-brand">
+          <a className="brand footer-brand-lockup" href="#top" aria-label="Roster home">
+            <RosterMark />
+            <span className="brand-name">roster</span>
+          </a>
+          <p>
+            The self-learning tool router for MCP. Local-first: prompts,
+            arguments, and results never leave your machine.
+          </p>
+        </div>
+
+        <nav className="footer-columns" aria-label="Footer">
+          <div className="footer-column">
+            <h4>Product</h4>
+            <a href="#why">Why roster</a>
+            <a href="#how-it-works">How it works</a>
+          </div>
+          <div className="footer-column">
+            <h4>Resources</h4>
+            <a href={REPO_URL} target="_blank" rel="noreferrer">GitHub</a>
+            <a href={`${REPO_URL}/tree/main/docs`} target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </nav>
+      </div>
+
+      <div className="footer-bottom">
+        <span className="footer-watermark" aria-hidden="true">roster</span>
+        <span className="footer-copy">&copy; 2026 roster</span>
+      </div>
+    </footer>
+  );
+}
+
 export default function Home() {
   return (
     <main className="landing-page" id="top">
-      <SignalField />
+      <div className="hero-stage">
+        <SignalField />
 
-      <header className="site-nav">
-        <a className="brand" href="#top" aria-label="Roster home">
-          <RosterMark />
-          <span className="brand-name">roster</span>
-        </a>
-
-        <nav className="nav-links" aria-label="Primary navigation">
-          <a href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">Docs</a>
-          <a href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">GitHub</a>
-          <a className="nav-button" href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">
-            <span>Get Started</span>
+        <header className="site-nav">
+          <a className="brand" href="#top" aria-label="Roster home">
+            <RosterMark />
+            <span className="brand-name">roster</span>
           </a>
-        </nav>
-      </header>
 
-      <section className="hero" aria-labelledby="hero-title">
-        <div className="update-pill">
-          <span className="update-label"><i />Latest update</span>
-          <span className="update-message">Beta v0.1 Now Live <DiagonalArrow /></span>
-        </div>
+          <nav className="nav-links" aria-label="Primary navigation">
+            <a href={`${REPO_URL}/tree/main/docs`} target="_blank" rel="noreferrer">Docs</a>
+            <a href={REPO_URL} target="_blank" rel="noreferrer">GitHub</a>
+            <a className="nav-button" href={REPO_URL} target="_blank" rel="noreferrer">
+              <span>Get Started</span>
+            </a>
+          </nav>
+        </header>
 
-        <h1 id="hero-title">
-          <span>The self-learning</span>
-          <br />
-          <span>tool router for MCP.</span>
-        </h1>
+        <section className="hero" aria-labelledby="hero-title">
+          <div className="update-pill">
+            <span className="update-label"><i />Latest update</span>
+            <span className="update-message">Beta v0.1 Now Live <DiagonalArrow /></span>
+          </div>
 
-        <p className="hero-description">
-          <span>Roster finds the right tools when needed,</span>
-          <br />
-          <span>learns from what works, and works with any MCP client.</span>
-        </p>
+          <h1 id="hero-title">
+            <span>The self-learning</span>
+            <br />
+            <span>tool router for MCP.</span>
+          </h1>
 
-        <div className="hero-actions">
-          <a className="hero-button hero-button-primary" href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">
-            <span>Get Started</span>
-            <DiagonalArrow />
-          </a>
-          <a className="hero-button hero-button-secondary" href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">
-            <span>View Docs</span>
-            <DiagonalArrow />
-          </a>
-        </div>
-      </section>
+          <p className="hero-description">
+            <span>Roster finds the right tools when needed,</span>
+            <br />
+            <span>learns from what works, and works with any MCP client.</span>
+          </p>
+
+          <div className="hero-actions">
+            <a className="hero-button hero-button-primary" href={REPO_URL} target="_blank" rel="noreferrer">
+              <span>Get Started</span>
+              <DiagonalArrow />
+            </a>
+            <a className="hero-button hero-button-secondary" href={`${REPO_URL}/tree/main/docs`} target="_blank" rel="noreferrer">
+              <span>View Docs</span>
+              <DiagonalArrow />
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <WhySection />
+      <HowItWorks />
+      <SiteFooter />
     </main>
   );
 }
