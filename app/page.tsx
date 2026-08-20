@@ -578,17 +578,6 @@ function DiagonalArrow() {
 
 const REPO_URL = "https://github.com/ManagementMO/roster";
 
-const SCHEMA_WALL_TOOLS = [
-  "github.create_issue", "github.list_prs", "slack.post_message", "slack.list_channels",
-  "notion.create_page", "notion.search", "jira.create_ticket", "jira.transition_issue",
-  "gmail.send", "gmail.search_threads", "googledrive.upload", "googlecalendar.create_event",
-  "docker.build_image", "docker.push", "kubernetes.apply", "kubernetes.get_logs",
-  "amazonaws.s3_put_object", "amazonaws.invoke_lambda", "postgresql.query", "redis.get",
-  "stripe.create_charge", "sentry.list_issues", "datadog.query_metrics", "figma.export_frame",
-  "linear.create_issue", "asana.add_task", "trello.move_card", "zapier.trigger_zap",
-  "supabase.rpc", "elasticsearch.search", "confluence.create_page", "dropbox.upload",
-];
-
 const DRAFT_RESULTS = [
   { icon: "github", tool: "github.open_pull_request", score: 96 },
   { icon: "git", tool: "git.push", score: 93 },
@@ -604,77 +593,6 @@ function MockIcon({ kind }: { kind: string }) {
   );
 }
 
-function WhySection() {
-  return (
-    <section className="section" id="why" aria-labelledby="why-title">
-      <div className="section-inner">
-        <p className="section-label reveal">Why roster</p>
-        <h2 className="reveal" id="why-title" style={{ transitionDelay: "90ms" }}>
-          Your agent has 200 tools.
-          <br />
-          Only five get to start.
-        </h2>
-        <p className="section-lede reveal" style={{ transitionDelay: "180ms" }}>
-          Tool schemas can eat most of a 200K context window before the first
-          user query, and selection accuracy collapses as the toolset grows.
-          Roster fronts all of your MCP servers behind one endpoint and serves
-          the best five tools for the task at hand.
-        </p>
-
-        <div className="compare-grid">
-          <div className="compare-col reveal">
-            <div className="compare-header"><span>Without roster</span><i /></div>
-            <div className="compare-panel">
-              <div className="schema-wall" aria-hidden="true">
-                {SCHEMA_WALL_TOOLS.map((tool) => (
-                  <span className="schema-chip" key={tool}>{tool}</span>
-                ))}
-              </div>
-              <p className="schema-wall-more">&hellip;and 168 more schemas, loaded on every turn</p>
-              <div className="compare-footnotes">
-                <span>200 tools loaded</span>
-                <span>143K tokens of schemas</span>
-                <span>14% pick accuracy</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="compare-col reveal" style={{ transitionDelay: "150ms" }}>
-            <div className="compare-header"><span>With roster</span><i /></div>
-            <div className="compare-panel">
-              <div className="mock-endpoint">
-                <span className="mock-endpoint-name"><i className="mock-dot" />roster &middot; one MCP endpoint</span>
-                <span className="mock-endpoint-status">connected</span>
-              </div>
-              <div className="score-rows">
-                {DRAFT_RESULTS.map(({ icon, tool, score }) => (
-                  <div className="score-row" key={tool}>
-                    <MockIcon kind={icon} />
-                    <span className="score-name">{tool}</span>
-                    <span className="score-bar"><i style={{ width: `${score}%` }} /></span>
-                    <span className="score-value">{score}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="compare-footnotes">
-                <span>1 endpoint</span>
-                <span>best 5 tools per task</span>
-                <span>learns your stack</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const SYNC_CONNECTIONS = [
-  { icon: "github", name: "github", detail: "stdio · 31 tools" },
-  { icon: "slack", name: "slack", detail: "stdio · 12 tools" },
-  { icon: "notion", name: "notion", detail: "stdio · 18 tools" },
-];
-
 const COACH_FEED = [
   "outcome ok · slack.post_message · 320ms",
   "rank up · github.open_pull_request",
@@ -685,128 +603,82 @@ const COACH_FEED = [
   "maintenance · index refreshed",
 ];
 
-function HowItWorks() {
+const LEAGUE_ROWS = [
+  { rank: 1, icon: "github", name: "github-mcp", score: "0.947", move: "up" },
+  { rank: 2, icon: "postgresql", name: "postgres-mcp", score: "0.921", move: "steady" },
+  { rank: 3, icon: "slack", name: "slack-mcp", score: "0.898", move: "up" },
+  { rank: 4, icon: "notion", name: "notion-mcp", score: "0.874", move: "down" },
+  { rank: 5, icon: "jira", name: "jira-mcp", score: "0.712", move: "down" },
+] as const;
+
+const LEAGUE_MOVE_GLYPHS = { up: "\u25b2", down: "\u25bc", steady: "\u2013" } as const;
+
+function ShowcaseSection() {
   return (
-    <section className="section" id="how-it-works" aria-labelledby="how-title">
+    <section className="section" id="showcase" aria-labelledby="showcase-title">
       <div className="section-inner">
-        <p className="section-label reveal">How it works</p>
-        <h2 className="reveal" id="how-title" style={{ transitionDelay: "90ms" }}>One endpoint. A starting five.</h2>
+        <h2 className="reveal" id="showcase-title">
+          Tool routers already exist.
+          <br />
+          Roster is much more.
+        </h2>
 
-        <div className="diagram reveal" aria-hidden="true" style={{ transitionDelay: "180ms" }}>
-          <i className="diagram-line diagram-line-left" />
-          <i className="diagram-line diagram-line-right" />
-
-          <div className="diagram-col">
-            <div className="diagram-panel diagram-panel-draft">
-              <div className="panel-title">roster_draft</div>
+        <div className="showcase-grid">
+          <div className="showcase-card reveal">
+            <span className="showcase-kicker">Routing</span>
+            <h3>The best five, every task</h3>
+            <div className="showcase-visual" aria-hidden="true">
               <div className="mock-query">
                 <span className="mock-query-fn">draft</span>(&ldquo;ship a hotfix and tell the team&rdquo;<span className="mock-caret" />)
               </div>
-              <div className="score-rows draft-loop">
-                {DRAFT_RESULTS.map(({ icon, tool, score }, index) => (
-                  <div className="score-row draft-row" key={tool} style={{ animationDelay: `${index * 0.5}s` }}>
+              <div className="score-rows">
+                {DRAFT_RESULTS.map(({ icon, tool, score }) => (
+                  <div className="score-row" key={tool}>
                     <span className="mock-tile"><MockIcon kind={icon} /></span>
                     <span className="score-name">{tool}</span>
+                    <span className="score-bar"><i style={{ width: `${score}%` }} /></span>
                     <span className="score-value">{score}</span>
                   </div>
                 ))}
               </div>
-              <div className="panel-foot">best 5 of 200 &middot; ranked locally</div>
+              <div className="showcase-foot">best 5 of 200 &middot; one endpoint</div>
             </div>
           </div>
 
-          <div className="diagram-col diagram-col-center">
-            <div className="agent-card">
-              <div className="agent-head">
-                <span className="client-cycle">
-                  <span>Claude Code</span>
-                  <span>Cursor</span>
-                  <span>Codex</span>
-                </span>
-              </div>
-              <div className="agent-bubble">
-                Ship the hotfix and post the changelog to #eng.
-              </div>
-              <div className="agent-tag">
-                <i className="mock-dot" />
-                roster drafted 5 tools
-              </div>
-              <div className="agent-reply">
-                <span>Reply&hellip;</span>
-                <span className="agent-reply-note">any MCP client</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="diagram-col">
-            <div className="diagram-panel">
-              <div className="panel-title">roster_sync</div>
-              {SYNC_CONNECTIONS.map(({ icon, name, detail }) => (
-                <div className="conn-row" key={name}>
-                  <span className="mock-tile"><MockIcon kind={icon} /></span>
-                  <span className="conn-name">
-                    {name}
-                    <span className="conn-detail">{detail}</span>
-                  </span>
-                  <span className="conn-status"><i className="mock-dot" />connected</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="diagram-panel">
-              <div className="panel-title">roster_call</div>
-              <div className="call-name">slack.post_message</div>
-              <div className="call-args">
-                <span>channel</span><span>#eng</span>
-              </div>
-              <div className="call-args">
-                <span>text</span><span>changelog v0.1.3</span>
-              </div>
-              <div className="call-ok">200 OK &middot; posted</div>
-            </div>
-
-            <div className="diagram-panel diagram-panel-coach">
-              <div className="panel-title">coach_log</div>
+          <div className="showcase-card reveal" style={{ transitionDelay: "130ms" }}>
+            <span className="showcase-kicker">Learning</span>
+            <h3>Learns what works</h3>
+            <div className="showcase-visual" aria-hidden="true">
               <div className="coach-feed">
                 <div className="coach-feed-track">
-                  {[...COACH_FEED, ...COACH_FEED].map((line, index) => (
+                  {[...COACH_FEED, ...COACH_FEED, ...COACH_FEED, ...COACH_FEED].map((line, index) => (
                     <span className="coach-line" key={index}>{line}</span>
                   ))}
                 </div>
               </div>
+              <div className="showcase-foot">local outcomes only &middot; prompts never stored</div>
+            </div>
+          </div>
+
+          <div className="showcase-card reveal" style={{ transitionDelay: "260ms" }}>
+            <span className="showcase-kicker">Ranking</span>
+            <h3>A public league of MCP servers</h3>
+            <div className="showcase-visual" aria-hidden="true">
+              <div className="league-rows">
+                {LEAGUE_ROWS.map(({ rank, icon, name, score, move }) => (
+                  <div className="league-row" key={name}>
+                    <span className="league-rank">{rank}</span>
+                    <span className="mock-tile"><MockIcon kind={icon} /></span>
+                    <span className="league-name">{name}</span>
+                    <span className={`league-move league-move-${move}`}>{LEAGUE_MOVE_GLYPHS[move]}</span>
+                    <span className="league-score">{score}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="showcase-foot">signed scores &middot; open harness</div>
             </div>
           </div>
         </div>
-
-        <ol className="step-line">
-          <li className="reveal">
-            <span className="step-number">01</span>
-            <h3>Sync your servers</h3>
-            <p>
-              <code>roster sync</code> swaps N config entries for one local
-              endpoint across Claude Code, Cursor, Codex, and OpenClaw.{" "}
-              <code>roster eject</code> puts everything back exactly as found.
-            </p>
-          </li>
-          <li className="reveal" style={{ transitionDelay: "130ms" }}>
-            <span className="step-number">02</span>
-            <h3>Draft the best five</h3>
-            <p>
-              Your agent calls <code>draft(need)</code> and gets the five best
-              tools for the task instead of every schema at once. If one
-              hard-fails, the next-ranked equivalent is suggested.
-            </p>
-          </li>
-          <li className="reveal" style={{ transitionDelay: "260ms" }}>
-            <span className="step-number">03</span>
-            <h3>Learn what works</h3>
-            <p>
-              The Coach records derived outcomes on your machine &mdash; never
-              prompts, arguments, or results &mdash; and refines routing toward
-              the tools that work on your stack.
-            </p>
-          </li>
-        </ol>
       </div>
     </section>
   );
@@ -830,8 +702,8 @@ function SiteFooter() {
         <nav className="footer-columns" aria-label="Footer">
           <div className="footer-column">
             <h4>Product</h4>
-            <a href="#why">Why roster</a>
-            <a href="#how-it-works">How it works</a>
+            <a href="#showcase">What roster does</a>
+            <a href={`${REPO_URL}/blob/main/docs/methodology.md`} target="_blank" rel="noreferrer">The League</a>
           </div>
           <div className="footer-column">
             <h4>Resources</h4>
@@ -922,8 +794,7 @@ export default function Home() {
         </section>
       </div>
 
-      <WhySection />
-      <HowItWorks />
+      <ShowcaseSection />
       <SiteFooter />
     </main>
   );
