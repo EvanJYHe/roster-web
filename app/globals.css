@@ -7,6 +7,9 @@
   /* Fluid scale unit: 1px at the 1672px design width, with a softened slope
      so type stays legible on small desktops and capped growth on ultrawide. */
   --u: clamp(0.56px, calc((100vw + 400px) / 2072), 1.16px);
+  /* Hero foreground runs slightly smaller than the corridor artwork so the
+     scene reads as a deeper, more zoomed-out corridor. */
+  --hu: calc(var(--u) * 0.85);
 }
 
 * {
@@ -280,10 +283,10 @@ a {
   border-radius: 999px;
   color: rgba(255, 255, 255, 0.72);
   display: inline-flex;
-  font-size: max(13px, calc(19 * var(--u)));
-  height: calc(60 * var(--u));
+  font-size: max(13px, calc(19 * var(--hu)));
+  height: calc(60 * var(--hu));
   letter-spacing: -0.045em;
-  padding: calc(3 * var(--u));
+  padding: calc(3 * var(--hu));
   white-space: nowrap;
 }
 
@@ -291,15 +294,15 @@ a {
 .update-message {
   align-items: center;
   display: inline-flex;
-  height: calc(52 * var(--u));
+  height: calc(52 * var(--hu));
 }
 
 .update-label {
   background: radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.045) 58%, transparent 100%);
   border-radius: 999px;
   color: rgba(255, 255, 255, 0.76);
-  gap: calc(23 * var(--u));
-  padding: 0 calc(25 * var(--u));
+  gap: calc(23 * var(--hu));
+  padding: 0 calc(25 * var(--hu));
 }
 
 .update-label i {
@@ -307,29 +310,29 @@ a {
   border-radius: 50%;
   box-shadow: 0 0 8px 3px rgba(221, 238, 234, 0.24);
   display: block;
-  height: max(9px, calc(14 * var(--u)));
-  width: max(9px, calc(14 * var(--u)));
+  height: max(9px, calc(14 * var(--hu)));
+  width: max(9px, calc(14 * var(--hu)));
 }
 
 .update-message {
-  gap: calc(12 * var(--u));
-  padding: 0 calc(18 * var(--u)) 0 calc(1 * var(--u));
+  gap: calc(12 * var(--hu));
+  padding: 0 calc(18 * var(--hu)) 0 calc(1 * var(--hu));
 }
 
 .update-message .diagonal-arrow {
   color: rgba(255, 255, 255, 0.6);
-  height: max(13px, calc(18 * var(--u)));
-  width: max(13px, calc(18 * var(--u)));
+  height: max(13px, calc(18 * var(--hu)));
+  width: max(13px, calc(18 * var(--hu)));
 }
 
 .hero h1 {
   color: #f1f1f1;
   font-family: var(--display-font);
-  font-size: calc(110 * var(--u));
+  font-size: calc(110 * var(--hu));
   font-weight: 400;
   letter-spacing: -0.025em;
   line-height: 1.07;
-  margin: calc(46 * var(--u)) 0 0;
+  margin: calc(46 * var(--hu)) 0 0;
 }
 
 .hero h1 span,
@@ -347,11 +350,11 @@ a {
 
 .hero-description {
   color: rgba(241, 241, 241, 0.68);
-  font-size: max(15px, calc(27 * var(--u)));
+  font-size: max(15px, calc(27 * var(--hu)));
   font-weight: 400;
   letter-spacing: -0.035em;
   line-height: 1.46;
-  margin: calc(23 * var(--u)) 0 0;
+  margin: calc(23 * var(--hu)) 0 0;
 }
 
 .hero-description span:first-child {
@@ -364,27 +367,32 @@ a {
 
 .hero-actions {
   display: flex;
-  gap: calc(21 * var(--u));
-  margin-top: calc(44 * var(--u));
+  gap: calc(21 * var(--hu));
+  margin-top: calc(44 * var(--hu));
 }
 
 .hero-button {
   align-items: center;
   display: inline-flex;
   border-radius: 5px;
-  font-size: max(16px, calc(27 * var(--u)));
-  gap: calc(17 * var(--u));
-  height: max(56px, calc(84 * var(--u)));
+  font-size: max(16px, calc(27 * var(--hu)));
+  gap: calc(17 * var(--hu));
+  height: max(56px, calc(84 * var(--hu)));
   justify-content: center;
   letter-spacing: -0.045em;
   transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.hero-button .diagonal-arrow {
+  height: max(13px, calc(18 * var(--hu)));
+  width: max(13px, calc(18 * var(--hu)));
 }
 
 .hero-button-primary {
   background: #fff;
   box-shadow: 0 0 22px rgba(255, 255, 255, 0.09), 0 8px 16px rgba(0, 0, 0, 0.24);
   color: #0c0c0c;
-  width: max(180px, calc(262 * var(--u)));
+  width: max(180px, calc(262 * var(--hu)));
 }
 
 .hero-button-primary:hover {
@@ -395,7 +403,7 @@ a {
 .hero-button-secondary {
   border: 1px solid rgba(255, 255, 255, 0.38);
   color: rgba(255, 255, 255, 0.88);
-  width: max(178px, calc(258 * var(--u)));
+  width: max(178px, calc(258 * var(--hu)));
 }
 
 .hero-button-secondary:hover {
