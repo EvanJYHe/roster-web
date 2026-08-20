@@ -127,8 +127,8 @@ a {
 
 .signal-vignette {
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.68), transparent 21%, transparent 78%, rgba(0, 0, 0, 0.24) 100%),
-    radial-gradient(ellipse 76% 105% at 50% 48%, transparent 46%, rgba(0, 0, 0, 0.08) 67%, rgba(0, 0, 0, 0.48) 100%);
+    linear-gradient(180deg, rgba(0, 0, 0, 0.56), transparent 21%, transparent 78%, rgba(0, 0, 0, 0.2) 100%),
+    radial-gradient(ellipse 76% 105% at 50% 48%, transparent 46%, rgba(0, 0, 0, 0.06) 67%, rgba(0, 0, 0, 0.38) 100%);
   z-index: 3;
 }
 
@@ -141,12 +141,12 @@ a {
 }
 
 .signal-vignette::before {
-  background: linear-gradient(142deg, transparent 24%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0.26) 100%);
+  background: linear-gradient(142deg, transparent 24%, rgba(0, 0, 0, 0.07) 75%, rgba(0, 0, 0, 0.16) 100%);
   clip-path: polygon(0 45%, 50% 57%, 50% 100%, 0 100%);
 }
 
 .signal-vignette::after {
-  background: linear-gradient(218deg, transparent 24%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0.26) 100%);
+  background: linear-gradient(218deg, transparent 24%, rgba(0, 0, 0, 0.07) 75%, rgba(0, 0, 0, 0.16) 100%);
   clip-path: polygon(50% 57%, 100% 45%, 100% 100%, 50% 100%);
 }
 

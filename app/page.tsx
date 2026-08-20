@@ -439,9 +439,9 @@ function PerspectiveMarquee() {
           <stop offset="55%" stopColor="#000" stopOpacity="0.1" />
           <stop offset="100%" stopColor="#000" stopOpacity="0.52" />
         </linearGradient>
-        <linearGradient id="top-fade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="70" y2="290">
-          <stop offset="0%" stopColor="white" stopOpacity="0" />
-          <stop offset="24%" stopColor="white" stopOpacity="0.2" />
+        <linearGradient id="top-fade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="40" y2="250">
+          <stop offset="0%" stopColor="white" stopOpacity="0.08" />
+          <stop offset="24%" stopColor="white" stopOpacity="0.38" />
           <stop offset="62%" stopColor="white" stopOpacity="0.94" />
           <stop offset="100%" stopColor="white" stopOpacity="1" />
         </linearGradient>
@@ -450,8 +450,8 @@ function PerspectiveMarquee() {
         </mask>
         <linearGradient id="bottom-fade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="700" y2={VIEWPORT_HEIGHT}>
           <stop offset="0%" stopColor="white" stopOpacity="1" />
-          <stop offset="65%" stopColor="white" stopOpacity="0.86" />
-          <stop offset="100%" stopColor="white" stopOpacity="0.2" />
+          <stop offset="65%" stopColor="white" stopOpacity="0.93" />
+          <stop offset="100%" stopColor="white" stopOpacity="0.42" />
         </linearGradient>
         <mask id="bottom-fade-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={VIEWPORT_WIDTH} height={VIEWPORT_HEIGHT}>
           <rect fill="url(#bottom-fade)" height={VIEWPORT_HEIGHT} width={VIEWPORT_WIDTH} x="0" y="0" />
