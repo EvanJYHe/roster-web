@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect } from "react";
 
 // Fixed artwork coordinate space for the corridor scene. The SVGs scale this
 // space uniformly to cover the hero (xMidYMid slice), so these are not tied to
@@ -611,74 +612,61 @@ function MockIcon({ kind }: { kind: string }) {
 
 function WhySection() {
   return (
-    <section className="section" id="why" aria-labelledby="why-title">
-      <p className="section-label">Why roster</p>
-      <h2 id="why-title">
-        Your agent has 200 tools.
-        <br />
-        Only five get to start.
-      </h2>
-      <p className="section-lede">
-        Tool schemas can eat most of a 200K context window before the first
-        user query, and selection accuracy collapses as the toolset grows.
-        Roster fronts all of your MCP servers behind one endpoint and serves
-        the best five tools for the task at hand.
-      </p>
+    <section className="section section-ivory" id="why" aria-labelledby="why-title">
+      <div className="section-inner">
+        <p className="section-label reveal">Why roster</p>
+        <h2 className="reveal" id="why-title" style={{ transitionDelay: "90ms" }}>
+          Your agent has 200 tools.
+          <br />
+          Only five get to start.
+        </h2>
+        <p className="section-lede reveal" style={{ transitionDelay: "180ms" }}>
+          Tool schemas can eat most of a 200K context window before the first
+          user query, and selection accuracy collapses as the toolset grows.
+          Roster fronts all of your MCP servers behind one endpoint and serves
+          the best five tools for the task at hand.
+        </p>
 
-      <div className="stat-grid">
-        <div className="stat-card">
-          <strong>72%</strong>
-          <span>of a 200K context window consumed by tool schemas before the first user query</span>
-        </div>
-        <div className="stat-card">
-          <strong>43% &rarr; 14%</strong>
-          <span>tool-selection accuracy collapse as toolsets grow past a handful of servers</span>
-        </div>
-        <div className="stat-card">
-          <strong>177,000+</strong>
-          <span>public MCP tools to route between, and the haystack keeps growing</span>
-        </div>
-      </div>
-
-      <div className="compare-grid">
-        <div className="compare-col">
-          <div className="compare-header"><span>Without roster</span><i /></div>
-          <div className="compare-panel">
-            <div className="schema-wall" aria-hidden="true">
-              {SCHEMA_WALL_TOOLS.map((tool) => (
-                <span className="schema-chip" key={tool}>{tool}</span>
-              ))}
-            </div>
-            <p className="schema-wall-more">&hellip;and 168 more schemas, loaded on every turn</p>
-            <div className="compare-footnotes">
-              <span>200 tools loaded</span>
-              <span>143K tokens of schemas</span>
-              <span>14% pick accuracy</span>
+        <div className="compare-grid">
+          <div className="compare-col reveal">
+            <div className="compare-header"><span>Without roster</span><i /></div>
+            <div className="compare-panel compare-panel-without">
+              <div className="schema-wall" aria-hidden="true">
+                {SCHEMA_WALL_TOOLS.map((tool) => (
+                  <span className="schema-chip" key={tool}>{tool}</span>
+                ))}
+              </div>
+              <p className="schema-wall-more">&hellip;and 168 more schemas, loaded on every turn</p>
+              <div className="compare-footnotes">
+                <span>200 tools loaded</span>
+                <span>143K tokens of schemas</span>
+                <span>14% pick accuracy</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="compare-col">
-          <div className="compare-header"><span>With roster</span><i /></div>
-          <div className="compare-panel">
-            <div className="mock-endpoint">
-              <span className="mock-endpoint-name"><i className="mock-dot" />roster &middot; one MCP endpoint</span>
-              <span className="mock-endpoint-status">connected</span>
-            </div>
-            <div className="score-rows">
-              {DRAFT_RESULTS.map(({ icon, tool, score }) => (
-                <div className="score-row" key={tool}>
-                  <MockIcon kind={icon} />
-                  <span className="score-name">{tool}</span>
-                  <span className="score-bar"><i style={{ width: `${score}%` }} /></span>
-                  <span className="score-value">{score}</span>
-                </div>
-              ))}
-            </div>
-            <div className="compare-footnotes">
-              <span>1 endpoint</span>
-              <span>best 5 tools per task</span>
-              <span>learns your stack</span>
+          <div className="compare-col reveal" style={{ transitionDelay: "150ms" }}>
+            <div className="compare-header"><span>With roster</span><i /></div>
+            <div className="compare-panel compare-panel-with">
+              <div className="mock-endpoint">
+                <span className="mock-endpoint-name"><i className="mock-dot" />roster &middot; one MCP endpoint</span>
+                <span className="mock-endpoint-status">connected</span>
+              </div>
+              <div className="score-rows">
+                {DRAFT_RESULTS.map(({ icon, tool, score }) => (
+                  <div className="score-row" key={tool}>
+                    <MockIcon kind={icon} />
+                    <span className="score-name">{tool}</span>
+                    <span className="score-bar"><i style={{ width: `${score}%` }} /></span>
+                    <span className="score-value">{score}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="compare-footnotes">
+                <span>1 endpoint</span>
+                <span>best 5 tools per task</span>
+                <span>learns your stack</span>
+              </div>
             </div>
           </div>
         </div>
@@ -690,11 +678,12 @@ function WhySection() {
 function HowItWorks() {
   return (
     <section className="section" id="how-it-works" aria-labelledby="how-title">
-      <p className="section-label">How it works</p>
-      <h2 id="how-title">One endpoint. A starting five.</h2>
+      <div className="section-inner">
+      <p className="section-label reveal">How it works</p>
+      <h2 className="reveal" id="how-title" style={{ transitionDelay: "90ms" }}>One endpoint. A starting five.</h2>
 
       <ol className="step-grid">
-        <li className="step-card">
+        <li className="step-card reveal">
           <div className="step-heading">
             <span className="step-number">Step 1</span>
             <h3>Sync your servers</h3>
@@ -716,7 +705,7 @@ function HowItWorks() {
           </p>
         </li>
 
-        <li className="step-card">
+        <li className="step-card reveal" style={{ transitionDelay: "130ms" }}>
           <div className="step-heading">
             <span className="step-number">Step 2</span>
             <h3>Draft the best five</h3>
@@ -742,7 +731,7 @@ function HowItWorks() {
           </p>
         </li>
 
-        <li className="step-card">
+        <li className="step-card reveal" style={{ transitionDelay: "260ms" }}>
           <div className="step-heading">
             <span className="step-number">Step 3</span>
             <h3>Learn what works</h3>
@@ -768,6 +757,7 @@ function HowItWorks() {
           </p>
         </li>
       </ol>
+      </div>
     </section>
   );
 }
@@ -810,6 +800,27 @@ function SiteFooter() {
 }
 
 export default function Home() {
+  useEffect(() => {
+    const elements = Array.from(document.querySelectorAll(".reveal"));
+    if (!("IntersectionObserver" in window)) {
+      elements.forEach((el) => el.classList.add("reveal-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("reveal-visible");
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
+    );
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <main className="landing-page" id="top">
       <div className="hero-stage">
