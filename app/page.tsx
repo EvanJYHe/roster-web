@@ -352,14 +352,13 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
   const laneEnd = lanePoint(sourceLogo, FLOW_EXIT_DEPTH);
   // Phases are spaced uniformly around the loop (rather than derived from the
   // static depth slots) so the marquee has no empty seam between the deepest
-  // logo and the next wrap-around. Each lane is offset by a stable random
-  // amount, and every logo gets a touch of jitter, so rows never read as
-  // aligned columns.
+  // logo and the next wrap-around, and the gap between icons in a lane stays
+  // exactly constant. Each lane is offset by a stable random amount so rows
+  // never read as aligned columns.
   const laneIndex = (logo.side === "left" ? 0 : 8) + (logo.row - 1);
   const laneOffset = hash01(laneIndex + 1);
-  const logoJitter = (hash01(laneIndex * 16 + logo.slot + 37) - 0.5) * 0.05;
   const laneProgress =
-    (((logo.slot + 0.5) / SECTION_DEPTHS.length + laneOffset + logoJitter) % 1 + 1) % 1;
+    ((logo.slot + 0.5) / SECTION_DEPTHS.length + laneOffset) % 1;
   const basePoint = lanePoint(sourceLogo, 1 - laneProgress * (1 - FLOW_EXIT_DEPTH));
   // Values are rounded and stripped of trailing zeros so the SSR-rendered
   // style attribute matches the browser's CSSOM serialization exactly
