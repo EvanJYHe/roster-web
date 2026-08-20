@@ -2,8 +2,11 @@
 
 import Image from "next/image";
 
-const VIEWPORT_WIDTH = 1672;
-const VIEWPORT_HEIGHT = 941;
+// Fixed artwork coordinate space for the corridor scene. The SVGs scale this
+// space uniformly to cover the hero (xMidYMid slice), so these are not tied to
+// any browser viewport size.
+const ART_WIDTH = 1672;
+const ART_HEIGHT = 941;
 const CENTER_X = 836;
 const RIGHT_EDGE = 1671;
 
@@ -232,8 +235,6 @@ const LOGO_ICON_ASPECTS: Partial<Record<LogoKind, number>> = {
   openai: 1.03,
   playwright: 1.33,
   salesforce: 1.42,
-  sendgrid: 5.69,
-  twilio: 3.3,
 };
 
 // Several pack assets use a generous square viewBox around a shorter mark.
@@ -289,7 +290,7 @@ function logoGeometry(logo: LogoSpec): LogoGeometry {
     y: (top + bottom) / 2,
     width: height * (LOGO_ICON_ASPECTS[logo.kind] ?? 1),
     height,
-    opacity: Math.max(0.07, ROW_LOGO_OPACITY[logo.row - 1] * (0.92 - logo.depth * 0.38)),
+    opacity: Math.max(0.07, ROW_LOGO_OPACITY[logo.row - 1] * (0.96 - logo.depth * 0.18)),
   };
 }
 
@@ -371,51 +372,55 @@ function PerspectiveMarquee() {
   const sides: Side[] = ["left", "right"];
 
   return (
-    <svg className="perspective-marquee" viewBox={`0 0 ${VIEWPORT_WIDTH} ${VIEWPORT_HEIGHT}`} preserveAspectRatio="none">
+    <svg className="perspective-marquee" viewBox={`0 0 ${ART_WIDTH} ${ART_HEIGHT}`} preserveAspectRatio="xMidYMid slice">
       <defs>
-        <linearGradient id="left-wall-mask-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="740" y1="0" y2="0">
+        <linearGradient id="left-wall-mask-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="830" y1="0" y2="0">
           <stop offset="0%" stopColor="white" stopOpacity="0.78" />
           <stop offset="18%" stopColor="white" stopOpacity="0.8" />
-          <stop offset="35%" stopColor="white" stopOpacity="0.58" />
-          <stop offset="50%" stopColor="white" stopOpacity="0.3" />
-          <stop offset="70%" stopColor="white" stopOpacity="0.07" />
+          <stop offset="42%" stopColor="white" stopOpacity="0.66" />
+          <stop offset="54%" stopColor="white" stopOpacity="0.44" />
+          <stop offset="66%" stopColor="white" stopOpacity="0.18" />
+          <stop offset="78%" stopColor="white" stopOpacity="0.06" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
-        <linearGradient id="right-wall-mask-gradient" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2={RIGHT_EDGE - 740} y1="0" y2="0">
+        <linearGradient id="right-wall-mask-gradient" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2={RIGHT_EDGE - 830} y1="0" y2="0">
           <stop offset="0%" stopColor="white" stopOpacity="0.78" />
           <stop offset="18%" stopColor="white" stopOpacity="0.8" />
-          <stop offset="35%" stopColor="white" stopOpacity="0.58" />
-          <stop offset="50%" stopColor="white" stopOpacity="0.3" />
-          <stop offset="70%" stopColor="white" stopOpacity="0.07" />
+          <stop offset="42%" stopColor="white" stopOpacity="0.66" />
+          <stop offset="54%" stopColor="white" stopOpacity="0.44" />
+          <stop offset="66%" stopColor="white" stopOpacity="0.18" />
+          <stop offset="78%" stopColor="white" stopOpacity="0.06" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
-        <linearGradient id="left-logo-mask-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="740" y1="0" y2="0">
+        <linearGradient id="left-logo-mask-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="830" y1="0" y2="0">
           <stop offset="0%" stopColor="white" stopOpacity="0.76" />
           <stop offset="18%" stopColor="white" stopOpacity="0.82" />
-          <stop offset="35%" stopColor="white" stopOpacity="0.56" />
-          <stop offset="50%" stopColor="white" stopOpacity="0.27" />
-          <stop offset="70%" stopColor="white" stopOpacity="0.05" />
+          <stop offset="42%" stopColor="white" stopOpacity="0.62" />
+          <stop offset="54%" stopColor="white" stopOpacity="0.38" />
+          <stop offset="66%" stopColor="white" stopOpacity="0.12" />
+          <stop offset="78%" stopColor="white" stopOpacity="0.03" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
-        <linearGradient id="right-logo-mask-gradient" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2={RIGHT_EDGE - 740} y1="0" y2="0">
+        <linearGradient id="right-logo-mask-gradient" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2={RIGHT_EDGE - 830} y1="0" y2="0">
           <stop offset="0%" stopColor="white" stopOpacity="0.76" />
           <stop offset="18%" stopColor="white" stopOpacity="0.82" />
-          <stop offset="35%" stopColor="white" stopOpacity="0.56" />
-          <stop offset="50%" stopColor="white" stopOpacity="0.27" />
-          <stop offset="70%" stopColor="white" stopOpacity="0.05" />
+          <stop offset="42%" stopColor="white" stopOpacity="0.62" />
+          <stop offset="54%" stopColor="white" stopOpacity="0.38" />
+          <stop offset="66%" stopColor="white" stopOpacity="0.12" />
+          <stop offset="78%" stopColor="white" stopOpacity="0.03" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
-        <mask id="left-wall-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={CENTER_X} height={VIEWPORT_HEIGHT}>
-          <rect fill="url(#left-wall-mask-gradient)" height={VIEWPORT_HEIGHT} width={CENTER_X} x="0" y="0" />
+        <mask id="left-wall-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={CENTER_X} height={ART_HEIGHT}>
+          <rect fill="url(#left-wall-mask-gradient)" height={ART_HEIGHT} width={CENTER_X} x="0" y="0" />
         </mask>
-        <mask id="right-wall-mask" maskUnits="userSpaceOnUse" x={CENTER_X} y="0" width={CENTER_X} height={VIEWPORT_HEIGHT}>
-          <rect fill="url(#right-wall-mask-gradient)" height={VIEWPORT_HEIGHT} width={CENTER_X} x={CENTER_X} y="0" />
+        <mask id="right-wall-mask" maskUnits="userSpaceOnUse" x={CENTER_X} y="0" width={CENTER_X} height={ART_HEIGHT}>
+          <rect fill="url(#right-wall-mask-gradient)" height={ART_HEIGHT} width={CENTER_X} x={CENTER_X} y="0" />
         </mask>
-        <mask id="left-logo-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={CENTER_X} height={VIEWPORT_HEIGHT}>
-          <rect fill="url(#left-logo-mask-gradient)" height={VIEWPORT_HEIGHT} width={CENTER_X} x="0" y="0" />
+        <mask id="left-logo-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={CENTER_X} height={ART_HEIGHT}>
+          <rect fill="url(#left-logo-mask-gradient)" height={ART_HEIGHT} width={CENTER_X} x="0" y="0" />
         </mask>
-        <mask id="right-logo-mask" maskUnits="userSpaceOnUse" x={CENTER_X} y="0" width={CENTER_X} height={VIEWPORT_HEIGHT}>
-          <rect fill="url(#right-logo-mask-gradient)" height={VIEWPORT_HEIGHT} width={CENTER_X} x={CENTER_X} y="0" />
+        <mask id="right-logo-mask" maskUnits="userSpaceOnUse" x={CENTER_X} y="0" width={CENTER_X} height={ART_HEIGHT}>
+          <rect fill="url(#right-logo-mask-gradient)" height={ART_HEIGHT} width={CENTER_X} x={CENTER_X} y="0" />
         </mask>
         <linearGradient id="left-panel-fill" gradientUnits="userSpaceOnUse" x1="0" x2={CENTER_X} y1="0" y2="0">
           <stop offset="0%" stopColor="#dce9e5" stopOpacity="0.08" />
@@ -429,15 +434,15 @@ function PerspectiveMarquee() {
           <stop offset="56%" stopColor="#b7c7c2" stopOpacity="0.018" />
           <stop offset="100%" stopColor="#b7c7c2" stopOpacity="0" />
         </linearGradient>
-        <linearGradient id="center-occlusion-left" gradientUnits="userSpaceOnUse" x1="350" x2={CENTER_X} y1="0" y2="0">
+        <linearGradient id="center-occlusion-left" gradientUnits="userSpaceOnUse" x1="450" x2={CENTER_X} y1="0" y2="0">
           <stop offset="0%" stopColor="#000" stopOpacity="0" />
-          <stop offset="55%" stopColor="#000" stopOpacity="0.1" />
-          <stop offset="100%" stopColor="#000" stopOpacity="0.52" />
+          <stop offset="50%" stopColor="#000" stopOpacity="0.12" />
+          <stop offset="100%" stopColor="#000" stopOpacity="0.5" />
         </linearGradient>
-        <linearGradient id="center-occlusion-right" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE - 350} x2={CENTER_X} y1="0" y2="0">
+        <linearGradient id="center-occlusion-right" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE - 450} x2={CENTER_X} y1="0" y2="0">
           <stop offset="0%" stopColor="#000" stopOpacity="0" />
-          <stop offset="55%" stopColor="#000" stopOpacity="0.1" />
-          <stop offset="100%" stopColor="#000" stopOpacity="0.52" />
+          <stop offset="50%" stopColor="#000" stopOpacity="0.12" />
+          <stop offset="100%" stopColor="#000" stopOpacity="0.5" />
         </linearGradient>
         <linearGradient id="top-fade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="40" y2="250">
           <stop offset="0%" stopColor="white" stopOpacity="0.08" />
@@ -445,16 +450,16 @@ function PerspectiveMarquee() {
           <stop offset="62%" stopColor="white" stopOpacity="0.94" />
           <stop offset="100%" stopColor="white" stopOpacity="1" />
         </linearGradient>
-        <mask id="top-fade-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={VIEWPORT_WIDTH} height={VIEWPORT_HEIGHT}>
-          <rect fill="url(#top-fade)" height={VIEWPORT_HEIGHT} width={VIEWPORT_WIDTH} x="0" y="0" />
+        <mask id="top-fade-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={ART_WIDTH} height={ART_HEIGHT}>
+          <rect fill="url(#top-fade)" height={ART_HEIGHT} width={ART_WIDTH} x="0" y="0" />
         </mask>
-        <linearGradient id="bottom-fade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="700" y2={VIEWPORT_HEIGHT}>
+        <linearGradient id="bottom-fade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="700" y2={ART_HEIGHT}>
           <stop offset="0%" stopColor="white" stopOpacity="1" />
           <stop offset="65%" stopColor="white" stopOpacity="0.93" />
           <stop offset="100%" stopColor="white" stopOpacity="0.58" />
         </linearGradient>
-        <mask id="bottom-fade-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={VIEWPORT_WIDTH} height={VIEWPORT_HEIGHT}>
-          <rect fill="url(#bottom-fade)" height={VIEWPORT_HEIGHT} width={VIEWPORT_WIDTH} x="0" y="0" />
+        <mask id="bottom-fade-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={ART_WIDTH} height={ART_HEIGHT}>
+          <rect fill="url(#bottom-fade)" height={ART_HEIGHT} width={ART_WIDTH} x="0" y="0" />
         </mask>
       </defs>
 
@@ -509,8 +514,8 @@ function PerspectiveMarquee() {
         );
       })}
 
-      <rect className="center-occlusion" fill="url(#center-occlusion-left)" height={VIEWPORT_HEIGHT} width={CENTER_X} x="0" y="0" />
-      <rect className="center-occlusion" fill="url(#center-occlusion-right)" height={VIEWPORT_HEIGHT} width={CENTER_X} x={CENTER_X} y="0" />
+      <rect className="center-occlusion" fill="url(#center-occlusion-left)" height={ART_HEIGHT} width={CENTER_X} x="0" y="0" />
+      <rect className="center-occlusion" fill="url(#center-occlusion-right)" height={ART_HEIGHT} width={CENTER_X} x={CENTER_X} y="0" />
     </svg>
   );
 }
@@ -518,7 +523,7 @@ function PerspectiveMarquee() {
 function SignalField() {
   return (
     <div className="signal-field" aria-hidden="true">
-      <svg className="signal-art" viewBox={`0 0 ${VIEWPORT_WIDTH} ${VIEWPORT_HEIGHT}`} preserveAspectRatio="none">
+      <svg className="signal-art" viewBox={`0 0 ${ART_WIDTH} ${ART_HEIGHT}`} preserveAspectRatio="xMidYMid slice">
         <defs>
           <radialGradient id="signal-horizon-glow" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#eef6f3" stopOpacity="0.13" />
