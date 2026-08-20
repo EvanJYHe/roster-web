@@ -344,7 +344,10 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
   };
   const laneStart = lanePoint(sourceLogo, 1);
   const laneEnd = lanePoint(sourceLogo, FLOW_EXIT_DEPTH);
-  const laneProgress = (1 - logo.depth) / (1 - FLOW_EXIT_DEPTH);
+  // Phases are spaced uniformly around the loop (rather than derived from the
+  // static depth slots) so the marquee has no empty seam between the deepest
+  // logo and the next wrap-around.
+  const laneProgress = (logo.slot + 0.5) / SECTION_DEPTHS.length;
   const laneStyle = {
     "--lane-x0": `${laneStart.x}px`,
     "--lane-y0": `${laneStart.y}px`,
