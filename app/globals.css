@@ -746,7 +746,13 @@ html {
 }
 
 .diagram-panel-draft {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+}
+
+.diagram-panel-draft .panel-foot {
+  margin-top: auto;
 }
 
 .panel-title {
