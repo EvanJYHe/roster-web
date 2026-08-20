@@ -620,25 +620,53 @@ function MockIcon({ kind }: { kind: string }) {
   );
 }
 
-const COACH_FEED = [
-  "outcome ok · slack.post_message · 320ms",
-  "rank up · github.open_pull_request",
-  "drift check · 3 servers · clean",
-  "outcome ok · git.push · 180ms",
-  "benched · jira.create_ticket · drift",
-  "outcome ok · sentry.resolve_issue · 540ms",
-  "maintenance · index refreshed",
-];
+const LEARN_ROWS = [
+  { tool: "slack.post_message", note: "ok · 320ms", width: 96, from: 0.86, score: "96", delta: "+3", kind: "up" },
+  { tool: "github.open_pull_request", note: "ok · 610ms", width: 94, from: 0.9, score: "94", delta: "+2", kind: "up" },
+  { tool: "git.push", note: "ok · 180ms", width: 92, from: 0.95, score: "92", delta: "+1", kind: "up" },
+  { tool: "jira.create_ticket", note: "drift", width: 12, from: 5.2, score: "benched", delta: "\u25bc", kind: "down" },
+] as const;
 
+// The League ranks only within one certified category, so the standings
+// compare like against like.
 const LEAGUE_ROWS = [
-  { rank: 1, icon: "github", name: "github-mcp", score: "0.947", move: "up" },
-  { rank: 2, icon: "postgresql", name: "postgres-mcp", score: "0.921", move: "steady" },
-  { rank: 3, icon: "slack", name: "slack-mcp", score: "0.898", move: "up" },
-  { rank: 4, icon: "notion", name: "notion-mcp", score: "0.874", move: "down" },
-  { rank: 5, icon: "jira", name: "jira-mcp", score: "0.712", move: "down" },
+  { rank: 1, icon: "postgresql", name: "postgres-mcp", score: "0.947", move: "steady", swap: "" },
+  { rank: 2, icon: "supabase", name: "supabase-mcp", score: "0.921", move: "down", swap: "down" },
+  { rank: 3, icon: "mongodb", name: "mongodb-mcp", score: "0.898", move: "up", swap: "up" },
+  { rank: 4, icon: "mysql", name: "mysql-mcp", score: "0.874", move: "steady", swap: "" },
+  { rank: 5, icon: "redis", name: "redis-mcp", score: "0.712", move: "down", swap: "" },
 ] as const;
 
 const LEAGUE_MOVE_GLYPHS = { up: "\u25b2", down: "\u25bc", steady: "\u2013" } as const;
+
+function RotationIcon() {
+  return (
+    <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
+      <path d="M14.5 9a5.5 5.5 0 1 1-2.1-4.32" />
+      <path d="M14.8 2.5v2.8H12" />
+    </svg>
+  );
+}
+
+function CoachIcon() {
+  return (
+    <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
+      <rect x="4" y="3.8" width="10" height="11.7" rx="1.4" />
+      <path d="M6.8 3.8V3a1.2 1.2 0 0 1 1.2-1.2h2A1.2 1.2 0 0 1 11.2 3v.8" />
+      <path d="M6.8 8.6h4.4M6.8 11.6h2.8" />
+    </svg>
+  );
+}
+
+function LeagueIcon() {
+  return (
+    <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
+      <path d="M5.8 2.8h6.4v3.6a3.2 3.2 0 0 1-6.4 0z" />
+      <path d="M5.8 4H3.5a2.5 2.5 0 0 0 2.6 2.6M12.2 4h2.3a2.5 2.5 0 0 1-2.6 2.6" />
+      <path d="M9 9.6v2.6M6.4 15h5.2" />
+    </svg>
+  );
+}
 
 function ShowcaseSection() {
   return (
@@ -652,15 +680,18 @@ function ShowcaseSection() {
 
         <div className="showcase-grid">
           <div className="showcase-card reveal">
-            <span className="showcase-kicker">Routing</span>
+            <div className="card-head">
+              <span className="card-badge"><RotationIcon /></span>
+              <span className="showcase-kicker">The Rotation</span>
+            </div>
             <h3>The best five, every task</h3>
             <div className="showcase-visual" aria-hidden="true">
               <div className="mock-query">
                 <span className="mock-query-fn">draft</span>(&ldquo;ship a hotfix and tell the team&rdquo;<span className="mock-caret" />)
               </div>
               <div className="score-rows">
-                {DRAFT_RESULTS.map(({ icon, tool, score }) => (
-                  <div className="score-row" key={tool}>
+                {DRAFT_RESULTS.map(({ icon, tool, score }, index) => (
+                  <div className="score-row draft-row" key={tool} style={{ "--d": `${1 + index * 0.9}s` } as React.CSSProperties}>
                     <span className="mock-tile"><MockIcon kind={icon} /></span>
                     <span className="score-name">{tool}</span>
                     <span className="score-bar"><i style={{ width: `${score}%` }} /></span>
@@ -673,32 +704,59 @@ function ShowcaseSection() {
           </div>
 
           <div className="showcase-card reveal" style={{ transitionDelay: "130ms" }}>
-            <span className="showcase-kicker">Learning</span>
+            <div className="card-head">
+              <span className="card-badge"><CoachIcon /></span>
+              <span className="showcase-kicker">The Coach</span>
+            </div>
             <h3>Learns what works</h3>
             <div className="showcase-visual" aria-hidden="true">
-              <div className="coach-feed">
-                <div className="coach-feed-track">
-                  {[...COACH_FEED, ...COACH_FEED, ...COACH_FEED, ...COACH_FEED].map((line, index) => (
-                    <span className="coach-line" key={index}>{line}</span>
-                  ))}
+              <div className="learn-table">
+                <div className="learn-head">
+                  <span>tool</span>
+                  <span>outcome</span>
+                  <span className="learn-head-score">score</span>
                 </div>
+                {LEARN_ROWS.map(({ tool, note, width, from, score, delta, kind }, index) => (
+                  <div
+                    className={`learn-row learn-row-${kind}`}
+                    key={tool}
+                    style={{ "--d": `${1 + index * 1.1}s`, "--from": from } as React.CSSProperties}
+                  >
+                    <span className="learn-name">{tool}</span>
+                    <span className="learn-note">{note}</span>
+                    <span className="score-bar learn-bar"><i style={{ width: `${width}%` }} /></span>
+                    <span className="learn-score">
+                      {score}
+                      <span className={`learn-delta learn-delta-${kind}`}>{delta}</span>
+                    </span>
+                  </div>
+                ))}
               </div>
               <div className="showcase-foot">local outcomes only &middot; prompts never stored</div>
             </div>
           </div>
 
           <div className="showcase-card reveal" style={{ transitionDelay: "260ms" }}>
-            <span className="showcase-kicker">Ranking</span>
-            <h3>A public league of MCP servers</h3>
+            <div className="card-head">
+              <span className="card-badge"><LeagueIcon /></span>
+              <span className="showcase-kicker">The League</span>
+            </div>
+            <h3>Every category, ranked</h3>
             <div className="showcase-visual" aria-hidden="true">
+              <div className="league-head">
+                <span>database mcps</span>
+                <span>6 certified</span>
+              </div>
               <div className="league-rows">
-                {LEAGUE_ROWS.map(({ rank, icon, name, score, move }) => (
+                {LEAGUE_ROWS.map(({ rank, icon, name, score, move, swap }) => (
                   <div className="league-row" key={name}>
                     <span className="league-rank">{rank}</span>
-                    <span className="mock-tile"><MockIcon kind={icon} /></span>
-                    <span className="league-name">{name}</span>
-                    <span className={`league-move league-move-${move}`}>{LEAGUE_MOVE_GLYPHS[move]}</span>
-                    <span className="league-score">{score}</span>
+                    <div className={`league-entry${swap ? ` league-swap-${swap}` : ""}`}>
+                      <span className="mock-tile"><MockIcon kind={icon} /></span>
+                      <span className="league-name">{name}</span>
+                      <span className={`league-move league-move-${move}`}>{LEAGUE_MOVE_GLYPHS[move]}</span>
+                      <span className="league-score">{score}</span>
+                    </div>
                   </div>
                 ))}
               </div>
