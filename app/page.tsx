@@ -208,6 +208,12 @@ const SECTION_DEPTHS = [0.06, 0.18, 0.3, 0.42, 0.54, 0.66, 0.78, 0.88] as const;
 const LOGO_SLOTS_PER_WALL = SECTION_DEPTHS.length * 8;
 const SIDE_LOGO_OFFSETS: Record<Side, number> = { left: 0, right: LOGO_SLOTS_PER_WALL };
 
+// Marquee flow: every logo drifts outward along its wall lane, from the
+// vanishing point (depth 1) to just past the screen edge (a slightly
+// negative depth so glyphs fully exit before wrapping back to the center).
+const FLOW_DURATION_S = 60;
+const FLOW_EXIT_DEPTH = -0.05;
+
 function buildLogoSpecs(side: Side): LogoSpec[] {
   return Array.from({ length: LOGO_SLOTS_PER_WALL }, (_, index) => {
     const slot = index % SECTION_DEPTHS.length;
@@ -276,21 +282,33 @@ function rowShear(side: Side, row: number): number {
   return screenDirection * (top.slope + bottom.slope) / 2;
 }
 
-function logoGeometry(logo: LogoSpec): LogoGeometry {
-  const distanceFromEdge = logo.depth * (CENTER_X - 1);
+// Lane positions are linear in depth (x scales with depth and every boundary
+// is a straight line), so a logo's whole outward journey is a straight-line
+// lerp between the depth-1 and exit-depth points of its lane.
+function lanePoint(logo: LogoSpec, depth: number): Point {
+  const distanceFromEdge = depth * (CENTER_X - 1);
   const x = logo.side === "left" ? distanceFromEdge : RIGHT_EDGE - distanceFromEdge;
   const top = boundaryPoint(logo.side, (logo.row - 1) * 2, x).y;
   const bottom = logo.row === 8
     ? partialBoundaryPoint(logo.side, x).y
     : boundaryPoint(logo.side, (logo.row - 1) * 2 + 1, x).y;
+
+  return { x, y: (top + bottom) / 2 };
+}
+
+function logoGeometry(logo: LogoSpec): LogoGeometry {
+  const { x, y } = lanePoint(logo, logo.depth);
   const height = LOGO_ICON_SIZE;
 
   return {
     x,
-    y: (top + bottom) / 2,
+    y,
     width: height * (LOGO_ICON_ASPECTS[logo.kind] ?? 1),
     height,
-    opacity: Math.max(0.07, ROW_LOGO_OPACITY[logo.row - 1] * (0.96 - logo.depth * 0.18)),
+    // Spatial fading along the lane is carried by the static wall masks and
+    // center occlusion, so the glyph's own opacity stays constant while it
+    // travels; only the row placement modulates it.
+    opacity: Math.max(0.07, ROW_LOGO_OPACITY[logo.row - 1] * 0.88),
   };
 }
 
@@ -324,15 +342,27 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
     y: -imageInkHeight / 2,
     preserveAspectRatio: "xMidYMid meet",
   };
+  const laneStart = lanePoint(sourceLogo, 1);
+  const laneEnd = lanePoint(sourceLogo, FLOW_EXIT_DEPTH);
+  const laneProgress = (1 - logo.depth) / (1 - FLOW_EXIT_DEPTH);
+  const laneStyle = {
+    "--lane-x0": `${laneStart.x}px`,
+    "--lane-y0": `${laneStart.y}px`,
+    "--lane-x1": `${laneEnd.x}px`,
+    "--lane-y1": `${laneEnd.y}px`,
+    transform: `translate(${logo.x}px, ${logo.y}px)`,
+    animationDelay: `${(-laneProgress * FLOW_DURATION_S).toFixed(2)}s`,
+  } as React.CSSProperties;
 
   return (
+    <g className="depth-mark-lane" style={laneStyle}>
     <g
       className="depth-mark"
       data-logo-depth={logo.depth}
       data-logo-kind={logo.kind}
       data-logo-size={logo.height}
       opacity={logo.opacity}
-      transform={`matrix(1 ${shear} 0 1 ${logo.x} ${logo.y})`}
+      transform={`matrix(1 ${shear} 0 1 0 0)`}
     >
       <g className="depth-mark-glyph">
         {logo.kind === "apple" ? (
@@ -364,6 +394,7 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
         <image href={`/mcp-logos/${logo.kind}.svg`} {...commonImageProps} />
       )}
       </g>
+    </g>
     </g>
   );
 }

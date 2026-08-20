@@ -87,6 +87,20 @@ a {
   isolation: isolate;
 }
 
+.depth-mark-lane {
+  animation: corridor-flow 60s linear infinite;
+}
+
+@keyframes corridor-flow {
+  from {
+    transform: translate(var(--lane-x0), var(--lane-y0));
+  }
+
+  to {
+    transform: translate(var(--lane-x1), var(--lane-y1));
+  }
+}
+
 .depth-mark {
   filter: brightness(1.2);
   mix-blend-mode: screen;
@@ -581,5 +595,9 @@ a {
   .hero-button,
   .nav-links > a:not(.nav-button) {
     transition: none;
+  }
+
+  .depth-mark-lane {
+    animation: none;
   }
 }
