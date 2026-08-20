@@ -214,6 +214,12 @@ const SIDE_LOGO_OFFSETS: Record<Side, number> = { left: 0, right: LOGO_SLOTS_PER
 const FLOW_DURATION_S = 60;
 const FLOW_EXIT_DEPTH = -0.05;
 
+// Deterministic hash so lanes get stable, hydration-safe stagger offsets.
+function hash01(seed: number): number {
+  const x = Math.sin(seed * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+
 function buildLogoSpecs(side: Side): LogoSpec[] {
   return Array.from({ length: LOGO_SLOTS_PER_WALL }, (_, index) => {
     const slot = index % SECTION_DEPTHS.length;
@@ -346,15 +352,26 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
   const laneEnd = lanePoint(sourceLogo, FLOW_EXIT_DEPTH);
   // Phases are spaced uniformly around the loop (rather than derived from the
   // static depth slots) so the marquee has no empty seam between the deepest
-  // logo and the next wrap-around.
-  const laneProgress = (logo.slot + 0.5) / SECTION_DEPTHS.length;
+  // logo and the next wrap-around. Each lane is offset by a stable random
+  // amount, and every logo gets a touch of jitter, so rows never read as
+  // aligned columns.
+  const laneIndex = (logo.side === "left" ? 0 : 8) + (logo.row - 1);
+  const laneOffset = hash01(laneIndex + 1);
+  const logoJitter = (hash01(laneIndex * 16 + logo.slot + 37) - 0.5) * 0.05;
+  const laneProgress =
+    (((logo.slot + 0.5) / SECTION_DEPTHS.length + laneOffset + logoJitter) % 1 + 1) % 1;
+  const basePoint = lanePoint(sourceLogo, 1 - laneProgress * (1 - FLOW_EXIT_DEPTH));
+  // Values are rounded and stripped of trailing zeros so the SSR-rendered
+  // style attribute matches the browser's CSSOM serialization exactly
+  // during hydration.
+  const px = (value: number) => `${parseFloat(value.toFixed(2))}px`;
   const laneStyle = {
-    "--lane-x0": `${laneStart.x}px`,
-    "--lane-y0": `${laneStart.y}px`,
-    "--lane-x1": `${laneEnd.x}px`,
-    "--lane-y1": `${laneEnd.y}px`,
-    transform: `translate(${logo.x}px, ${logo.y}px)`,
-    animationDelay: `${(-laneProgress * FLOW_DURATION_S).toFixed(2)}s`,
+    "--lane-x0": px(laneStart.x),
+    "--lane-y0": px(laneStart.y),
+    "--lane-x1": px(laneEnd.x),
+    "--lane-y1": px(laneEnd.y),
+    transform: `translate(${px(basePoint.x)}, ${px(basePoint.y)})`,
+    animationDelay: `${parseFloat((-laneProgress * FLOW_DURATION_S).toFixed(2))}s`,
   } as React.CSSProperties;
 
   return (
