@@ -101,7 +101,14 @@ a {
   fill: #f1f6f3;
 }
 
+/* Flatten icons to a uniform white ink regardless of their source colors. */
 .depth-logo-image {
+  filter: brightness(0) invert(1);
+}
+
+/* Icons whose inner detail relies on color contrast keep a tonal mapping
+   instead of the flat silhouette. */
+.depth-logo-image-multitone {
   filter: grayscale(1) invert(1) brightness(1.55) contrast(0.64);
 }
 

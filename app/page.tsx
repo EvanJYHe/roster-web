@@ -270,6 +270,15 @@ const LOGO_OPTICAL_SCALES: Partial<Record<LogoKind, number>> = {
 
 const ROW_LOGO_OPACITY = [0.62, 0.56, 0.68, 0.82, 0.66, 0.58, 0.56, 0.46];
 
+// These marks draw their inner detail with contrasting fills (white text or
+// features over a colored base), so a flat silhouette would erase it; they
+// keep the tonal grayscale mapping instead.
+const MULTI_TONE_LOGOS = new Set<LogoKind>([
+  "playwright",
+  "salesforce",
+  "sendgrid",
+]);
+
 type LogoGeometry = {
   x: number;
   y: number;
@@ -341,7 +350,9 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
   const imageInkWidth = logo.width * LOGO_INK_SCALE * opticalScale;
   const imageInkHeight = logo.height * LOGO_INK_SCALE * opticalScale;
   const commonImageProps = {
-    className: "depth-logo-image",
+    className: MULTI_TONE_LOGOS.has(logo.kind)
+      ? "depth-logo-image depth-logo-image-multitone"
+      : "depth-logo-image",
     height: imageInkHeight,
     width: imageInkWidth,
     x: -imageInkWidth / 2,
