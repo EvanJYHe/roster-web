@@ -451,7 +451,7 @@ function PerspectiveMarquee() {
         <linearGradient id="bottom-fade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="700" y2={VIEWPORT_HEIGHT}>
           <stop offset="0%" stopColor="white" stopOpacity="1" />
           <stop offset="65%" stopColor="white" stopOpacity="0.93" />
-          <stop offset="100%" stopColor="white" stopOpacity="0.42" />
+          <stop offset="100%" stopColor="white" stopOpacity="0.58" />
         </linearGradient>
         <mask id="bottom-fade-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={VIEWPORT_WIDTH} height={VIEWPORT_HEIGHT}>
           <rect fill="url(#bottom-fade)" height={VIEWPORT_HEIGHT} width={VIEWPORT_WIDTH} x="0" y="0" />
