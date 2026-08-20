@@ -63,8 +63,6 @@ const BOUNDARIES: Record<Side, Boundary[]> = {
   right: RIGHT_BOUNDARIES,
 };
 
-const ROW_OPACITY = [0.72, 0.86, 0.92, 0.96, 0.92, 0.85, 0.68, 0.4];
-
 function boundaryPoint(side: Side, boundaryIndex: number, x: number): Point {
   const boundary = BOUNDARIES[side][boundaryIndex];
   const distanceFromEdge = side === "left" ? x : RIGHT_EDGE - x;
@@ -82,26 +80,6 @@ function partialBoundaryPoint(side: Side, x: number): Point {
   const distanceFromEdge = side === "left" ? x : RIGHT_EDGE - x;
 
   return { x, y: boundary.outerY + boundary.slope * distanceFromEdge };
-}
-
-function panelPath(side: Side, topIndex: number, bottomIndex?: number): string {
-  const edgeX = side === "left" ? 0 : RIGHT_EDGE;
-  const innerTop = boundaryPoint(side, topIndex, CENTER_X);
-  const innerBottom = bottomIndex === undefined
-    ? partialBoundaryPoint(side, CENTER_X)
-    : boundaryPoint(side, bottomIndex, CENTER_X);
-  const outerTop = boundaryPoint(side, topIndex, edgeX);
-  const outerBottom = bottomIndex === undefined
-    ? partialBoundaryPoint(side, edgeX)
-    : boundaryPoint(side, bottomIndex, edgeX);
-
-  return [
-    `M ${outerTop.x} ${outerTop.y}`,
-    `L ${outerBottom.x} ${outerBottom.y}`,
-    `L ${innerBottom.x} ${innerBottom.y}`,
-    `L ${innerTop.x} ${innerTop.y}`,
-    "Z",
-  ].join(" ");
 }
 
 function boundaryPath(side: Side, boundaryIndex: number): string {
@@ -472,18 +450,6 @@ function PerspectiveMarquee() {
         <mask id="right-logo-mask" maskUnits="userSpaceOnUse" x={CENTER_X} y="0" width={CENTER_X} height={ART_HEIGHT}>
           <rect fill="url(#right-logo-mask-gradient)" height={ART_HEIGHT} width={CENTER_X} x={CENTER_X} y="0" />
         </mask>
-        <linearGradient id="left-panel-fill" gradientUnits="userSpaceOnUse" x1="0" x2={CENTER_X} y1="0" y2="0">
-          <stop offset="0%" stopColor="#dce9e5" stopOpacity="0.08" />
-          <stop offset="24%" stopColor="#c9d8d3" stopOpacity="0.05" />
-          <stop offset="56%" stopColor="#b7c7c2" stopOpacity="0.018" />
-          <stop offset="100%" stopColor="#b7c7c2" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient id="right-panel-fill" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2={CENTER_X} y1="0" y2="0">
-          <stop offset="0%" stopColor="#dce9e5" stopOpacity="0.08" />
-          <stop offset="24%" stopColor="#c9d8d3" stopOpacity="0.05" />
-          <stop offset="56%" stopColor="#b7c7c2" stopOpacity="0.018" />
-          <stop offset="100%" stopColor="#b7c7c2" stopOpacity="0" />
-        </linearGradient>
         <linearGradient id="center-occlusion-left" gradientUnits="userSpaceOnUse" x1="540" x2={CENTER_X} y1="0" y2="0">
           <stop offset="0%" stopColor="#000" stopOpacity="0" />
           <stop offset="55%" stopColor="#000" stopOpacity="0.08" />
@@ -516,21 +482,6 @@ function PerspectiveMarquee() {
       {sides.map((side) => {
         const wallGroup = (
           <g className={`depth-corridor depth-corridor-${side}`} key={side} mask={`url(#${side}-wall-mask)`}>
-            {Array.from({ length: 8 }, (_, rowIndex) => {
-              const topIndex = rowIndex * 2;
-              const bottomIndex = topIndex + 1 < BOUNDARIES[side].length ? topIndex + 1 : undefined;
-
-              return (
-                <path
-                  className="depth-band-fill"
-                  d={panelPath(side, topIndex, bottomIndex)}
-                  fill={`url(#${side}-panel-fill)`}
-                  opacity={ROW_OPACITY[rowIndex]}
-                  key={`${side}-panel-${rowIndex}`}
-                />
-              );
-            })}
-
             <g className="depth-boundaries">
               {BOUNDARIES[side].map((_, boundaryIndex) => (
                 <path

@@ -81,10 +81,6 @@ a {
   vector-effect: non-scaling-stroke;
 }
 
-.depth-band-fill {
-  mix-blend-mode: screen;
-}
-
 .depth-lane-content,
 .depth-mark {
   isolation: isolate;
