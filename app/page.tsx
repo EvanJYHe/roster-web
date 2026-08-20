@@ -192,28 +192,6 @@ const SIDE_LOGO_OFFSETS: Record<Side, number> = { left: 0, right: LOGO_SLOTS_PER
 const FLOW_DURATION_S = 60;
 const FLOW_EXIT_DEPTH = -0.05;
 
-// Perspective-correct motion: constant world-space speed toward the viewer
-// maps to screen offset ~ 1/z, so icons crawl near the vanishing point and
-// accelerate outward. FLOW_EPSILON sets the simulated depth range; exit
-// speed is 1/FLOW_EPSILON^2 times spawn speed. The curve is remapped so
-// travel spans exactly the whole lane.
-const FLOW_EPSILON = 0.45;
-
-function flowCurve(progress: number): number {
-  return (
-    (FLOW_EPSILON / (1 - (1 - FLOW_EPSILON) * progress) - FLOW_EPSILON) /
-    (1 - FLOW_EPSILON)
-  );
-}
-
-const FLOW_KEYFRAMES = `@keyframes corridor-flow {
-${Array.from({ length: 21 }, (_, i) => {
-  const u = i / 20;
-  const f = flowCurve(u).toFixed(4);
-  return `  ${(u * 100).toFixed(0)}% { transform: translate(calc(var(--lane-x0) + var(--lane-dx) * ${f}), calc(var(--lane-y0) + var(--lane-dy) * ${f})); }`;
-}).join("\n")}
-}`;
-
 // Deterministic hash so lanes get stable, hydration-safe stagger offsets.
 function hash01(seed: number): number {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
@@ -363,17 +341,14 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
   const laneEnd = lanePoint(sourceLogo, FLOW_EXIT_DEPTH);
   // Phases are spaced uniformly around the loop (rather than derived from the
   // static depth slots) so the marquee has no empty seam between the deepest
-  // logo and the next wrap-around; with the perspective flow curve this means
-  // icons are evenly spaced in world space (screen gaps compress toward the
-  // vanishing point). Each lane is offset by a stable random amount so rows
+  // logo and the next wrap-around, and the gap between icons in a lane stays
+  // exactly constant. Each lane is offset by a stable random amount so rows
   // never read as aligned columns.
   const laneIndex = (logo.side === "left" ? 0 : 8) + (logo.row - 1);
   const laneOffset = hash01(laneIndex + 1);
   const laneProgress =
     ((logo.slot + 0.5) / SECTION_DEPTHS.length + laneOffset) % 1;
-  const baseF = flowCurve(laneProgress);
-  const baseX = laneStart.x + (laneEnd.x - laneStart.x) * baseF;
-  const baseY = laneStart.y + (laneEnd.y - laneStart.y) * baseF;
+  const basePoint = lanePoint(sourceLogo, 1 - laneProgress * (1 - FLOW_EXIT_DEPTH));
   // Values are rounded and stripped of trailing zeros so the SSR-rendered
   // style attribute matches the browser's CSSOM serialization exactly
   // during hydration.
@@ -381,9 +356,9 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
   const laneStyle = {
     "--lane-x0": px(laneStart.x),
     "--lane-y0": px(laneStart.y),
-    "--lane-dx": px(laneEnd.x - laneStart.x),
-    "--lane-dy": px(laneEnd.y - laneStart.y),
-    transform: `translate(${px(baseX)}, ${px(baseY)})`,
+    "--lane-x1": px(laneEnd.x),
+    "--lane-y1": px(laneEnd.y),
+    transform: `translate(${px(basePoint.x)}, ${px(basePoint.y)})`,
     animationDelay: `${parseFloat((-laneProgress * FLOW_DURATION_S).toFixed(2))}s`,
   } as React.CSSProperties;
 
@@ -437,7 +412,6 @@ function PerspectiveMarquee() {
 
   return (
     <svg className="perspective-marquee" viewBox={`0 0 ${ART_WIDTH} ${ART_HEIGHT}`} preserveAspectRatio="xMidYMid slice">
-      <style>{FLOW_KEYFRAMES}</style>
       <defs>
         <linearGradient id="left-wall-mask-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="830" y1="0" y2="0">
           <stop offset="0%" stopColor="white" stopOpacity="0.78" />

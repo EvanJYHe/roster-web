@@ -86,10 +86,18 @@ a {
   isolation: isolate;
 }
 
-/* corridor-flow keyframes are generated in app/page.tsx (perspective-correct
-   motion curve sampled from the same lane geometry). */
 .depth-mark-lane {
   animation: corridor-flow 60s linear infinite;
+}
+
+@keyframes corridor-flow {
+  from {
+    transform: translate(var(--lane-x0), var(--lane-y0));
+  }
+
+  to {
+    transform: translate(var(--lane-x1), var(--lane-y1));
+  }
 }
 
 .depth-mark {
