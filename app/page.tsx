@@ -268,7 +268,7 @@ const LOGO_OPTICAL_SCALES: Partial<Record<LogoKind, number>> = {
   youtube: 1.41,
 };
 
-const ROW_LOGO_OPACITY = [0.62, 0.56, 0.68, 0.82, 0.66, 0.58, 0.5, 0.38];
+const ROW_LOGO_OPACITY = [0.62, 0.56, 0.68, 0.82, 0.66, 0.58, 0.56, 0.46];
 
 type LogoGeometry = {
   x: number;
@@ -429,36 +429,36 @@ function PerspectiveMarquee() {
           <stop offset="0%" stopColor="white" stopOpacity="0.78" />
           <stop offset="18%" stopColor="white" stopOpacity="0.8" />
           <stop offset="42%" stopColor="white" stopOpacity="0.66" />
-          <stop offset="54%" stopColor="white" stopOpacity="0.44" />
-          <stop offset="66%" stopColor="white" stopOpacity="0.18" />
-          <stop offset="78%" stopColor="white" stopOpacity="0.06" />
+          <stop offset="54%" stopColor="white" stopOpacity="0.46" />
+          <stop offset="66%" stopColor="white" stopOpacity="0.24" />
+          <stop offset="80%" stopColor="white" stopOpacity="0.1" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="right-wall-mask-gradient" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2={RIGHT_EDGE - 830} y1="0" y2="0">
           <stop offset="0%" stopColor="white" stopOpacity="0.78" />
           <stop offset="18%" stopColor="white" stopOpacity="0.8" />
           <stop offset="42%" stopColor="white" stopOpacity="0.66" />
-          <stop offset="54%" stopColor="white" stopOpacity="0.44" />
-          <stop offset="66%" stopColor="white" stopOpacity="0.18" />
-          <stop offset="78%" stopColor="white" stopOpacity="0.06" />
+          <stop offset="54%" stopColor="white" stopOpacity="0.46" />
+          <stop offset="66%" stopColor="white" stopOpacity="0.24" />
+          <stop offset="80%" stopColor="white" stopOpacity="0.1" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="left-logo-mask-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="830" y1="0" y2="0">
           <stop offset="0%" stopColor="white" stopOpacity="0.76" />
           <stop offset="18%" stopColor="white" stopOpacity="0.82" />
           <stop offset="42%" stopColor="white" stopOpacity="0.62" />
-          <stop offset="54%" stopColor="white" stopOpacity="0.38" />
-          <stop offset="66%" stopColor="white" stopOpacity="0.12" />
-          <stop offset="78%" stopColor="white" stopOpacity="0.03" />
+          <stop offset="54%" stopColor="white" stopOpacity="0.4" />
+          <stop offset="66%" stopColor="white" stopOpacity="0.18" />
+          <stop offset="80%" stopColor="white" stopOpacity="0.06" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="right-logo-mask-gradient" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2={RIGHT_EDGE - 830} y1="0" y2="0">
           <stop offset="0%" stopColor="white" stopOpacity="0.76" />
           <stop offset="18%" stopColor="white" stopOpacity="0.82" />
           <stop offset="42%" stopColor="white" stopOpacity="0.62" />
-          <stop offset="54%" stopColor="white" stopOpacity="0.38" />
-          <stop offset="66%" stopColor="white" stopOpacity="0.12" />
-          <stop offset="78%" stopColor="white" stopOpacity="0.03" />
+          <stop offset="54%" stopColor="white" stopOpacity="0.4" />
+          <stop offset="66%" stopColor="white" stopOpacity="0.18" />
+          <stop offset="80%" stopColor="white" stopOpacity="0.06" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
         <mask id="left-wall-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={CENTER_X} height={ART_HEIGHT}>
@@ -485,15 +485,15 @@ function PerspectiveMarquee() {
           <stop offset="56%" stopColor="#b7c7c2" stopOpacity="0.018" />
           <stop offset="100%" stopColor="#b7c7c2" stopOpacity="0" />
         </linearGradient>
-        <linearGradient id="center-occlusion-left" gradientUnits="userSpaceOnUse" x1="450" x2={CENTER_X} y1="0" y2="0">
+        <linearGradient id="center-occlusion-left" gradientUnits="userSpaceOnUse" x1="540" x2={CENTER_X} y1="0" y2="0">
           <stop offset="0%" stopColor="#000" stopOpacity="0" />
-          <stop offset="50%" stopColor="#000" stopOpacity="0.12" />
-          <stop offset="100%" stopColor="#000" stopOpacity="0.5" />
+          <stop offset="55%" stopColor="#000" stopOpacity="0.08" />
+          <stop offset="100%" stopColor="#000" stopOpacity="0.44" />
         </linearGradient>
-        <linearGradient id="center-occlusion-right" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE - 450} x2={CENTER_X} y1="0" y2="0">
+        <linearGradient id="center-occlusion-right" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE - 540} x2={CENTER_X} y1="0" y2="0">
           <stop offset="0%" stopColor="#000" stopOpacity="0" />
-          <stop offset="50%" stopColor="#000" stopOpacity="0.12" />
-          <stop offset="100%" stopColor="#000" stopOpacity="0.5" />
+          <stop offset="55%" stopColor="#000" stopOpacity="0.08" />
+          <stop offset="100%" stopColor="#000" stopOpacity="0.44" />
         </linearGradient>
         <linearGradient id="top-fade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="40" y2="250">
           <stop offset="0%" stopColor="white" stopOpacity="0.08" />
@@ -506,8 +506,8 @@ function PerspectiveMarquee() {
         </mask>
         <linearGradient id="bottom-fade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="700" y2={ART_HEIGHT}>
           <stop offset="0%" stopColor="white" stopOpacity="1" />
-          <stop offset="65%" stopColor="white" stopOpacity="0.93" />
-          <stop offset="100%" stopColor="white" stopOpacity="0.58" />
+          <stop offset="65%" stopColor="white" stopOpacity="0.96" />
+          <stop offset="100%" stopColor="white" stopOpacity="0.74" />
         </linearGradient>
         <mask id="bottom-fade-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={ART_WIDTH} height={ART_HEIGHT}>
           <rect fill="url(#bottom-fade)" height={ART_HEIGHT} width={ART_WIDTH} x="0" y="0" />

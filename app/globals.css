@@ -138,15 +138,15 @@ a {
 
 .signal-center-veil {
   background:
-    radial-gradient(ellipse 30% 26% at 50% 45%, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.16) 45%, rgba(0, 0, 0, 0) 100%),
-    linear-gradient(90deg, transparent 32%, rgba(0, 0, 0, 0.07) 42%, rgba(0, 0, 0, 0.18) 50%, rgba(0, 0, 0, 0.07) 58%, transparent 68%);
+    radial-gradient(ellipse 32% 28% at 50% 45%, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0.17) 45%, rgba(0, 0, 0, 0) 100%),
+    linear-gradient(90deg, transparent 34%, rgba(0, 0, 0, 0.05) 43%, rgba(0, 0, 0, 0.12) 50%, rgba(0, 0, 0, 0.05) 57%, transparent 66%);
   z-index: 2;
 }
 
 .signal-vignette {
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.56), transparent 21%, transparent 78%, rgba(0, 0, 0, 0.14) 100%),
-    radial-gradient(ellipse 76% 105% at 50% 48%, transparent 46%, rgba(0, 0, 0, 0.05) 67%, rgba(0, 0, 0, 0.32) 100%);
+    linear-gradient(180deg, rgba(0, 0, 0, 0.56), transparent 21%, transparent 78%, rgba(0, 0, 0, 0.1) 100%),
+    radial-gradient(ellipse 76% 105% at 50% 48%, transparent 46%, rgba(0, 0, 0, 0.04) 67%, rgba(0, 0, 0, 0.26) 100%);
   z-index: 3;
 }
 
@@ -159,12 +159,12 @@ a {
 }
 
 .signal-vignette::before {
-  background: linear-gradient(142deg, transparent 24%, rgba(0, 0, 0, 0.06) 75%, rgba(0, 0, 0, 0.12) 100%);
+  background: linear-gradient(142deg, transparent 24%, rgba(0, 0, 0, 0.04) 75%, rgba(0, 0, 0, 0.08) 100%);
   clip-path: polygon(0 45%, 50% 57%, 50% 100%, 0 100%);
 }
 
 .signal-vignette::after {
-  background: linear-gradient(218deg, transparent 24%, rgba(0, 0, 0, 0.06) 75%, rgba(0, 0, 0, 0.12) 100%);
+  background: linear-gradient(218deg, transparent 24%, rgba(0, 0, 0, 0.04) 75%, rgba(0, 0, 0, 0.08) 100%);
   clip-path: polygon(50% 57%, 100% 45%, 100% 100%, 50% 100%);
 }
 
