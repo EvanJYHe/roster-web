@@ -24,11 +24,11 @@ are intentionally absent.
 | Element | Measured bounds / position |
 | --- | --- |
 | Viewport | `1672 × 941` |
-| Brand mark visible raster | `x=64..111, y=36..100` |
-| Brand word visible raster | `x=135..239, y=55..80` |
-| Docs visible raster | `x=1218..1261, y=61..78` |
-| GitHub visible raster | `x=1317..1379, y=61..78` |
-| Header Get Started border | `x=1431..1622, y=36..100` |
+| Brand mark visible raster | `x=76..97, y=45..74` (large header treatment using the square app mark) |
+| Brand word visible raster | `x=133..218, y=49..73` (`roster`, lowercase) |
+| Docs visible raster | `x=1218..1260, y=61..78` |
+| GitHub visible raster | `x=1318..1379, y=61..78` |
+| Header Get Started border | `x=1432..1622, y=36..100` |
 | Update pill visible raster | `x=639..1029, y=188..247`; visual box approximately `x=638..1031, y=188..248` |
 | Update dot | `x=667..680, y=212..227` |
 | Update label text | `x=704..812, y=211..227` |

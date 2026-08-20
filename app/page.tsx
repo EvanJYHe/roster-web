@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 const VIEWPORT_WIDTH = 1672;
 const VIEWPORT_HEIGHT = 941;
 const CENTER_X = 836;
@@ -371,36 +373,36 @@ function PerspectiveMarquee() {
   return (
     <svg className="perspective-marquee" viewBox={`0 0 ${VIEWPORT_WIDTH} ${VIEWPORT_HEIGHT}`} preserveAspectRatio="none">
       <defs>
-        <linearGradient id="left-wall-mask-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="700" y1="0" y2="0">
-          <stop offset="0%" stopColor="white" stopOpacity="0.7" />
-          <stop offset="18%" stopColor="white" stopOpacity="0.74" />
-          <stop offset="35%" stopColor="white" stopOpacity="0.4" />
-          <stop offset="50%" stopColor="white" stopOpacity="0.12" />
-          <stop offset="70%" stopColor="white" stopOpacity="0.02" />
+        <linearGradient id="left-wall-mask-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="740" y1="0" y2="0">
+          <stop offset="0%" stopColor="white" stopOpacity="0.78" />
+          <stop offset="18%" stopColor="white" stopOpacity="0.8" />
+          <stop offset="35%" stopColor="white" stopOpacity="0.58" />
+          <stop offset="50%" stopColor="white" stopOpacity="0.3" />
+          <stop offset="70%" stopColor="white" stopOpacity="0.07" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
-        <linearGradient id="right-wall-mask-gradient" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2="971" y1="0" y2="0">
-          <stop offset="0%" stopColor="white" stopOpacity="0.7" />
-          <stop offset="18%" stopColor="white" stopOpacity="0.74" />
-          <stop offset="35%" stopColor="white" stopOpacity="0.4" />
-          <stop offset="50%" stopColor="white" stopOpacity="0.12" />
-          <stop offset="70%" stopColor="white" stopOpacity="0.02" />
+        <linearGradient id="right-wall-mask-gradient" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2={RIGHT_EDGE - 740} y1="0" y2="0">
+          <stop offset="0%" stopColor="white" stopOpacity="0.78" />
+          <stop offset="18%" stopColor="white" stopOpacity="0.8" />
+          <stop offset="35%" stopColor="white" stopOpacity="0.58" />
+          <stop offset="50%" stopColor="white" stopOpacity="0.3" />
+          <stop offset="70%" stopColor="white" stopOpacity="0.07" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
-        <linearGradient id="left-logo-mask-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="700" y1="0" y2="0">
-          <stop offset="0%" stopColor="white" stopOpacity="0.74" />
-          <stop offset="18%" stopColor="white" stopOpacity="0.78" />
-          <stop offset="35%" stopColor="white" stopOpacity="0.48" />
-          <stop offset="50%" stopColor="white" stopOpacity="0.18" />
-          <stop offset="70%" stopColor="white" stopOpacity="0.03" />
+        <linearGradient id="left-logo-mask-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="740" y1="0" y2="0">
+          <stop offset="0%" stopColor="white" stopOpacity="0.76" />
+          <stop offset="18%" stopColor="white" stopOpacity="0.82" />
+          <stop offset="35%" stopColor="white" stopOpacity="0.56" />
+          <stop offset="50%" stopColor="white" stopOpacity="0.27" />
+          <stop offset="70%" stopColor="white" stopOpacity="0.05" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
-        <linearGradient id="right-logo-mask-gradient" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2="971" y1="0" y2="0">
-          <stop offset="0%" stopColor="white" stopOpacity="0.74" />
-          <stop offset="18%" stopColor="white" stopOpacity="0.78" />
-          <stop offset="35%" stopColor="white" stopOpacity="0.48" />
-          <stop offset="50%" stopColor="white" stopOpacity="0.18" />
-          <stop offset="70%" stopColor="white" stopOpacity="0.03" />
+        <linearGradient id="right-logo-mask-gradient" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2={RIGHT_EDGE - 740} y1="0" y2="0">
+          <stop offset="0%" stopColor="white" stopOpacity="0.76" />
+          <stop offset="18%" stopColor="white" stopOpacity="0.82" />
+          <stop offset="35%" stopColor="white" stopOpacity="0.56" />
+          <stop offset="50%" stopColor="white" stopOpacity="0.27" />
+          <stop offset="70%" stopColor="white" stopOpacity="0.05" />
           <stop offset="100%" stopColor="black" stopOpacity="0" />
         </linearGradient>
         <mask id="left-wall-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={CENTER_X} height={VIEWPORT_HEIGHT}>
@@ -416,26 +418,26 @@ function PerspectiveMarquee() {
           <rect fill="url(#right-logo-mask-gradient)" height={VIEWPORT_HEIGHT} width={CENTER_X} x={CENTER_X} y="0" />
         </mask>
         <linearGradient id="left-panel-fill" gradientUnits="userSpaceOnUse" x1="0" x2={CENTER_X} y1="0" y2="0">
-          <stop offset="0%" stopColor="#dce9e5" stopOpacity="0.045" />
-          <stop offset="24%" stopColor="#c9d8d3" stopOpacity="0.025" />
-          <stop offset="56%" stopColor="#b7c7c2" stopOpacity="0.008" />
+          <stop offset="0%" stopColor="#dce9e5" stopOpacity="0.08" />
+          <stop offset="24%" stopColor="#c9d8d3" stopOpacity="0.05" />
+          <stop offset="56%" stopColor="#b7c7c2" stopOpacity="0.018" />
           <stop offset="100%" stopColor="#b7c7c2" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="right-panel-fill" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE} x2={CENTER_X} y1="0" y2="0">
-          <stop offset="0%" stopColor="#dce9e5" stopOpacity="0.045" />
-          <stop offset="24%" stopColor="#c9d8d3" stopOpacity="0.025" />
-          <stop offset="56%" stopColor="#b7c7c2" stopOpacity="0.008" />
+          <stop offset="0%" stopColor="#dce9e5" stopOpacity="0.08" />
+          <stop offset="24%" stopColor="#c9d8d3" stopOpacity="0.05" />
+          <stop offset="56%" stopColor="#b7c7c2" stopOpacity="0.018" />
           <stop offset="100%" stopColor="#b7c7c2" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="center-occlusion-left" gradientUnits="userSpaceOnUse" x1="350" x2={CENTER_X} y1="0" y2="0">
           <stop offset="0%" stopColor="#000" stopOpacity="0" />
-          <stop offset="55%" stopColor="#000" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#000" stopOpacity="0.96" />
+          <stop offset="55%" stopColor="#000" stopOpacity="0.1" />
+          <stop offset="100%" stopColor="#000" stopOpacity="0.52" />
         </linearGradient>
         <linearGradient id="center-occlusion-right" gradientUnits="userSpaceOnUse" x1={RIGHT_EDGE - 350} x2={CENTER_X} y1="0" y2="0">
           <stop offset="0%" stopColor="#000" stopOpacity="0" />
-          <stop offset="55%" stopColor="#000" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#000" stopOpacity="0.96" />
+          <stop offset="55%" stopColor="#000" stopOpacity="0.1" />
+          <stop offset="100%" stopColor="#000" stopOpacity="0.52" />
         </linearGradient>
         <linearGradient id="top-fade" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="70" y2="290">
           <stop offset="0%" stopColor="white" stopOpacity="0" />
@@ -537,11 +539,14 @@ function SignalField() {
 
 function RosterMark() {
   return (
-    <svg className="roster-mark" viewBox="0 0 48 65" aria-hidden="true">
-      <path d="M13 17C10 10 16 4 25 4c10 0 18 7 19 16 1 7-3 12-9 15" />
-      <path d="M12 17c-3 2-4 7-2 11 2 4 7 7 12 10l21 16" />
-      <path d="M8 44 5 61" />
-    </svg>
+    <Image
+      className="roster-mark"
+      src="/icon.png"
+      alt=""
+      width={64}
+      height={64}
+      priority
+    />
   );
 }
 
@@ -561,7 +566,7 @@ export default function Home() {
       <header className="site-nav">
         <a className="brand" href="#top" aria-label="Roster home">
           <RosterMark />
-          <span className="brand-name">Roster</span>
+          <span className="brand-name">roster</span>
         </a>
 
         <nav className="nav-links" aria-label="Primary navigation">

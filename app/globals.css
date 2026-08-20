@@ -71,7 +71,7 @@ a {
 
 .depth-lane-line {
   fill: none;
-  stroke: rgba(224, 235, 231, 0.2);
+  stroke: rgba(224, 235, 231, 0.25);
   stroke-linecap: butt;
   stroke-width: 0.85;
   vector-effect: non-scaling-stroke;
@@ -120,8 +120,8 @@ a {
 
 .signal-center-veil {
   background:
-    radial-gradient(ellipse 24% 22% at 50% 45%, rgba(0, 0, 0, 0.77) 0%, rgba(0, 0, 0, 0.52) 45%, rgba(0, 0, 0, 0) 100%),
-    linear-gradient(90deg, transparent 31%, rgba(0, 0, 0, 0.16) 42%, rgba(0, 0, 0, 0.44) 50%, rgba(0, 0, 0, 0.16) 58%, transparent 69%);
+    radial-gradient(ellipse 23% 19% at 50% 45%, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.14) 45%, rgba(0, 0, 0, 0) 100%),
+    linear-gradient(90deg, transparent 34%, rgba(0, 0, 0, 0.06) 43%, rgba(0, 0, 0, 0.16) 50%, rgba(0, 0, 0, 0.06) 57%, transparent 66%);
   z-index: 2;
 }
 
@@ -173,7 +173,7 @@ a {
   gap: 23px;
   font-family: var(--ui-font);
   font-size: 36px;
-  font-weight: 400;
+  font-weight: 300;
   letter-spacing: -0.09em;
   line-height: 1;
   position: absolute;
@@ -184,19 +184,11 @@ a {
 .roster-mark {
   display: block;
   flex: 0 0 auto;
-  height: 65px;
+  height: 48px;
   object-fit: contain;
   overflow: visible;
   transform: translateX(-1px);
   width: 48px;
-}
-
-.roster-mark path {
-  fill: none;
-  stroke: #f3f3f3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 7.5px;
 }
 
 .brand-name {
@@ -422,6 +414,7 @@ a {
   .site-nav {
     left: 20px;
     right: 20px;
+    padding: 0;
   }
 
   .brand {
@@ -432,13 +425,16 @@ a {
 
   .roster-mark {
     height: 36px;
-    width: 27px;
+    width: 36px;
   }
 
   .nav-links {
     font-size: 16px;
-    gap: 14px;
     top: 20px;
+  }
+
+  .nav-links {
+    gap: 14px;
   }
 
   .nav-links > a:not(.nav-button) {
@@ -448,7 +444,8 @@ a {
   .nav-button {
     gap: 10px;
     height: 46px;
-    padding: 0 16px;
+    padding-left: 16px;
+    padding-right: 16px;
     font-size: 16px;
     width: auto;
   }
@@ -525,6 +522,7 @@ a {
     height: 70px;
     left: 16px;
     right: 16px;
+    padding: 0;
   }
 
   .brand {
@@ -535,7 +533,7 @@ a {
 
   .roster-mark {
     height: 29px;
-    width: 22px;
+    width: 29px;
   }
 
   .nav-links {

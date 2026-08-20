@@ -232,13 +232,13 @@
   "foreground": {
     "measurementThreshold": "luminance >=120 unless noted",
     "header": {
-      "brandMarkRaster": [64, 36, 111, 100],
-      "brandWordRaster": [135, 55, 239, 80],
-      "docsRaster": [1218, 61, 1261, 78],
-      "githubRaster": [1317, 61, 1379, 78],
-      "getStartedNavBorder": [1431, 36, 1622, 100],
+      "brandMarkRaster": [76, 45, 97, 74],
+      "brandWordRaster": [133, 49, 218, 73],
+      "docsRaster": [1218, 61, 1260, 78],
+      "githubRaster": [1318, 61, 1379, 78],
+      "getStartedNavBorder": [1432, 36, 1622, 100],
       "headerHorizontalPadding": { "left": 64, "right": 49 },
-      "navGapDocsToGithub": 55,
+      "navGapDocsToGithub": 52,
       "navGapGithubToButton": 52
     },
     "updatePill": {
