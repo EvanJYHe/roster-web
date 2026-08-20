@@ -182,7 +182,7 @@ a {
 .brand {
   align-items: center;
   display: inline-flex;
-  gap: calc(23 * var(--u));
+  gap: calc(10 * var(--u));
   font-family: var(--ui-font);
   font-size: calc(36 * var(--u));
   font-weight: 300;
@@ -413,7 +413,7 @@ a {
 
   .brand {
     font-size: 25px;
-    gap: 12px;
+    gap: 7px;
   }
 
   .roster-mark {
@@ -499,7 +499,7 @@ a {
 
   .brand {
     font-size: 21px;
-    gap: 9px;
+    gap: 5px;
   }
 
   .roster-mark {
