@@ -229,32 +229,25 @@ html {
   letter-spacing: -0.055em;
 }
 
-.nav-links > a:not(.nav-button) {
+.nav-links > a {
   color: var(--muted-white);
   transition: color 180ms ease;
 }
 
-.nav-links > a:not(.nav-button):hover {
+.nav-links > a:hover {
   color: var(--white);
 }
 
-.nav-button {
+.nav-github {
   align-items: center;
-  background: #000;
-  border: 1px solid rgba(255, 255, 255, 0.4);
   display: inline-flex;
-  height: max(48px, calc(65 * var(--u)));
-  justify-content: center;
-  padding: 0 calc(21 * var(--u));
-  font-size: max(15px, calc(22 * var(--u)));
-  white-space: nowrap;
-  width: max(150px, calc(191 * var(--u)));
-  transition: background 180ms ease, border-color 180ms ease;
+  gap: calc(10 * var(--u));
 }
 
-.nav-button:hover {
-  background: #141414;
-  border-color: rgba(255, 255, 255, 0.7);
+.github-mark {
+  fill: currentColor;
+  height: max(18px, calc(24 * var(--u)));
+  width: max(18px, calc(24 * var(--u)));
 }
 
 .diagonal-arrow {
@@ -375,26 +368,35 @@ html {
 
 .hero-button {
   align-items: center;
+  cursor: pointer;
   display: inline-flex;
   border-radius: 5px;
+  font-family: var(--ui-font);
   font-size: max(16px, calc(27 * var(--hu)));
-  gap: calc(17 * var(--hu));
+  gap: calc(14 * var(--hu));
   height: max(56px, calc(84 * var(--hu)));
   justify-content: center;
   letter-spacing: -0.045em;
   transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
-.hero-button .diagonal-arrow {
-  height: max(13px, calc(18 * var(--hu)));
-  width: max(13px, calc(18 * var(--hu)));
+.hero-button-icon {
+  fill: none;
+  flex: 0 0 auto;
+  height: max(15px, calc(21 * var(--hu)));
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+  width: max(15px, calc(21 * var(--hu)));
 }
 
 .hero-button-primary {
   background: #fff;
+  border: 0;
   box-shadow: 0 0 22px rgba(255, 255, 255, 0.09), 0 8px 16px rgba(0, 0, 0, 0.24);
   color: #0c0c0c;
-  width: max(180px, calc(262 * var(--hu)));
+  width: max(220px, calc(300 * var(--hu)));
 }
 
 .hero-button-primary:hover {
@@ -406,7 +408,7 @@ html {
   background: #000;
   border: 1px solid rgba(255, 255, 255, 0.38);
   color: rgba(255, 255, 255, 0.88);
-  width: max(178px, calc(258 * var(--hu)));
+  width: max(200px, calc(280 * var(--hu)));
 }
 
 .hero-button-secondary:hover {
@@ -849,16 +851,9 @@ html {
     gap: 14px;
   }
 
-  .nav-links > a:not(.nav-button) {
-    display: none;
-  }
-
-  .nav-button {
-    height: 46px;
-    padding-left: 16px;
-    padding-right: 16px;
-    font-size: 16px;
-    width: auto;
+  .github-mark {
+    height: 19px;
+    width: 19px;
   }
 
   .hero {
@@ -960,10 +955,9 @@ html {
     font-size: 14px;
   }
 
-  .nav-button {
-    height: 42px;
-    padding: 0 12px;
-    font-size: 14px;
+  .github-mark {
+    height: 17px;
+    width: 17px;
   }
 
   .hero {
@@ -1037,9 +1031,8 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nav-button,
   .hero-button,
-  .nav-links > a:not(.nav-button) {
+  .nav-links > a {
     transition: none;
   }
 
