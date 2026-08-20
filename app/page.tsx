@@ -591,7 +591,6 @@ export default function Home() {
           <a href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">GitHub</a>
           <a className="nav-button" href="https://github.com/ManagementMO/roster" target="_blank" rel="noreferrer">
             <span>Get Started</span>
-            <DiagonalArrow />
           </a>
         </nav>
       </header>
