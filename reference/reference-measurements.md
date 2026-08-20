@@ -14,6 +14,10 @@ The logo boxes are diagnostic evidence, not implementation coordinates. The
 implementation intentionally discards these AI-generated per-instance
 inconsistencies and rebuilds marks from normalized wall-depth slots, local row
 height, brand aspect ratios, and the row's derived affine shear.
+The repeated field uses icon-only marks with one exact shared optical height.
+Perspective is expressed through wall placement, row geometry, opacity, and
+occlusion; brand-specific wordmark treatments and per-instance size overrides
+are intentionally absent.
 
 ## Viewport and foreground
 

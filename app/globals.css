@@ -91,7 +91,7 @@ a {
   mix-blend-mode: screen;
 }
 
-.depth-mark > svg {
+.depth-mark svg {
   fill: #f1f6f3;
 }
 
@@ -99,57 +99,12 @@ a {
   filter: grayscale(1) invert(1) brightness(1.55) contrast(0.64);
 }
 
-.depth-wordmark,
-.depth-combo-label {
-  fill: #f1f6f3;
-  font-family: var(--ui-font);
-  font-weight: 400;
-  letter-spacing: -0.075em;
-}
-
-.depth-wordmark {
-  font-size: 28px;
-}
-
-.depth-google-wordmark {
-  transform: scaleX(0.78);
-}
-
-.depth-combo-label {
-  font-size: 20px;
-}
-
 .depth-microsoft-icon {
   fill: #f1f6f3;
 }
 
-.depth-microsoft-mark .depth-combo-label {
-  font-size: 18px;
-  letter-spacing: -0.085em;
-}
-
 .depth-vercel-mark path {
   fill: #f1f6f3;
-}
-
-.depth-vercel-mark .depth-combo-label {
-  font-size: 14px;
-  letter-spacing: -0.09em;
-}
-
-.depth-stripe-wordmark {
-  fill: #f1f6f3;
-  font-family: var(--ui-font);
-  font-weight: 400;
-  letter-spacing: -0.1em;
-}
-
-.depth-wordmark-combo {
-  fill: #f1f6f3;
-}
-
-.depth-wordmark-combo .depth-combo-label {
-  letter-spacing: -0.09em;
 }
 
 .center-occlusion {

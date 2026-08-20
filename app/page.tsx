@@ -107,16 +107,85 @@ function boundaryPath(side: Side, boundaryIndex: number): string {
   return `M ${outer.x} ${outer.y} L ${inner.x} ${inner.y}`;
 }
 
-type LogoKind =
-  | "apple"
-  | "aws"
-  | "github"
-  | "google"
-  | "microsoft"
-  | "notion"
-  | "openai"
-  | "stripe"
-  | "vercel";
+// The supplied MCP logo pack gives the corridor a broad tool-ecosystem mix.
+const LOGO_KINDS = [
+  "apple",
+  "microsoft",
+  "google",
+  "openai",
+  "github",
+  "notion",
+  "vercel",
+  "stripe",
+  "amazonaws",
+  "anthropic",
+  "claude",
+  "cursor",
+  "linear",
+  "figma",
+  "slack",
+  "discord",
+  "airtable",
+  "asana",
+  "atlassian",
+  "bitbucket",
+  "gitlab",
+  "docker",
+  "kubernetes",
+  "react",
+  "nextdotjs",
+  "javascript",
+  "typescript",
+  "python",
+  "fastapi",
+  "postgresql",
+  "mongodb",
+  "redis",
+  "replit",
+  "mysql",
+  "cloudflare",
+  "datadog",
+  "grafana",
+  "sentry",
+  "snowflake",
+  "databricks",
+  "elasticsearch",
+  "kafka",
+  "gmail",
+  "googlecalendar",
+  "googlecloud",
+  "googledrive",
+  "youtube",
+  "reddit",
+  "wordpress",
+  "zapier",
+  "salesforce",
+  "hubspot",
+  "shopify",
+  "trello",
+  "box",
+  "dropbox",
+  "confluence",
+  "jira",
+  "raycast",
+  "warp",
+  "zedindustries",
+  "githubcopilot",
+  "playwright",
+  "postman",
+  "npm",
+  "nodedotjs",
+  "graphql",
+  "rabbitmq",
+  "twilio",
+  "sendgrid",
+  "neon",
+  "brave",
+  "git",
+  "supabase",
+] as const;
+
+type LogoKind = typeof LOGO_KINDS[number];
 
 type LogoSpec = {
   side: Side;
@@ -131,64 +200,57 @@ type LogoSpec = {
 // below are the clean, reusable system that recreates its rhythm without
 // preserving AI-generated per-instance distortions.
 const SECTION_DEPTHS = [0.06, 0.18, 0.3, 0.42, 0.54, 0.66, 0.78, 0.88] as const;
-const ROW_KIND_PATTERNS: LogoKind[][] = [
-  ["google", "apple", "openai", "stripe", "microsoft", "notion", "github", "vercel"],
-  ["microsoft", "github", "notion", "microsoft", "openai", "google", "aws", "vercel"],
-  ["apple", "openai", "github", "google", "aws", "notion", "microsoft", "stripe"],
-  ["microsoft", "google", "apple", "vercel", "notion", "openai", "github", "aws"],
-  ["notion", "vercel", "aws", "microsoft", "google", "stripe", "openai", "github"],
-  ["apple", "openai", "aws", "vercel", "microsoft", "notion", "google", "stripe"],
-  ["google", "notion", "microsoft", "github", "openai", "vercel", "aws", "stripe"],
-  ["stripe", "microsoft", "notion", "github", "apple", "google", "openai", "vercel"],
-];
-
-const SIDE_SLOT_PHASE: Record<Side, number> = { left: 0, right: 3 };
+const LOGO_SLOTS_PER_WALL = SECTION_DEPTHS.length * 8;
+const SIDE_LOGO_OFFSETS: Record<Side, number> = { left: 0, right: LOGO_SLOTS_PER_WALL };
 
 function buildLogoSpecs(side: Side): LogoSpec[] {
-  return ROW_KIND_PATTERNS.flatMap((pattern, rowIndex) =>
-    SECTION_DEPTHS.map((depth, slot) => ({
+  return Array.from({ length: LOGO_SLOTS_PER_WALL }, (_, index) => {
+    const slot = index % SECTION_DEPTHS.length;
+
+    return {
       side,
-      row: rowIndex + 1,
+      row: Math.floor(index / SECTION_DEPTHS.length) + 1,
       slot,
-      kind: pattern[(slot + SIDE_SLOT_PHASE[side]) % pattern.length],
-      depth,
-    })),
-  );
+      kind: LOGO_KINDS[(SIDE_LOGO_OFFSETS[side] + index) % LOGO_KINDS.length],
+      depth: SECTION_DEPTHS[slot],
+    };
+  });
 }
 
-const ALL_LOGOS = (Object.keys(SIDE_SLOT_PHASE) as Side[]).flatMap(buildLogoSpecs);
+const ALL_LOGOS = (Object.keys(SIDE_LOGO_OFFSETS) as Side[]).flatMap(buildLogoSpecs);
 
-function wallCenterY(side: Side, row: number, x: number): number {
-  const top = boundaryPoint(side, (row - 1) * 2, x).y;
-  const bottom = row === 8
-    ? partialBoundaryPoint(side, x).y
-    : boundaryPoint(side, (row - 1) * 2 + 1, x).y;
-
-  return (top + bottom) / 2;
-}
-
-const LOGO_HEIGHT_FACTORS: Record<LogoKind, number> = {
-  apple: 0.47,
-  aws: 0.4,
-  github: 0.44,
-  google: 0.4,
-  microsoft: 0.5,
-  notion: 0.44,
-  openai: 0.47,
-  stripe: 0.4,
-  vercel: 0.42,
+// Every brand receives the same exact icon height. Perspective is carried by
+// wall placement, row geometry, opacity, and occlusion rather than changing
+// the dimensions of repeated marks.
+const LOGO_ICON_SIZE = 32;
+const LOGO_INK_SCALE = 0.82;
+const LOGO_ICON_ASPECTS: Partial<Record<LogoKind, number>> = {
+  amazonaws: 1.67,
+  kafka: 2.19,
+  openai: 1.03,
+  playwright: 1.33,
+  salesforce: 1.42,
+  sendgrid: 5.69,
+  twilio: 3.3,
 };
 
-const LOGO_ASPECTS: Record<LogoKind, number> = {
-  apple: 0.72,
-  aws: 0.95,
-  github: 2.15,
-  google: 2.05,
-  microsoft: 3.25,
-  notion: 2.15,
-  openai: 0.72,
-  stripe: 1.45,
-  vercel: 2.1,
+// Several pack assets use a generous square viewBox around a shorter mark.
+// These measured optical corrections make their visible ink comparable to
+// the exact shared logo height without changing the wall geometry.
+const LOGO_OPTICAL_SCALES: Partial<Record<LogoKind, number>> = {
+  airtable: 1.19,
+  anthropic: 1.41,
+  box: 1.85,
+  cloudflare: 2.17,
+  discord: 1.3,
+  docker: 1.39,
+  dropbox: 1.18,
+  githubcopilot: 1.19,
+  gmail: 1.33,
+  googlecloud: 1.24,
+  mysql: 1.47,
+  warp: 1.28,
+  youtube: 1.41,
 };
 
 const ROW_LOGO_OPACITY = [0.62, 0.56, 0.68, 0.82, 0.66, 0.58, 0.5, 0.38];
@@ -218,14 +280,12 @@ function logoGeometry(logo: LogoSpec): LogoGeometry {
   const bottom = logo.row === 8
     ? partialBoundaryPoint(logo.side, x).y
     : boundaryPoint(logo.side, (logo.row - 1) * 2 + 1, x).y;
-  const sectionHeight = Math.max(8, Math.abs(bottom - top));
-  const depthScale = 0.94 - logo.depth * 0.18;
-  const height = Math.max(7, sectionHeight * LOGO_HEIGHT_FACTORS[logo.kind] * depthScale);
+  const height = LOGO_ICON_SIZE;
 
   return {
     x,
     y: (top + bottom) / 2,
-    width: height * LOGO_ASPECTS[logo.kind],
+    width: height * (LOGO_ICON_ASPECTS[logo.kind] ?? 1),
     height,
     opacity: Math.max(0.07, ROW_LOGO_OPACITY[logo.row - 1] * (0.92 - logo.depth * 0.38)),
   };
@@ -235,103 +295,72 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
   const geometry = logoGeometry(sourceLogo);
   const logo: LogoSpec & LogoGeometry = { ...sourceLogo, ...geometry };
   const shear = rowShear(logo.side, logo.row);
-  const microsoftSquare = logo.height * 0.3;
+  const microsoftSquare = logo.height * 0.38;
   const microsoftGap = logo.height * 0.055;
-  const microsoftLayout = {
-    iconX: logo.width * 0.035,
-    iconY: logo.height * 0.15,
-    squareWidth: microsoftSquare,
-    squareHeight: microsoftSquare,
-    columnStep: microsoftSquare + microsoftGap,
-    rowStep: microsoftSquare + microsoftGap,
-    labelX: logo.width * 0.3,
-    labelY: logo.height * 0.52,
-    labelFontSize: logo.height * 0.62,
-    labelLetterSpacing: "-0.085em",
-  };
+  const microsoftIconWidth = microsoftSquare * 2 + microsoftGap;
+  const microsoftIconX = (logo.width - microsoftIconWidth) / 2;
+  const microsoftIconY = (logo.height - microsoftIconWidth) / 2;
+  const vercelTriangleHeight = logo.height * 0.82;
+  const vercelTriangleWidth = vercelTriangleHeight * 0.72;
+  const vercelTriangleX = (logo.width - vercelTriangleWidth) / 2;
+  const vercelTriangleY = (logo.height - vercelTriangleHeight) / 2;
+  const appleInkWidth = logo.width * 1.12;
+  const appleInkHeight = logo.height * 1.12;
+  const openAiInkWidth = logo.width * LOGO_INK_SCALE;
+  const openAiInkHeight = logo.height * LOGO_INK_SCALE;
+  const slackInkHeight = logo.height * LOGO_INK_SCALE;
+  const slackInkWidth = slackInkHeight * (155 / 130);
+  const opticalScale = LOGO_OPTICAL_SCALES[logo.kind] ?? 1;
+  const imageInkWidth = logo.width * LOGO_INK_SCALE * opticalScale;
+  const imageInkHeight = logo.height * LOGO_INK_SCALE * opticalScale;
   const commonImageProps = {
     className: "depth-logo-image",
-    height: logo.height,
-    width: logo.width,
-    x: -logo.width / 2,
-    y: -logo.height / 2,
+    height: imageInkHeight,
+    width: imageInkWidth,
+    x: -imageInkWidth / 2,
+    y: -imageInkHeight / 2,
+    preserveAspectRatio: "xMidYMid meet",
   };
 
   return (
     <g
       className="depth-mark"
+      data-logo-depth={logo.depth}
+      data-logo-kind={logo.kind}
+      data-logo-size={logo.height}
       opacity={logo.opacity}
       transform={`matrix(1 ${shear} 0 1 ${logo.x} ${logo.y})`}
     >
-      {logo.kind === "apple" ? (
-        <svg aria-hidden="true" height={logo.height} viewBox="0 0 24 24" width={logo.width} x={-logo.width / 2} y={-logo.height / 2}>
+      <g className="depth-mark-glyph">
+        {logo.kind === "apple" ? (
+        <svg aria-hidden="true" height={appleInkHeight} viewBox="0 0 24 24" width={appleInkWidth} x={-appleInkWidth / 2} y={-appleInkHeight / 2}>
           <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.3.74 3.12.8 1.23-.25 2.41-.94 3.6-.84 1.44.12 2.53.69 3.22 1.71-2.97 1.78-2.27 5.69.46 6.78-.55 1.45-1.27 2.86-2.4 4.52zM12.03 7.25C11.88 5.1 13.63 3.34 15.61 3.17c.27 2.49-2.24 4.31-3.58 4.08z" />
         </svg>
       ) : logo.kind === "openai" ? (
-        <svg aria-hidden="true" height={logo.height} viewBox="0 0 130 126" width={logo.width} x={-logo.width / 2} y={-logo.height / 2}>
+        <svg aria-hidden="true" height={openAiInkHeight} viewBox="0 0 130 126" width={openAiInkWidth} x={-openAiInkWidth / 2} y={-openAiInkHeight / 2}>
           <path d="M116.085 51.561a31.37 31.37 0 0 0-2.695-25.774a31.77 31.77 0 0 0-34.184-15.224A31.4 31.4 0 0 0 55.536.001a31.74 31.74 0 0 0-30.278 21.99A31.4 31.4 0 0 0 4.282 37.213a31.77 31.77 0 0 0 3.906 37.218a31.4 31.4 0 0 0 2.695 25.748a31.77 31.77 0 0 0 34.21 15.256a31.4 31.4 0 0 0 23.644 10.562a31.74 31.74 0 0 0 30.278-21.99a31.4 31.4 0 0 0 20.97-15.223a31.73 31.73 0 0 0-3.9-37.224m-47.348 66.22a23.52 23.52 0 0 1-15.108-5.478c.186-.104.548-.285.756-.422l25.09-14.484a4.07 4.07 0 0 0 2.06-3.567V58.453l10.6 6.119a.37.37 0 0 1 .208.296v29.28c0 13.041-10.564 23.618-23.606 23.633M18.015 96.12a23.56 23.56 0 0 1-2.82-15.821c.185.115.514.312.744.443l25.096 14.49a4.08 4.08 0 0 0 4.12 0L75.77 77.528v12.238a.37.37 0 0 1-.148.328L50.26 104.732c-11.292 6.502-25.716 2.637-32.245-8.64zm-6.573-54.782a23.5 23.5 0 0 1 12.287-10.354v29.823a4.08 4.08 0 0 0 2.06 3.567l30.623 17.683l-10.639 6.141a.37.37 0 0 1-.356.033L20.059 73.589c-11.282-6.527-15.148-20.957-8.64-32.25zm87.102 20.27L67.92 43.924l10.59-6.125a.38.38 0 0 1 .355-.033l25.359 14.643a23.61 23.61 0 0 1-3.649 42.598V65.191a4.08 4.08 0 0 0-2.049-3.583zM109.1 45.721a30 30 0 0 0-.745-.444L83.26 30.788a4.08 4.08 0 0 0-4.12 0L48.517 48.466V36.233a.4.4 0 0 1 .154-.328l25.358-14.638a23.61 23.61 0 0 1 35.06 24.46zM42.738 67.546l-10.605-6.119a.4.4 0 0 1-.203-.295V31.85a23.605 23.605 0 0 1 38.714-18.155c-.186.105-.52.285-.756.422l-25.09 14.484a4.08 4.08 0 0 0-2.06 3.567zm5.758-12.418l13.64-7.878l13.635 7.878v15.744l-13.64 7.877l-13.64-7.877z" />
+        </svg>
+      ) : logo.kind === "slack" ? (
+        <svg aria-hidden="true" height={slackInkHeight} viewBox="0 0 155 130" width={slackInkWidth} x={-slackInkWidth / 2} y={-slackInkHeight / 2}>
+          <image className="depth-logo-image" href="/mcp-logos/slack.svg" height="130" preserveAspectRatio="none" width="512" x="0" y="0" />
         </svg>
       ) : logo.kind === "microsoft" ? (
         <g className="depth-microsoft-mark" transform={`translate(${-logo.width / 2} ${-logo.height / 2})`}>
-          <g className="depth-microsoft-icon" transform={`translate(${microsoftLayout.iconX} ${microsoftLayout.iconY})`}>
-            <rect height={microsoftLayout.squareHeight} width={microsoftLayout.squareWidth} />
-            <rect height={microsoftLayout.squareHeight} width={microsoftLayout.squareWidth} x={microsoftLayout.columnStep} />
-            <rect height={microsoftLayout.squareHeight} width={microsoftLayout.squareWidth} y={microsoftLayout.rowStep} />
-            <rect height={microsoftLayout.squareHeight} width={microsoftLayout.squareWidth} x={microsoftLayout.columnStep} y={microsoftLayout.rowStep} />
+          <g className="depth-microsoft-icon" transform={`translate(${microsoftIconX} ${microsoftIconY})`}>
+            <rect height={microsoftSquare} width={microsoftSquare} />
+            <rect height={microsoftSquare} width={microsoftSquare} x={microsoftSquare + microsoftGap} />
+            <rect height={microsoftSquare} width={microsoftSquare} y={microsoftSquare + microsoftGap} />
+            <rect height={microsoftSquare} width={microsoftSquare} x={microsoftSquare + microsoftGap} y={microsoftSquare + microsoftGap} />
           </g>
-          <text
-            className="depth-combo-label"
-            dominantBaseline="middle"
-            style={{
-              fontSize: `${microsoftLayout.labelFontSize}px`,
-              letterSpacing: microsoftLayout.labelLetterSpacing,
-            }}
-            x={microsoftLayout.labelX}
-            y={microsoftLayout.labelY}
-          >
-            Microsoft
-          </text>
         </g>
-      ) : logo.kind === "google" ? (
-        <text
-          className="depth-wordmark depth-google-wordmark"
-          dominantBaseline="middle"
-          style={{ fontSize: `${Math.max(12, logo.width * 28 / 63)}px` }}
-          textAnchor="middle"
-          y="1"
-        >
-          Google
-        </text>
       ) : logo.kind === "vercel" ? (
         <g className="depth-vercel-mark" transform={`translate(${-logo.width / 2} ${-logo.height / 2})`}>
-          <path d={`M ${logo.height * 0.36} 2 L ${logo.height * 0.72} ${logo.height - 2} L 0 ${logo.height - 2} Z`} />
-          <text className="depth-combo-label" dominantBaseline="middle" x={logo.height * 0.88} y={logo.height * 0.47}>Vercel</text>
+          <path d={`M ${vercelTriangleX + vercelTriangleWidth / 2} ${vercelTriangleY} L ${vercelTriangleX + vercelTriangleWidth} ${vercelTriangleY + vercelTriangleHeight} L ${vercelTriangleX} ${vercelTriangleY + vercelTriangleHeight} Z`} />
         </g>
-      ) : (logo.kind === "github" || logo.kind === "notion") && logo.width > 40 ? (
-        <g className="depth-wordmark-combo" transform={`translate(${-logo.width / 2} ${-logo.height / 2})`}>
-          <image
-            className="depth-logo-image"
-            href={`/mcp-logos/${logo.kind}.svg`}
-            height={Math.min(logo.height * 0.68, 27)}
-            width={Math.min(logo.height * 0.68, 27)}
-            x="0"
-            y={logo.height / 2 - Math.min(logo.height * 0.68, 27) / 2}
-          />
-          <text
-            className="depth-combo-label"
-            dominantBaseline="middle"
-            style={{ fontSize: `${Math.max(12, Math.min(18, logo.height * 0.52))}px` }}
-            x={Math.min(logo.height * 0.68, 27) + 7}
-            y={logo.height / 2}
-          >
-            {logo.kind === "github" ? "GitHub" : "Notion"}
-          </text>
-        </g>
-      ) : logo.kind === "stripe" ? (
-        <text className="depth-stripe-wordmark" dominantBaseline="middle" fontSize={Math.max(12, logo.height * 0.55)} fontStyle="italic" textAnchor="middle" y="1">stripe</text>
       ) : (
-        <image href={`/mcp-logos/${logo.kind === "aws" ? "amazonaws" : logo.kind}.svg`} {...commonImageProps} />
+        <image href={`/mcp-logos/${logo.kind}.svg`} {...commonImageProps} />
       )}
+      </g>
     </g>
   );
 }
