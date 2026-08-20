@@ -628,13 +628,14 @@ const LEARN_ROWS = [
 ] as const;
 
 // The League ranks only within one certified category, so the standings
-// compare like against like.
+// compare like against like. mongodb's score updates mid-cycle, overtaking
+// supabase, and the two rows trade places to match.
 const LEAGUE_ROWS = [
-  { rank: 1, icon: "postgresql", name: "postgres-mcp", score: "0.947", move: "steady", swap: "" },
-  { rank: 2, icon: "supabase", name: "supabase-mcp", score: "0.921", move: "down", swap: "down" },
-  { rank: 3, icon: "mongodb", name: "mongodb-mcp", score: "0.898", move: "up", swap: "up" },
-  { rank: 4, icon: "mysql", name: "mysql-mcp", score: "0.874", move: "steady", swap: "" },
-  { rank: 5, icon: "redis", name: "redis-mcp", score: "0.712", move: "down", swap: "" },
+  { rank: 1, icon: "postgresql", name: "postgres-mcp", score: "0.947", scoreNew: "", move: "steady", swap: "" },
+  { rank: 2, icon: "supabase", name: "supabase-mcp", score: "0.921", scoreNew: "", move: "down", swap: "down" },
+  { rank: 3, icon: "mongodb", name: "mongodb-mcp", score: "0.898", scoreNew: "0.924", move: "up", swap: "up" },
+  { rank: 4, icon: "mysql", name: "mysql-mcp", score: "0.874", scoreNew: "", move: "steady", swap: "" },
+  { rank: 5, icon: "redis", name: "redis-mcp", score: "0.712", scoreNew: "", move: "down", swap: "" },
 ] as const;
 
 const LEAGUE_MOVE_GLYPHS = { up: "\u25b2", down: "\u25bc", steady: "\u2013" } as const;
@@ -691,7 +692,7 @@ function ShowcaseSection() {
               </div>
               <div className="score-rows">
                 {DRAFT_RESULTS.map(({ icon, tool, score }, index) => (
-                  <div className="score-row draft-row" key={tool} style={{ "--d": `${1 + index * 0.9}s` } as React.CSSProperties}>
+                  <div className={`score-row draft-row draft-row-${index + 1}`} key={tool}>
                     <span className="mock-tile"><MockIcon kind={icon} /></span>
                     <span className="score-name">{tool}</span>
                     <span className="score-bar"><i style={{ width: `${score}%` }} /></span>
@@ -718,9 +719,9 @@ function ShowcaseSection() {
                 </div>
                 {LEARN_ROWS.map(({ tool, note, width, from, score, delta, kind }, index) => (
                   <div
-                    className={`learn-row learn-row-${kind}`}
+                    className={`learn-row learn-row-${kind} learn-row-${index + 1}`}
                     key={tool}
-                    style={{ "--d": `${1 + index * 1.1}s`, "--from": from } as React.CSSProperties}
+                    style={{ "--from": from } as React.CSSProperties}
                   >
                     <span className="learn-name">{tool}</span>
                     <span className="learn-note">{note}</span>
@@ -748,14 +749,21 @@ function ShowcaseSection() {
                 <span>6 certified</span>
               </div>
               <div className="league-rows">
-                {LEAGUE_ROWS.map(({ rank, icon, name, score, move, swap }) => (
+                {LEAGUE_ROWS.map(({ rank, icon, name, score, scoreNew, move, swap }) => (
                   <div className="league-row" key={name}>
                     <span className="league-rank">{rank}</span>
                     <div className={`league-entry${swap ? ` league-swap-${swap}` : ""}`}>
                       <span className="mock-tile"><MockIcon kind={icon} /></span>
                       <span className="league-name">{name}</span>
                       <span className={`league-move league-move-${move}`}>{LEAGUE_MOVE_GLYPHS[move]}</span>
-                      <span className="league-score">{score}</span>
+                      {scoreNew ? (
+                        <span className="league-score league-score-flip">
+                          <span className="league-score-old">{score}</span>
+                          <span className="league-score-new">{scoreNew}</span>
+                        </span>
+                      ) : (
+                        <span className="league-score">{score}</span>
+                      )}
                     </div>
                   </div>
                 ))}

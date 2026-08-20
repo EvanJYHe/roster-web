@@ -739,7 +739,6 @@ html {
 }
 
 .learn-delta {
-    animation-fill-mode: backwards;
   font-size: max(9px, calc(11 * var(--u)));
 }
 
@@ -762,8 +761,20 @@ html {
 
 .score-bar i,
 .learn-bar i {
-    animation-fill-mode: backwards;
   transform-origin: left center;
+}
+
+.league-score-flip {
+  display: inline-grid;
+}
+
+.league-score-flip span {
+  grid-area: 1 / 1;
+  text-align: right;
+}
+
+.league-score-new {
+  opacity: 0;
 }
 
 /* --- motion ------------------------------------------------------------- */
@@ -824,102 +835,91 @@ html {
     animation: caret-blink 1.1s steps(1) infinite;
   }
 
-  /* The Rotation: drafted tools light up one at a time, then re-deal. */
-  @keyframes draft-activate {
-    0%,
-    6% {
-      opacity: 0.22;
-    }
-
-    14%,
-    88% {
-      opacity: 1;
-    }
-
-    96%,
-    100% {
-      opacity: 0.22;
-    }
-  }
-
-  @keyframes draft-bar {
-    0%,
-    7% {
-      transform: scaleX(0);
-    }
-
-    18%,
-    100% {
-      transform: scaleX(1);
-    }
-  }
-
+  /* The Rotation: one shared 10s cycle. All rows start dimmed, light up one
+     at a time in draft order, hold the full five, then re-deal together. */
   .draft-row {
-    animation: draft-activate 9s ease-out infinite;
-    animation-delay: var(--d, 0s);
-    animation-fill-mode: backwards;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
     opacity: 0.22;
   }
 
   .draft-row .score-bar i {
-    animation: draft-bar 9s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
-    animation-delay: var(--d, 0s);
-    animation-fill-mode: backwards;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+    transform: scaleX(0);
   }
 
-  /* The Coach: bars move from the old score to the new one, delta pops in. */
-  @keyframes learn-bar {
-    0%,
-    10% {
-      transform: scaleX(var(--from, 1));
-    }
+  .draft-row-1 { animation-name: draft-r1; }
+  .draft-row-2 { animation-name: draft-r2; }
+  .draft-row-3 { animation-name: draft-r3; }
+  .draft-row-4 { animation-name: draft-r4; }
+  .draft-row-5 { animation-name: draft-r5; }
+  .draft-row-1 .score-bar i { animation-name: draft-b1; }
+  .draft-row-2 .score-bar i { animation-name: draft-b2; }
+  .draft-row-3 .score-bar i { animation-name: draft-b3; }
+  .draft-row-4 .score-bar i { animation-name: draft-b4; }
+  .draft-row-5 .score-bar i { animation-name: draft-b5; }
 
-    24%,
-    100% {
-      transform: scaleX(1);
-    }
-  }
+  @keyframes draft-r1 { 0%, 6% { opacity: 0.22; } 11%, 90% { opacity: 1; } 96%, 100% { opacity: 0.22; } }
+  @keyframes draft-r2 { 0%, 14% { opacity: 0.22; } 19%, 90% { opacity: 1; } 96%, 100% { opacity: 0.22; } }
+  @keyframes draft-r3 { 0%, 22% { opacity: 0.22; } 27%, 90% { opacity: 1; } 96%, 100% { opacity: 0.22; } }
+  @keyframes draft-r4 { 0%, 30% { opacity: 0.22; } 35%, 90% { opacity: 1; } 96%, 100% { opacity: 0.22; } }
+  @keyframes draft-r5 { 0%, 38% { opacity: 0.22; } 43%, 90% { opacity: 1; } 96%, 100% { opacity: 0.22; } }
+  @keyframes draft-b1 { 0%, 6% { transform: scaleX(0); } 14%, 96% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+  @keyframes draft-b2 { 0%, 14% { transform: scaleX(0); } 22%, 96% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+  @keyframes draft-b3 { 0%, 22% { transform: scaleX(0); } 30%, 96% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+  @keyframes draft-b4 { 0%, 30% { transform: scaleX(0); } 38%, 96% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+  @keyframes draft-b5 { 0%, 38% { transform: scaleX(0); } 46%, 96% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
 
-  @keyframes learn-delta {
-    0%,
-    20% {
-      opacity: 0;
-    }
-
-    30%,
-    90% {
-      opacity: 1;
-    }
-
-    98%,
-    100% {
-      opacity: 0;
-    }
-  }
-
+  /* The Coach: one shared 10s cycle. Outcomes land top to bottom, each bar
+     moving from its old score to the new one with the delta appearing, then
+     the whole table settles back for the next session. */
   .learn-bar i {
-    animation: learn-bar 9s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
-    animation-delay: var(--d, 0s);
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
   .learn-delta {
-    animation: learn-delta 9s ease-out infinite;
-    animation-delay: var(--d, 0s);
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
   }
 
-  /* The League: two neighbours trade places mid-cycle. */
+  .learn-row-1 .learn-bar i { animation-name: learn-b1; }
+  .learn-row-2 .learn-bar i { animation-name: learn-b2; }
+  .learn-row-3 .learn-bar i { animation-name: learn-b3; }
+  .learn-row-4 .learn-bar i { animation-name: learn-b4; }
+  .learn-row-1 .learn-delta { animation-name: learn-d1; }
+  .learn-row-2 .learn-delta { animation-name: learn-d2; }
+  .learn-row-3 .learn-delta { animation-name: learn-d3; }
+  .learn-row-4 .learn-delta { animation-name: learn-d4; }
+
+  @keyframes learn-b1 { 0%, 8% { transform: scaleX(var(--from, 1)); } 16%, 94% { transform: scaleX(1); } 100% { transform: scaleX(var(--from, 1)); } }
+  @keyframes learn-b2 { 0%, 18% { transform: scaleX(var(--from, 1)); } 26%, 94% { transform: scaleX(1); } 100% { transform: scaleX(var(--from, 1)); } }
+  @keyframes learn-b3 { 0%, 28% { transform: scaleX(var(--from, 1)); } 36%, 94% { transform: scaleX(1); } 100% { transform: scaleX(var(--from, 1)); } }
+  @keyframes learn-b4 { 0%, 38% { transform: scaleX(var(--from, 1)); } 46%, 94% { transform: scaleX(1); } 100% { transform: scaleX(var(--from, 1)); } }
+  @keyframes learn-d1 { 0%, 14% { opacity: 0; } 20%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes learn-d2 { 0%, 24% { opacity: 0; } 30%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes learn-d3 { 0%, 34% { opacity: 0; } 40%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes learn-d4 { 0%, 44% { opacity: 0; } 50%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+
+  /* The League: mongodb's signed score updates first, and only then do the
+     two neighbours trade places so the standings stay sorted by score. */
   @keyframes league-swap-down {
     0%,
-    38% {
+    40% {
       transform: translateY(0);
     }
 
-    46%,
-    90% {
+    48%,
+    92% {
       transform: translateY(calc(100% + 23 * var(--u)));
     }
 
-    98%,
+    99%,
     100% {
       transform: translateY(0);
     }
@@ -927,27 +927,69 @@ html {
 
   @keyframes league-swap-up {
     0%,
-    38% {
+    40% {
       transform: translateY(0);
     }
 
-    46%,
-    90% {
+    48%,
+    92% {
       transform: translateY(calc(-100% - 23 * var(--u)));
     }
 
-    98%,
+    99%,
     100% {
       transform: translateY(0);
     }
   }
 
+  @keyframes league-score-old {
+    0%,
+    30% {
+      opacity: 1;
+    }
+
+    34%,
+    94% {
+      opacity: 0;
+    }
+
+    99%,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes league-score-new {
+    0%,
+    30% {
+      opacity: 0;
+    }
+
+    34%,
+    94% {
+      opacity: 1;
+    }
+
+    99%,
+    100% {
+      opacity: 0;
+    }
+  }
+
   .league-swap-down {
-    animation: league-swap-down 11s ease-in-out infinite;
+    animation: league-swap-down 12s ease-in-out infinite;
   }
 
   .league-swap-up {
-    animation: league-swap-up 11s ease-in-out infinite;
+    animation: league-swap-up 12s ease-in-out infinite;
+  }
+
+  .league-score-old {
+    animation: league-score-old 12s infinite;
+  }
+
+  .league-score-new {
+    animation: league-score-new 12s infinite;
   }
 }
 
