@@ -1,0 +1,125 @@
+/* Footer, including the ASCII skyline plate and its per-cell brightness. */
+
+.site-footer {
+  margin-top: calc(30 * var(--u));
+}
+
+.footer-inner {
+  margin: 0 auto;
+  max-width: min(calc(1250 * var(--uw)), 1340px);
+  padding: calc(40 * var(--u)) 24px calc(18 * var(--u));
+}
+
+/* Brand takes the flexible column and the link groups sit in an even track
+   set, so the two never drift to opposite edges with dead space between. */
+.footer-top {
+  display: grid;
+  gap: calc(48 * var(--uw));
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.footer-brand {
+  max-width: calc(340 * var(--uw));
+}
+
+.footer-brand-lockup {
+  font-size: calc(24 * var(--u));
+  gap: calc(8 * var(--u));
+}
+
+.footer-brand-lockup .roster-mark {
+  height: calc(31 * var(--u));
+  width: calc(31 * var(--u));
+}
+
+.footer-brand p {
+  color: var(--ink-4);
+  font-size: max(12px, calc(14.5 * var(--u)));
+  letter-spacing: -0.01em;
+  line-height: 1.6;
+  margin: calc(18 * var(--u)) 0 0;
+}
+
+.footer-cols {
+  display: grid;
+  gap: calc(56 * var(--uw));
+  grid-auto-columns: minmax(calc(128 * var(--uw)), auto);
+  grid-auto-flow: column;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: calc(11 * var(--u));
+}
+
+.footer-col h4 {
+  color: var(--ink-5);
+  font-family: var(--mono-font);
+  font-size: max(10px, calc(11.5 * var(--u)));
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  margin: 0 0 calc(6 * var(--u));
+  text-transform: uppercase;
+}
+
+.footer-col a {
+  color: var(--ink-3);
+  font-size: max(12px, calc(14.5 * var(--u)));
+  letter-spacing: -0.01em;
+  transition: color var(--t-fast) var(--ease-soft), transform var(--t-fast) var(--ease);
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.footer-col a:hover {
+  transform: translateX(3px);
+}
+
+.footer-col a:hover {
+  color: var(--white);
+}
+
+/* Sized off the container rather than the viewport, so the art always spans
+   exactly one full line whatever the layout does around it. Full bleed, so a
+   38 row plate is still large enough to read as a city. */
+.footer-art {
+  container-type: inline-size;
+  margin-top: calc(10 * var(--u));
+  overflow: hidden;
+  width: 100%;
+}
+
+.footer-art pre {
+  /* 320 columns at a 0.6em advance is 192em, so 100/192 = 0.521cqw spans the
+     container exactly. Colour is set per run below, not here. */
+  font-family: var(--mono-font);
+  font-feature-settings: "liga" 0, "calt" 0;
+  font-size: 0.519cqw;
+  line-height: 1.06;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  margin: 0;
+  user-select: none;
+  white-space: pre;
+}
+
+/* Per-cell brightness. Glyph choice gives the plate its texture; these give it
+   depth. A shadowed facade is a solid character drawn dim, a lit one is a dense
+   character drawn near white, which is the range a single flat colour loses. */
+.footer-art .sky-1 { color: rgba(255, 255, 255, 0.10); }
+.footer-art .sky-2 { color: rgba(255, 255, 255, 0.19); }
+.footer-art .sky-3 { color: rgba(255, 255, 255, 0.28); }
+.footer-art .sky-4 { color: rgba(255, 255, 255, 0.38); }
+.footer-art .sky-5 { color: rgba(255, 255, 255, 0.49); }
+.footer-art .sky-6 { color: rgba(255, 255, 255, 0.61); }
+.footer-art .sky-7 { color: rgba(255, 255, 255, 0.73); }
+.footer-art .sky-8 { color: rgba(255, 255, 255, 0.86); }
+.footer-art .sky-9 { color: rgba(255, 255, 255, 0.98); }
+
+.footer-bottom {
+  color: var(--ink-4);
+  display: flex;
+  font-size: max(11px, calc(13 * var(--u)));
+  letter-spacing: -0.01em;
+  margin-top: calc(42 * var(--u));
+}

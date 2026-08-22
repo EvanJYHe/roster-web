@@ -1,0 +1,81 @@
+/* Design tokens: the fluid scale units, the ink ramp and the motion
+   vocabulary. Everything else in the stylesheet is expressed in these. */
+
+:root {
+  --page: #000;
+  --white: #f3f3f3;
+  --muted-white: rgba(243, 243, 243, 0.58);
+  --ui-font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono-font: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
+  /* The page has no brand hue: light itself is the accent. */
+  --ink: #0a0a0a;
+  --paper: #f4f3f1;
+  --hilite: #ffffff;
+  --display-font: "Didot", "Bodoni 72", "Iowan Old Style", "Baskerville", serif;
+  /* Fluid scale unit: 1px at the 1672px design width, with a softened slope
+     so type stays legible on small desktops and capped growth on ultrawide.
+     Height is in the min() as well, so a short window scales the whole page
+     down rather than pushing a section past the fold. */
+  --uw: clamp(0.56px, calc((100vw + 400px) / 2072), 1.16px);
+  --u: clamp(
+    0.56px,
+    min(var(--uw), calc((100svh + 320px) / 1290)),
+    1.16px
+  );
+  /* Hero foreground runs slightly smaller than the corridor artwork so the
+     scene reads as a deeper, more zoomed-out corridor. --hero-zoom scales the
+     hero copy and buttons on their own: the layout is fluid, so 125% browser
+     zoom only works out about 5% larger in real pixels, and this reproduces
+     that at 100% without touching any section below the fold. */
+  --hero-zoom: 1.08;
+  --hu: calc(var(--u) * 0.85 * var(--hero-zoom));
+  /* One motion vocabulary. --ease is an expo-out: it leaves fast and settles
+     slowly, which is what reads as "smooth" rather than mechanical. */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-fast: 200ms;
+  --t-mid: 460ms;
+  --t-slow: 900ms;
+  /* Portrait only. --corridor-span sets how much of the corridor's length fits
+     the screen height; --corridor-fan magnifies the cross axis on its own, so
+     the lane fan reaches the side edges without cropping the corridor short. */
+  --corridor-span: 700;
+  --corridor-fan: 1.5;
+  /* Text on pure black has no ambient light to help it, so low-alpha white
+     falls apart much faster than the same value would on a grey page. These
+     five steps replace ~20 ad hoc values; body copy sits at --ink-3 and
+     nothing readable is allowed below --ink-4. */
+  --ink-1: rgba(255, 255, 255, 0.94);
+  --ink-2: rgba(255, 255, 255, 0.78);
+  --ink-3: rgba(255, 255, 255, 0.66);
+  --ink-4: rgba(255, 255, 255, 0.5);
+  --ink-5: rgba(255, 255, 255, 0.36);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--page);
+  margin: 0;
+  min-height: 100%;
+  padding: 0;
+}
+
+body {
+  color: var(--white);
+  font-family: var(--ui-font);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}

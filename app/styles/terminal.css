@@ -1,0 +1,214 @@
+/* Terminal mocks. A character grid, so most sizing is in ch/em rather than
+   the page's --u scale. */
+
+.badge-icon {
+  fill: none;
+  height: max(15px, calc(19 * var(--u)));
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.3;
+  width: max(15px, calc(19 * var(--u)));
+}
+
+.term-titlebar {
+  align-items: center;
+  background: #17181b;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  padding: calc(10 * var(--u)) calc(13 * var(--u));
+}
+
+.term-lights {
+  display: flex;
+  gap: calc(7 * var(--u));
+}
+
+.term-lights i {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  display: block;
+  height: max(8px, calc(10 * var(--u)));
+  width: max(8px, calc(10 * var(--u)));
+}
+
+.term-title {
+  color: rgba(255, 255, 255, 0.42);
+  font-family: var(--mono-font);
+  font-size: max(10px, calc(12 * var(--u)));
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Everything sits on the monospace character grid: column widths are in ch so
+   the columns line up the way real terminal output does. The height is fixed
+   in em so the window is identical on every tab and still scales with the
+   terminal's own font size. */
+.term-body {
+  color: rgba(255, 255, 255, 0.72);
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  font-family: var(--mono-font);
+  /* Coding fonts ligate "--" into an en dash, which turns a real CLI flag
+     into something you cannot type. Shell output should be literal. */
+  font-feature-settings: "liga" 0, "calt" 0;
+  font-size: max(10px, calc(12.5 * var(--u)));
+  font-variant-ligatures: none;
+  height: 23.2em;
+  line-height: 1.85;
+  overflow: hidden;
+  padding: calc(14 * var(--u)) calc(16 * var(--u)) calc(14 * var(--u));
+}
+
+.term-line {
+  display: flex;
+  gap: 1ch;
+  white-space: pre;
+}
+
+.term-line-cmd {
+  color: var(--white);
+}
+
+.term-caret {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.term-arg {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.term-out {
+  display: flex;
+  flex-direction: column;
+}
+
+/* A finished block of output is followed by a blank line before the next
+   prompt, the way a real shell session reads. */
+.term-out + .term-line-cmd {
+  margin-top: 1.1em;
+}
+
+.term-row {
+  display: grid;
+  gap: 1ch;
+  white-space: pre;
+}
+
+.term-row-learn {
+  grid-template-columns: minmax(0, 25ch) 4ch auto minmax(13ch, auto);
+}
+
+.term-row-search {
+  grid-template-columns: 5ch minmax(0, 1fr);
+}
+
+.term-row-league {
+  grid-template-columns: 2ch minmax(0, 1fr);
+}
+
+.term-row-head {
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+}
+
+.term-name {
+  color: rgba(255, 255, 255, 0.86);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.term-dim {
+  color: rgba(255, 255, 255, 0.34);
+}
+
+.term-right {
+  text-align: right;
+}
+
+.term-status-up {
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.term-status-down {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.term-check {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.term-note {
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 1.1em;
+  white-space: pre;
+}
+
+.term-note-lead {
+  margin: 0 0 1.1em;
+}
+
+.term-note-tight {
+  margin-top: 0;
+  padding-left: 2ch;
+}
+
+.term-cursor {
+  background: rgba(255, 255, 255, 0.8);
+  display: inline-block;
+  height: 1.15em;
+  vertical-align: text-bottom;
+  width: 1ch;
+}
+
+/* Block-glyph meter: a shaded track with a solid fill clipped over it. */
+.term-meter {
+  display: inline-block;
+  letter-spacing: -0.03em;
+  position: relative;
+}
+
+.term-meter-track {
+  color: rgba(255, 255, 255, 0.16);
+}
+
+.term-meter-fill {
+  color: rgba(255, 255, 255, 0.92);
+  inset: 0 auto 0 0;
+  overflow: hidden;
+  position: absolute;
+  width: var(--w1);
+}
+
+.learn-delta-up {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.learn-delta-down {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* The rank column stays fixed while the entry beside it slides, so a swap
+   reads as two servers trading places rather than the numbers reshuffling. */
+.term-league-entry {
+  display: grid;
+  gap: 1ch;
+  grid-template-columns: minmax(0, 1fr) 7ch 6ch;
+}
+
+.league-score-flip {
+  display: inline-grid;
+}
+
+.league-score-flip span {
+  grid-area: 1 / 1;
+  text-align: right;
+}
+
+.league-score-new {
+  opacity: 0;
+}

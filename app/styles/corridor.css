@@ -1,0 +1,187 @@
+/* The hero's perspective corridor: lane geometry, the logo marquee and the
+   portrait re-framing that turns the walls into top and bottom halves. */
+
+.signal-field {
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
+
+.perspective-marquee,
+.signal-art {
+  display: block;
+  height: 100%;
+  inset: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+}
+
+.signal-art {
+  opacity: 0.9;
+  z-index: 0;
+}
+
+.perspective-marquee {
+  opacity: 1;
+  z-index: 1;
+}
+
+.depth-lane-line {
+  fill: none;
+  stroke: rgba(224, 235, 231, 0.25);
+  stroke-linecap: butt;
+  stroke-width: 0.85;
+  vector-effect: non-scaling-stroke;
+}
+
+.depth-lane-content,
+.depth-mark {
+  isolation: isolate;
+}
+
+.depth-mark-lane {
+  animation: corridor-flow 60s linear infinite;
+}
+
+@keyframes corridor-flow {
+  from {
+    transform: translate(var(--lane-x0), var(--lane-y0)) scale(var(--lane-s0));
+  }
+
+  to {
+    transform: translate(var(--lane-x1), var(--lane-y1)) scale(var(--lane-s1));
+  }
+}
+
+.depth-mark {
+  filter: brightness(1.2);
+  mix-blend-mode: screen;
+}
+
+.depth-mark svg {
+  fill: #f1f6f3;
+}
+
+/* Flatten icons to a uniform white ink regardless of their source colors. */
+.depth-logo-image {
+  filter: brightness(0) invert(1);
+}
+
+/* Icons whose inner detail relies on color contrast keep a tonal mapping
+   instead of the flat silhouette. */
+.depth-logo-image-multitone {
+  filter: grayscale(1) invert(1) brightness(1.55) contrast(0.64);
+}
+
+.depth-microsoft-icon {
+  fill: #f1f6f3;
+}
+
+.depth-vercel-mark path {
+  fill: #f1f6f3;
+}
+
+.center-occlusion {
+  pointer-events: none;
+}
+
+.signal-center-veil,
+.signal-vignette {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.signal-center-veil {
+  background:
+    radial-gradient(ellipse 32% 28% at 50% 45%, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0.17) 45%, rgba(0, 0, 0, 0) 100%),
+    linear-gradient(90deg, transparent 34%, rgba(0, 0, 0, 0.05) 43%, rgba(0, 0, 0, 0.12) 50%, rgba(0, 0, 0, 0.05) 57%, transparent 66%);
+  z-index: 2;
+}
+
+.signal-vignette {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.56), transparent 21%, transparent 78%, rgba(0, 0, 0, 0.1) 100%),
+    radial-gradient(ellipse 76% 105% at 50% 48%, transparent 46%, rgba(0, 0, 0, 0.04) 67%, rgba(0, 0, 0, 0.26) 100%);
+  z-index: 3;
+}
+
+.signal-vignette::before,
+.signal-vignette::after {
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.signal-vignette::before {
+  background: linear-gradient(142deg, transparent 24%, rgba(0, 0, 0, 0.04) 75%, rgba(0, 0, 0, 0.08) 100%);
+  clip-path: polygon(0 45%, 50% 57%, 50% 100%, 0 100%);
+}
+
+.signal-vignette::after {
+  background: linear-gradient(218deg, transparent 24%, rgba(0, 0, 0, 0.04) 75%, rgba(0, 0, 0, 0.08) 100%);
+  clip-path: polygon(50% 57%, 100% 45%, 100% 100%, 50% 100%);
+}
+
+.field-horizon-glow {
+  filter: blur(12px);
+}
+
+/* Portrait framing for the corridor.
+
+   On desktop the two walls run down the left and right edges with the
+   vanishing point between them. A tall narrow viewport has no room for that
+   side by side, and cropping to the middle lands on the vanishing point,
+   which is empty by design.
+
+   So rotate the whole corridor a quarter turn: the walls become the top and
+   bottom halves of the screen and the vanishing point stays in the middle.
+   That also puts the empty part of the composition exactly where the headline
+   sits, which is why the field can be brighter here than a centre crop could
+   ever be. Each logo is counter-rotated so the marks stay upright. */
+@media (max-aspect-ratio: 4 / 5) {
+  .perspective-marquee,
+  .signal-art {
+    /* Sized in the pre-rotation axes: height runs across the corridor and so
+       spans the viewport's width, width runs along it and spills past the top
+       and bottom. --corridor-span is how many of the artwork's 941 cross-axis
+       units fill the screen width; smaller means more zoomed in, which is what
+       pulls the dense band out to the edges instead of leaving them bare. */
+    height: 100vw;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%) rotate(90deg) scaleY(var(--corridor-fan));
+    width: calc(100vw * 1672 / var(--corridor-span));
+  }
+
+  /* Still pulled back from full strength: the walls are close to the edges of
+     a phone screen in a way they never are on desktop. */
+  .perspective-marquee {
+    opacity: 0.8;
+  }
+
+  /* Cancels the fan magnification for everything below it. It sits under the
+     lane translate, so positions keep the spread while the shear and the glyph
+     keep their true proportions. */
+  .depth-mark-fan {
+    transform: scaleY(calc(1 / var(--corridor-fan)));
+  }
+
+  .depth-mark-glyph {
+    transform: rotate(-90deg);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .signal-center-veil {
+    background: radial-gradient(
+      ellipse 74% 30% at 50% 47%,
+      rgba(0, 0, 0, 0.62) 0%,
+      rgba(0, 0, 0, 0.34) 55%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+}

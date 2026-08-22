@@ -1,0 +1,79 @@
+/* Site header. */
+
+.site-nav {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  left: 0;
+  padding: calc(36 * var(--u)) calc(49 * var(--u)) 0 calc(64 * var(--u));
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 5;
+}
+
+.brand {
+  align-items: center;
+  display: inline-flex;
+  gap: calc(10 * var(--u));
+  font-family: var(--ui-font);
+  font-size: calc(36 * var(--u));
+  font-weight: 300;
+  letter-spacing: -0.09em;
+  line-height: 1;
+}
+
+.roster-mark {
+  display: block;
+  flex: 0 0 auto;
+  height: calc(48 * var(--u));
+  object-fit: contain;
+  overflow: visible;
+  transform: translateX(-1px);
+  width: calc(48 * var(--u));
+}
+
+.brand-name {
+  display: inline-block;
+  transform: translate(-4px, 0) scaleX(1.21);
+  transform-origin: left center;
+}
+
+.nav-links {
+  align-items: center;
+  display: flex;
+  gap: calc(52 * var(--u));
+  font-size: max(15px, calc(23 * var(--u)));
+  letter-spacing: -0.055em;
+}
+
+.nav-links > a {
+  color: var(--muted-white);
+  transition: color var(--t-fast) var(--ease-soft);
+}
+
+.nav-links > a:hover {
+  color: var(--white);
+}
+
+.nav-github {
+  align-items: center;
+  display: inline-flex;
+  gap: calc(10 * var(--u));
+}
+
+.github-mark {
+  fill: currentColor;
+  height: max(18px, calc(24 * var(--u)));
+  width: max(18px, calc(24 * var(--u)));
+}
+
+.diagonal-arrow {
+  fill: none;
+  height: max(13px, calc(18 * var(--u)));
+  stroke: currentColor;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  stroke-width: 1.45;
+  width: max(13px, calc(18 * var(--u)));
+}

@@ -1,0 +1,162 @@
+/* Hero copy and calls to action. Sized in --hu so the hero can scale on its
+   own without touching any section below the fold. */
+
+.hero {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding: calc(120 * var(--u)) 24px;
+  position: relative;
+  text-align: center;
+  z-index: 4;
+}
+
+.update-pill {
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  color: var(--ink-2);
+  display: inline-flex;
+  font-size: max(13px, calc(19 * var(--hu)));
+  height: calc(60 * var(--hu));
+  letter-spacing: -0.045em;
+  padding: calc(3 * var(--hu));
+  white-space: nowrap;
+}
+
+.update-label,
+.update-message {
+  align-items: center;
+  display: inline-flex;
+  height: calc(52 * var(--hu));
+}
+
+.update-label {
+  background: radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.045) 58%, transparent 100%);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.76);
+  gap: calc(23 * var(--hu));
+  padding: 0 calc(25 * var(--hu));
+}
+
+.update-label i {
+  background: rgba(241, 246, 244, 0.96);
+  border-radius: 50%;
+  box-shadow: 0 0 8px 3px rgba(221, 238, 234, 0.24);
+  display: block;
+  height: max(9px, calc(14 * var(--hu)));
+  width: max(9px, calc(14 * var(--hu)));
+}
+
+.update-message {
+  gap: calc(12 * var(--hu));
+  padding: 0 calc(18 * var(--hu)) 0 calc(1 * var(--hu));
+}
+
+.update-message .diagonal-arrow {
+  color: rgba(255, 255, 255, 0.6);
+  height: max(13px, calc(18 * var(--hu)));
+  width: max(13px, calc(18 * var(--hu)));
+}
+
+.hero h1 {
+  color: #f1f1f1;
+  font-family: var(--display-font);
+  font-size: calc(110 * var(--hu));
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.07;
+  margin: calc(46 * var(--hu)) 0 0;
+}
+
+.hero h1 span,
+.hero-description span {
+  display: inline-block;
+}
+
+.hero h1 span:first-child {
+  transform: translate(9px, -2px) scale(1.006, 0.99);
+}
+
+.hero h1 span:last-child {
+  transform: translate(13px, 0) scale(1.026, 1.04);
+}
+
+.hero-description {
+  color: rgba(241, 241, 241, 0.68);
+  font-size: max(15px, calc(27 * var(--hu)));
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1.46;
+  margin: calc(23 * var(--hu)) 0 0;
+}
+
+.hero-description span:first-child {
+  transform: translate(12px, 1px) scaleX(1.02);
+}
+
+.hero-description span:last-child {
+  transform: translateX(17px) scaleX(1.01);
+}
+
+.hero-actions {
+  display: flex;
+  gap: calc(21 * var(--hu));
+  margin-top: calc(44 * var(--hu));
+}
+
+.hero-button {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  border-radius: 5px;
+  font-family: var(--ui-font);
+  font-size: max(16px, calc(27 * var(--hu)));
+  gap: calc(14 * var(--hu));
+  height: max(56px, calc(84 * var(--hu)));
+  justify-content: center;
+  letter-spacing: -0.045em;
+  transition:
+    background var(--t-fast) var(--ease-soft),
+    border-color var(--t-fast) var(--ease-soft),
+    box-shadow var(--t-fast) var(--ease-soft),
+    transform var(--t-fast) var(--ease);
+}
+
+.hero-button-icon {
+  fill: none;
+  flex: 0 0 auto;
+  height: max(15px, calc(21 * var(--hu)));
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+  width: max(15px, calc(21 * var(--hu)));
+}
+
+.hero-button-primary {
+  background: #fff;
+  border: 0;
+  box-shadow: 0 0 22px rgba(255, 255, 255, 0.09), 0 8px 16px rgba(0, 0, 0, 0.24);
+  color: #0c0c0c;
+  width: max(220px, calc(300 * var(--hu)));
+}
+
+.hero-button-primary:hover {
+  background: #fff;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.15), 0 8px 16px rgba(0, 0, 0, 0.24);
+}
+
+.hero-button-secondary {
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  color: rgba(255, 255, 255, 0.88);
+  width: max(200px, calc(280 * var(--hu)));
+}
+
+.hero-button-secondary:hover {
+  background: #121212;
+  border-color: rgba(255, 255, 255, 0.7);
+}

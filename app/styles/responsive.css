@@ -1,0 +1,393 @@
+/* Responsive overrides.
+
+   These stay in one file, last, deliberately. They were written as a single
+   cascade at the end of the stylesheet and several of them rely on that
+   position to win; scattering them into the component files would change
+   which rule applies. */
+
+@media (max-width: 900px) {
+  /* Per-line optical alignment tuned for the wide composition. Narrow screens
+     re-wrap the text, so the nudges land mid-line and overflow instead.
+     The spans are inline-block for that nudging, which also stops the copy
+     flowing across the line break: each span wraps internally and the next
+     one starts a fresh line, leaving a stub. Inline lets it read as one
+     paragraph. */
+  .hero h1 span,
+  .hero-description span {
+    display: inline;
+    transform: none;
+  }
+
+  .site-nav {
+    padding: 20px 20px 0;
+  }
+
+  .brand {
+    font-size: 25px;
+    gap: 7px;
+  }
+
+  .roster-mark {
+    height: 36px;
+    width: 36px;
+  }
+
+  .nav-links {
+    font-size: 16px;
+    gap: 14px;
+  }
+
+  .github-mark {
+    height: 19px;
+    width: 19px;
+  }
+
+  .hero {
+    padding: 110px 24px 48px;
+  }
+
+  .update-pill {
+    font-size: 14px;
+    height: 48px;
+    padding: 3px;
+  }
+
+  .update-label,
+  .update-message {
+    height: 40px;
+  }
+
+  .update-label {
+    gap: 15px;
+    padding: 0 22px;
+  }
+
+  .update-label i {
+    height: 9px;
+    width: 9px;
+  }
+
+  .update-message {
+    gap: 10px;
+    padding: 0 12px 0 8px;
+  }
+
+  .hero h1 {
+    font-size: clamp(50px, 8.8vw, 80px);
+    line-height: 1.02;
+    margin-top: 32px;
+  }
+
+  .hero h1 span,
+  .hero-description span {
+    transform: none;
+  }
+
+  .hero-description {
+    font-size: clamp(16px, 1.9vw, 19px);
+    line-height: 1.45;
+    margin-top: 32px;
+  }
+
+  .hero-actions {
+    gap: 14px;
+    margin-top: 30px;
+  }
+
+  .section {
+    padding: 72px 24px;
+  }
+
+  .section h2 {
+    font-size: clamp(34px, 6.4vw, 48px);
+  }
+
+  .section {
+    display: block;
+    min-height: 0;
+    padding: 56px 24px;
+  }
+
+  .section h2 br {
+    display: none;
+  }
+
+  .features-grid {
+    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 32px;
+  }
+
+  .feature-card {
+    padding: 20px 18px 18px;
+  }
+
+
+
+  .lineup-grid {
+    grid-template-columns: 1fr;
+    margin-top: 40px;
+  }
+
+  /* Four outlined boxes in a 2x2 read as a form, and the rail's sliding marker
+     is geometry for a vertical stack of four, so on a grid it lands nowhere
+     sensible. Mobile gets a flat segmented control instead: no boxes, one
+     hairline frame around the set, and the active cell carries the state. */
+  .lineup-tabs {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: grid;
+    gap: 1px;
+    grid-template-columns: repeat(2, 1fr);
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .lineup-marker {
+    display: none;
+  }
+
+  .lineup-tab,
+  .lineup-tab + .lineup-tab {
+    background: var(--page);
+    border: 0;
+    gap: 3px;
+    margin-top: 0;
+    padding: 13px 14px;
+  }
+
+  .lineup-tab-active,
+  .lineup-tab-active:hover {
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  /* Stands in for the rail marker, which only makes sense on a vertical stack. */
+  .lineup-tab-active::after {
+    background: var(--hilite);
+    content: "";
+    height: 2px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .lineup-tab-label {
+    font-size: 11.5px;
+    letter-spacing: 0.11em;
+  }
+
+  .lineup-tab-role {
+    font-size: 11.5px;
+  }
+
+  .lineup-tab-icon {
+    display: none;
+  }
+
+  /* Stacked, the two columns can't share a fixed height, so release it. */
+  .lineup-panel {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .lineup-stage {
+    padding: 36px 20px;
+  }
+
+  .lineup-copy {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 32px 24px 36px;
+  }
+
+  .footer-inner {
+    padding: 48px 24px 24px;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  /* Three tracks won't fit a phone; wrap them into a grid instead. */
+  .footer-cols {
+    gap: 32px 40px;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-brand {
+    max-width: none;
+  }
+
+  .footer-bottom {
+    margin-top: 34px;
+  }
+
+  .footer-art {
+    margin-top: 44px;
+  }
+}
+
+@media (max-width: 620px) {
+  /* Mono text in a half-width column wraps at ~20 characters, which reads as
+     a stack of fragments. One column per card instead. */
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-nav {
+    padding: 12px 16px 0;
+  }
+
+  .brand {
+    font-size: 21px;
+    gap: 5px;
+  }
+
+  .roster-mark {
+    height: 29px;
+    width: 29px;
+  }
+
+  .nav-links {
+    font-size: 14px;
+  }
+
+  .github-mark {
+    height: 17px;
+    width: 17px;
+  }
+
+  .hero {
+    padding: 96px 16px 40px;
+  }
+
+  .update-pill {
+    font-size: 11px;
+    height: 42px;
+  }
+
+  .update-label,
+  .update-message {
+    height: 32px;
+  }
+
+  .update-label {
+    gap: 9px;
+    padding: 0 12px;
+  }
+
+  .update-label i {
+    height: 6px;
+    width: 6px;
+  }
+
+  .update-message {
+    gap: 6px;
+    padding: 0 8px 0 5px;
+  }
+
+  .update-message .diagonal-arrow {
+    height: 13px;
+    width: 13px;
+  }
+
+  .hero h1 {
+    font-size: clamp(43px, 12.2vw, 70px);
+    letter-spacing: -0.055em;
+    margin-top: 30px;
+  }
+
+  .hero-description {
+    font-size: 15px;
+    line-height: 1.45;
+    margin-top: 26px;
+  }
+
+  .hero-description br {
+    display: none;
+  }
+
+  /* The pill costs a whole band of vertical space above the fold for a line
+     that repeats what the nav already implies. Desktop keeps it. */
+  .update-pill {
+    display: none;
+  }
+
+  /* Side by side and sized to their labels, rather than two stacked full
+     width bars. Two compact buttons read as a choice; two stacked slabs read
+     as a form. */
+  .hero-actions {
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 24px;
+    width: auto;
+  }
+
+  .hero-button,
+  .hero-button-primary,
+  .hero-button-secondary {
+    flex: 0 1 auto;
+    height: 48px;
+    padding: 0 16px;
+    width: auto;
+  }
+
+  .hero-button {
+    font-size: 14px;
+    gap: 8px;
+    letter-spacing: -0.03em;
+  }
+
+  .hero-button svg {
+    height: 15px;
+    width: 15px;
+  }
+
+  /* Labels stay on one line; a two line button reads as broken, not compact. */
+  .hero-button span {
+    white-space: nowrap;
+  }
+}
+
+/* Two labels plus two icons no longer fit one row here. The icons are the
+   decorative half of the pair, so they go and the labels stay intact. */
+@media (max-width: 350px) {
+  .hero-button svg {
+    display: none;
+  }
+
+  .hero-button {
+    font-size: 13px;
+    padding: 0 13px;
+  }
+}
+
+/* Below this width the character grid can't hold the meter column, so the
+   mock drops it and gives the width back to the tool names, the same thing a
+   real terminal table does in a narrow window. */
+@media (max-width: 520px) {
+  .term-meter,
+  .term-row-learn.term-row-head > :nth-child(3) {
+    display: none;
+  }
+
+  .term-row-learn {
+    grid-template-columns: minmax(0, 1fr) 4ch minmax(13ch, auto);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lineup-marker,
+  .feature-card,
+  .hero-button,
+  .nav-links > a {
+    transition: none;
+  }
+
+  .depth-mark-lane {
+    animation: none;
+  }
+}

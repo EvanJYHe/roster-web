@@ -1,0 +1,13 @@
+/* Page shell. */
+
+.landing-page {
+  background: #000;
+  width: 100%;
+}
+
+.hero-stage {
+  isolation: isolate;
+  min-height: 100svh;
+  overflow: hidden;
+  position: relative;
+}

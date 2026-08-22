@@ -1,0 +1,187 @@
+/* All animation, behind prefers-reduced-motion. */
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .update-pill {
+    animation: hero-rise 0.7s ease-out 0.1s both;
+  }
+
+  .hero h1 {
+    animation: hero-rise 0.8s ease-out 0.22s both;
+  }
+
+  .hero-description {
+    animation: hero-rise 0.8s ease-out 0.34s both;
+  }
+
+  .hero-actions {
+    animation: hero-rise 0.8s ease-out 0.46s both;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity var(--t-slow) var(--ease),
+      transform var(--t-slow) var(--ease);
+    will-change: opacity, transform;
+  }
+
+  .reveal-visible {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  /* Section heads and the lineup lead their own children in, so a block
+     arrives as a sequence instead of one slab sliding up. */
+  .section-head.reveal,
+  .lineup-grid.reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .section-head.reveal > *,
+  .lineup-grid.reveal > * {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity var(--t-slow) var(--ease),
+      transform var(--t-slow) var(--ease);
+  }
+
+  .section-head.reveal-visible > *,
+  .lineup-grid.reveal-visible > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  .section-head.reveal-visible > *:nth-child(2) { transition-delay: 90ms; }
+  .section-head.reveal-visible > *:nth-child(3) { transition-delay: 180ms; }
+  .lineup-grid.reveal-visible > *:nth-child(2) { transition-delay: 120ms; }
+
+  /* Hover lifts. Transform only, so nothing reflows. */
+  .feature-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .hero-button:hover {
+    transform: translateY(-2px);
+  }
+
+  .hero-button:active {
+    transform: translateY(0);
+    transition-duration: 80ms;
+  }
+
+  @keyframes caret-blink {
+    0%,
+    48% {
+      opacity: 1;
+    }
+
+    52%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .term-cursor {
+    animation: caret-blink 1.05s steps(1) infinite;
+  }
+
+  /* Tool search: one shared 10s cycle. Matches land top to bottom in rank
+     order, hold as a complete shortlist, then clear for the next task. */
+  .draft-row {
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
+    opacity: 0.22;
+  }
+
+  .draft-row-1 { animation-name: draft-r1; }
+  .draft-row-2 { animation-name: draft-r2; }
+  .draft-row-3 { animation-name: draft-r3; }
+  .draft-row-4 { animation-name: draft-r4; }
+  .draft-row-5 { animation-name: draft-r5; }
+
+  @keyframes draft-r1 { 0%, 6% { opacity: 0.22; } 11%, 90% { opacity: 1; } 96%, 100% { opacity: 0.22; } }
+  @keyframes draft-r2 { 0%, 14% { opacity: 0.22; } 19%, 90% { opacity: 1; } 96%, 100% { opacity: 0.22; } }
+  @keyframes draft-r3 { 0%, 22% { opacity: 0.22; } 27%, 90% { opacity: 1; } 96%, 100% { opacity: 0.22; } }
+  @keyframes draft-r4 { 0%, 30% { opacity: 0.22; } 35%, 90% { opacity: 1; } 96%, 100% { opacity: 0.22; } }
+  @keyframes draft-r5 { 0%, 38% { opacity: 0.22; } 43%, 90% { opacity: 1; } 96%, 100% { opacity: 0.22; } }
+
+  /* Self-learning: each meter travels from the old rating to the new one and
+     the "was -> now" figure lands with it, so the table shows the rerank. */
+  .learn-row .term-meter-fill {
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .learn-delta {
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
+  }
+
+  .learn-row-1 .term-meter-fill { animation-name: learn-b1; }
+  .learn-row-2 .term-meter-fill { animation-name: learn-b2; }
+  .learn-row-3 .term-meter-fill { animation-name: learn-b3; }
+  .learn-row-4 .term-meter-fill { animation-name: learn-b4; }
+  .learn-row-1 .learn-delta { animation-name: learn-d1; }
+  .learn-row-2 .learn-delta { animation-name: learn-d2; }
+  .learn-row-3 .learn-delta { animation-name: learn-d3; }
+  .learn-row-4 .learn-delta { animation-name: learn-d4; }
+
+  @keyframes learn-b1 { 0%, 8% { width: var(--w0); } 16%, 94% { width: var(--w1); } 100% { width: var(--w0); } }
+  @keyframes learn-b2 { 0%, 18% { width: var(--w0); } 26%, 94% { width: var(--w1); } 100% { width: var(--w0); } }
+  @keyframes learn-b3 { 0%, 28% { width: var(--w0); } 36%, 94% { width: var(--w1); } 100% { width: var(--w0); } }
+  @keyframes learn-b4 { 0%, 38% { width: var(--w0); } 46%, 94% { width: var(--w1); } 100% { width: var(--w0); } }
+  @keyframes learn-d1 { 0%, 12% { opacity: 0; } 18%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes learn-d2 { 0%, 22% { opacity: 0; } 28%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes learn-d3 { 0%, 32% { opacity: 0; } 38%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes learn-d4 { 0%, 42% { opacity: 0; } 48%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+
+  /* Rankings: mongodb's signed score updates first, and only then do the two
+     neighbours trade places so the standings stay sorted by score. */
+  @keyframes league-swap-down {
+    0%, 40% { transform: translateY(0); }
+    48%, 92% { transform: translateY(100%); }
+    99%, 100% { transform: translateY(0); }
+  }
+
+  @keyframes league-swap-up {
+    0%, 40% { transform: translateY(0); }
+    48%, 92% { transform: translateY(-100%); }
+    99%, 100% { transform: translateY(0); }
+  }
+
+  @keyframes league-score-old {
+    0%, 30% { opacity: 1; }
+    34%, 94% { opacity: 0; }
+    99%, 100% { opacity: 1; }
+  }
+
+  @keyframes league-score-new {
+    0%, 30% { opacity: 0; }
+    34%, 94% { opacity: 1; }
+    99%, 100% { opacity: 0; }
+  }
+
+  .league-swap-down { animation: league-swap-down 12s ease-in-out infinite; }
+  .league-swap-up { animation: league-swap-up 12s ease-in-out infinite; }
+  .league-score-old { animation: league-score-old 12s infinite; }
+  .league-score-new { animation: league-score-new 12s infinite; }
+}

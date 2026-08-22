@@ -1,0 +1,231 @@
+/* The tabbed product section: rail, sliding marker, panel and copy. */
+
+.lineup-grid {
+  display: grid;
+  gap: calc(26 * var(--u));
+  grid-template-columns: calc(224 * var(--uw)) minmax(0, 1fr);
+  margin-top: calc(46 * var(--u));
+}
+
+.lineup-tabs {
+  display: flex;
+  position: relative;
+  flex: 1;
+  flex-direction: column;
+}
+
+.lineup-tab {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--ink-3);
+  cursor: pointer;
+  display: flex;
+  flex: 1;
+  gap: calc(15 * var(--u));
+  overflow: hidden;
+  padding: calc(16 * var(--u)) calc(17 * var(--u));
+  position: relative;
+  text-align: left;
+  transition:
+    background var(--t-fast) var(--ease-soft),
+    border-color var(--t-fast) var(--ease-soft),
+    color var(--t-fast) var(--ease-soft);
+}
+
+.lineup-tab + .lineup-tab {
+  margin-top: -1px;
+}
+
+.lineup-tab:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.lineup-tab-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: calc(4 * var(--u));
+  min-width: 0;
+}
+
+.lineup-tab-label {
+  font-family: var(--mono-font);
+  font-size: max(12px, calc(14 * var(--u)));
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  /* The rail is sized to hold the longest label on one line. */
+  white-space: nowrap;
+}
+
+.lineup-tab-role {
+  color: var(--ink-5);
+  font-size: max(11px, calc(13 * var(--u)));
+  letter-spacing: -0.01em;
+}
+
+.lineup-tab-icon {
+  flex: 0 0 auto;
+  opacity: 0.45;
+  transition: opacity var(--t-mid) var(--ease-soft);
+}
+
+.lineup-tab-icon .badge-icon {
+  display: block;
+  height: max(18px, calc(23 * var(--u)));
+  stroke: currentColor;
+  width: max(18px, calc(23 * var(--u)));
+}
+
+/* Selection reads as a lit edge and a lift in value, not a slab of white:
+   a solid rule on the leading edge, the same device the copy bullets use. */
+.lineup-tab-active,
+.lineup-tab-active:hover {
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--white);
+  z-index: 1;
+}
+
+/* A single marker that travels between tabs, so switching reads as movement
+   rather than one bar blinking out and another blinking in. */
+.lineup-marker {
+  background: var(--hilite);
+  height: calc(100% / var(--n));
+  left: -1px;
+  position: absolute;
+  top: 0;
+  transform: translateY(calc(var(--i) * 100%));
+  transition: transform var(--t-mid) var(--ease);
+  width: 2px;
+  z-index: 2;
+}
+
+.lineup-tab-active .lineup-tab-role {
+  color: var(--ink-3);
+}
+
+.lineup-tab-active .lineup-tab-icon {
+  opacity: 1;
+}
+
+/* Shot clock for the auto-advance; disappears once a card is picked. */
+.lineup-progress {
+  background: rgba(255, 255, 255, 0.55);
+  bottom: 0;
+  height: 2px;
+  left: 0;
+  position: absolute;
+  transform-origin: left center;
+  width: 100%;
+}
+
+.lineup-panel {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  display: grid;
+  grid-template-columns: minmax(0, 1.24fr) minmax(0, 1fr);
+  /* A hard height, not a minimum: every tab renders the identical box. */
+  height: calc(452 * var(--u));
+}
+
+/* A lit slab of paper set into the black page: the section's contrast comes
+   from raw value, so no brand hue is needed to make it land. */
+.lineup-stage {
+  align-items: center;
+  background:
+    radial-gradient(56% 44% at 16% 10%, #ffffff 0%, rgba(255, 255, 255, 0.62) 42%, transparent 74%),
+    radial-gradient(70% 60% at 92% 96%, rgba(150, 152, 157, 0.5) 0%, rgba(178, 180, 184, 0.28) 48%, transparent 80%),
+    linear-gradient(152deg, #fbfaf9 0%, #e4e3e1 48%, #b7b9bc 100%);
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  padding: calc(32 * var(--u)) calc(28 * var(--u));
+  position: relative;
+}
+
+/* Fine film grain gives the slab a printed tooth and stops it banding. */
+.lineup-stage::before {
+  content: "";
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  inset: 0;
+  mix-blend-mode: multiply;
+  opacity: 0.16;
+  position: absolute;
+}
+
+.lineup-window {
+  background: #08090c;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 4px 14px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: min(100%, calc(505 * var(--u)));
+}
+
+.lineup-copy {
+  animation: content-swap var(--t-mid) var(--ease) both;
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(28 * var(--u)) calc(38 * var(--u));
+}
+
+/* Contents crossfade inside a window that never moves, so nothing uncovers
+   the lit slab behind it. */
+@keyframes content-swap {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.lineup-window .term-body {
+  animation: content-swap var(--t-mid) var(--ease) both;
+}
+
+.term-title {
+  animation: content-swap var(--t-mid) var(--ease) both;
+}
+
+.lineup-copy h3 {
+  color: #f1f1f1;
+  font-size: max(19px, calc(29 * var(--u)));
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.16;
+  margin: 0;
+}
+
+.lineup-copy p {
+  color: var(--ink-3);
+  font-size: max(13px, calc(15.5 * var(--u)));
+  letter-spacing: -0.015em;
+  line-height: 1.6;
+  margin: calc(16 * var(--u)) 0 0;
+}
+
+.lineup-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: calc(13 * var(--u));
+  list-style: none;
+  margin: calc(26 * var(--u)) 0 0;
+  padding: 0;
+}
+
+.lineup-bullets li {
+  border-left: 2px solid rgba(255, 255, 255, 0.85);
+  color: var(--ink-2);
+  font-size: max(12px, calc(15 * var(--u)));
+  letter-spacing: -0.01em;
+  line-height: 1.45;
+  padding-left: calc(15 * var(--u));
+}
