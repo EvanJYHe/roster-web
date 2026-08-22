@@ -4,3 +4,7 @@ out
 .DS_Store
 *.log
 *.tsbuildinfo
+.vercel
+
+# Cached source photograph for scripts/build-skyline.py, re-downloaded on demand
+scripts/.cache/

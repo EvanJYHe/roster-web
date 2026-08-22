@@ -193,6 +193,18 @@ const SIDE_LOGO_OFFSETS: Record<Side, number> = { left: 0, right: LOGO_SLOTS_PER
 const FLOW_DURATION_S = 60;
 const FLOW_EXIT_DEPTH = -0.05;
 
+// A corridor whose lanes converge but whose glyphs never change size has no
+// depth cue at all: near the vanishing point every lane overlaps at full size,
+// which is what reads as "squished", and with nothing shrinking the eye cannot
+// tell that constant screen speed is correct. Size is therefore tied to depth,
+// interpolated over the same keyframe as the position so the two stay in step.
+// 1 is the size at the screen edge; the far end is FLOW_NEAR_SCALE of that.
+const FLOW_NEAR_SCALE = 0.3;
+
+function depthScale(depth: number): number {
+  return FLOW_NEAR_SCALE + (1 - FLOW_NEAR_SCALE) * (1 - depth);
+}
+
 // Deterministic hash so lanes get stable, hydration-safe stagger offsets.
 function hash01(seed: number): number {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
@@ -218,7 +230,7 @@ const ALL_LOGOS = (Object.keys(SIDE_LOGO_OFFSETS) as Side[]).flatMap(buildLogoSp
 // Every brand receives the same exact icon height. Perspective is carried by
 // wall placement, row geometry, opacity, and occlusion rather than changing
 // the dimensions of repeated marks.
-const LOGO_ICON_SIZE = 32;
+const LOGO_ICON_SIZE = 42;
 const LOGO_INK_SCALE = 0.82;
 const LOGO_ICON_ASPECTS: Partial<Record<LogoKind, number>> = {
   amazonaws: 1.67,
@@ -354,17 +366,22 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
   // style attribute matches the browser's CSSOM serialization exactly
   // during hydration.
   const px = (value: number) => `${parseFloat(value.toFixed(2))}px`;
+  const num = (value: number) => `${parseFloat(value.toFixed(4))}`;
+  const baseDepth = 1 - laneProgress * (1 - FLOW_EXIT_DEPTH);
   const laneStyle = {
     "--lane-x0": px(laneStart.x),
     "--lane-y0": px(laneStart.y),
     "--lane-x1": px(laneEnd.x),
     "--lane-y1": px(laneEnd.y),
-    transform: `translate(${px(basePoint.x)}, ${px(basePoint.y)})`,
+    "--lane-s0": num(depthScale(1)),
+    "--lane-s1": num(depthScale(FLOW_EXIT_DEPTH)),
+    transform: `translate(${px(basePoint.x)}, ${px(basePoint.y)}) scale(${num(depthScale(baseDepth))})`,
     animationDelay: `${parseFloat((-laneProgress * FLOW_DURATION_S).toFixed(2))}s`,
   } as React.CSSProperties;
 
   return (
     <g className="depth-mark-lane" style={laneStyle}>
+    <g className="depth-mark-fan">
     <g
       className="depth-mark"
       data-logo-depth={logo.depth}
@@ -403,6 +420,7 @@ function LogoGlyph({ logo: sourceLogo }: { logo: LogoSpec }) {
         <image href={`/mcp-logos/${logo.kind}.svg`} {...commonImageProps} />
       )}
       </g>
+    </g>
     </g>
     </g>
   );
@@ -601,46 +619,19 @@ function StarIcon() {
   );
 }
 
-const LLM_PROMPT = `You are helping me set up Roster, an open-source, local-first tool router for AI agents (MCP). Read https://github.com/ManagementMO/roster for context. Roster fronts local stdio MCP servers behind one endpoint: "roster sync" replaces N client config entries with one, draft(need) returns the best five tools for the task, call(tool, args) proxies the invocation, and outcomes are learned locally. Help me install it, sync my MCP clients (Claude Code, Cursor, Codex, OpenClaw), and verify the setup. "roster eject" must restore my original configs exactly as found.`;
+const LLM_PROMPT = `You are helping me set up Roster, an open-source, local-first tool router for AI agents (MCP). Roster fronts local stdio MCP servers behind one endpoint: "roster sync" replaces N client config entries with one, draft(need) returns the best tools for the task, call(tool, args) proxies the invocation, and outcomes are learned locally. Help me install it, sync my MCP clients (Claude Code, Cursor, Codex, OpenClaw), and verify the setup. "roster eject" must restore my original configs exactly as found.`;
 
-const REPO_URL = "https://github.com/ManagementMO/roster";
+// Placeholder wiring for the demo deploy: GitHub points at my profile and the
+// other nav/footer destinations are inert until the real URLs exist. Research
+// citations on the stat cards are real and link out.
+const GITHUB_URL = "https://github.com/EvanJYHe";
+const PLACEHOLDER = "#";
 
-const DRAFT_RESULTS = [
-  { icon: "github", tool: "github.open_pull_request", score: 96 },
-  { icon: "git", tool: "git.push", score: 93 },
-  { icon: "slack", tool: "slack.post_message", score: 91 },
-  { icon: "sentry", tool: "sentry.resolve_issue", score: 88 },
-  { icon: "datadog", tool: "datadog.check_deploy", score: 85 },
-];
+// --- terminal mocks -------------------------------------------------------
+// Each mock is a short shell session chosen so the command itself explains
+// what that pillar does, with a closing summary line stating the outcome.
 
-function MockIcon({ kind }: { kind: string }) {
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img alt="" aria-hidden="true" className="mock-icon" src={`/mcp-logos/${kind}.svg`} />
-  );
-}
-
-const LEARN_ROWS = [
-  { tool: "slack.post_message", note: "ok · 320ms", width: 96, from: 0.86, score: "96", delta: "+3", kind: "up" },
-  { tool: "github.open_pull_request", note: "ok · 610ms", width: 94, from: 0.9, score: "94", delta: "+2", kind: "up" },
-  { tool: "git.push", note: "ok · 180ms", width: 92, from: 0.95, score: "92", delta: "+1", kind: "up" },
-  { tool: "jira.create_ticket", note: "drift", width: 12, from: 5.2, score: "benched", delta: "\u25bc", kind: "down" },
-] as const;
-
-// The League ranks only within one certified category, so the standings
-// compare like against like. mongodb's score updates mid-cycle, overtaking
-// supabase, and the two rows trade places to match.
-const LEAGUE_ROWS = [
-  { rank: 1, icon: "postgresql", name: "postgres-mcp", score: "0.947", scoreNew: "", move: "steady", swap: "" },
-  { rank: 2, icon: "supabase", name: "supabase-mcp", score: "0.921", scoreNew: "", move: "down", swap: "down" },
-  { rank: 3, icon: "mongodb", name: "mongodb-mcp", score: "0.898", scoreNew: "0.924", move: "up", swap: "up" },
-  { rank: 4, icon: "mysql", name: "mysql-mcp", score: "0.874", scoreNew: "", move: "steady", swap: "" },
-  { rank: 5, icon: "redis", name: "redis-mcp", score: "0.712", scoreNew: "", move: "down", swap: "" },
-] as const;
-
-const LEAGUE_MOVE_GLYPHS = { up: "\u25b2", down: "\u25bc", steady: "\u2013" } as const;
-
-function RotationIcon() {
+function RouteIcon() {
   return (
     <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
       <path d="M14.5 9a5.5 5.5 0 1 1-2.1-4.32" />
@@ -649,126 +640,458 @@ function RotationIcon() {
   );
 }
 
-function CoachIcon() {
+function LearnIcon() {
   return (
     <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
-      <rect x="4" y="3.8" width="10" height="11.7" rx="1.4" />
-      <path d="M6.8 3.8V3a1.2 1.2 0 0 1 1.2-1.2h2A1.2 1.2 0 0 1 11.2 3v.8" />
-      <path d="M6.8 8.6h4.4M6.8 11.6h2.8" />
+      <path d="M2.6 14.2 6.4 9.4l3 2.6 5.2-6.6" />
+      <path d="M11.6 5.4h3v3" />
     </svg>
   );
 }
 
-function LeagueIcon() {
+function RankIcon() {
   return (
     <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
-      <path d="M5.8 2.8h6.4v3.6a3.2 3.2 0 0 1-6.4 0z" />
-      <path d="M5.8 4H3.5a2.5 2.5 0 0 0 2.6 2.6M12.2 4h2.3a2.5 2.5 0 0 1-2.6 2.6" />
-      <path d="M9 9.6v2.6M6.4 15h5.2" />
+      <path d="M2.8 15.2h12.4" />
+      <path d="M4.6 15.2V9.8M9 15.2V3.4M13.4 15.2v-4" />
     </svg>
   );
 }
 
-function ShowcaseSection() {
+function EjectIcon() {
   return (
-    <section className="section" id="showcase" aria-labelledby="showcase-title">
+    <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
+      <path d="M9 11.4V2.6M6.1 5.5 9 2.6l2.9 2.9" />
+      <path d="M3.2 10.6v3.6a1.2 1.2 0 0 0 1.2 1.2h9.2a1.2 1.2 0 0 0 1.2-1.2v-3.6" />
+    </svg>
+  );
+}
+
+const BAR_CELLS = 12;
+
+// A shaded track with a solid fill clipped over it, so the meter stays on the
+// monospace character grid instead of being a drawn element.
+function TermBar({ pct, from }: { pct: number; from?: number }) {
+  const style = { "--w1": `${pct}%`, "--w0": `${from ?? 0}%` } as React.CSSProperties;
+  return (
+    <span className="term-meter">
+      <span className="term-meter-track">{"\u2591".repeat(BAR_CELLS)}</span>
+      <span className="term-meter-fill" style={style}>{"\u2588".repeat(BAR_CELLS)}</span>
+    </span>
+  );
+}
+
+function TermPrompt({ command, arg }: { command: string; arg?: string }) {
+  return (
+    <div className="term-line term-line-cmd">
+      <span className="term-caret">&#10095;</span>
+      <span>
+        {command}
+        {arg ? <span className="term-arg"> {arg}</span> : null}
+      </span>
+    </div>
+  );
+}
+
+function TermCursorLine() {
+  return (
+    <div className="term-line term-line-cmd">
+      <span className="term-caret">&#10095;</span>
+      <span className="term-cursor" />
+    </div>
+  );
+}
+
+const LEARN_ROWS = [
+  { tool: "github.open_pull_request", ok: "98%", was: "0.71", now: "0.96", pct: 96, from: 71, kind: "up" },
+  { tool: "slack.post_message", ok: "97%", was: "0.80", now: "0.94", pct: 94, from: 80, kind: "up" },
+  { tool: "git.push", ok: "99%", was: "0.90", now: "0.92", pct: 92, from: 90, kind: "up" },
+  { tool: "jira.create_ticket", ok: "41%", was: "0.83", now: "bench", pct: 24, from: 83, kind: "down" },
+] as const;
+
+function LearningVisual() {
+  return (
+    <div className="term-body" aria-hidden="true">
+      <TermPrompt command="roster outcomes" arg="--since 7d" />
+      <div className="term-out">
+        <div className="term-row term-row-learn term-row-head">
+          <span>tool</span>
+          <span>ok</span>
+          <span>rating</span>
+          <span className="term-right">was &#8594; now</span>
+        </div>
+        {LEARN_ROWS.map(({ tool, ok, was, now, pct, from, kind }, index) => (
+          <div
+            className={`term-row term-row-learn learn-row learn-row-${kind} learn-row-${index + 1}`}
+            key={tool}
+          >
+            <span className="term-name">{tool}</span>
+            <span className={`term-status term-status-${kind}`}>{ok}</span>
+            <TermBar pct={pct} from={from} />
+            <span className="term-right">
+              <span className="term-dim">{was}</span>
+              <span className={`learn-delta learn-delta-${kind}`}> &#8594; {now}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="term-note">ranking rebuilt: 3 promoted, 1 benched</div>
+      <TermCursorLine />
+    </div>
+  );
+}
+
+const MATCHED_TOOLS = [
+  { score: "0.96", tool: "github.open_pull_request" },
+  { score: "0.93", tool: "git.push" },
+  { score: "0.91", tool: "slack.post_message" },
+  { score: "0.88", tool: "sentry.resolve_issue" },
+  { score: "0.85", tool: "datadog.check_deploy" },
+] as const;
+
+function SearchVisual() {
+  return (
+    <div className="term-body" aria-hidden="true">
+      <TermPrompt command="roster draft" arg={"\u201chotfix and tell the team\u201d"} />
+      <div className="term-out">
+        <div className="term-note term-note-lead">searched 214 indexed tools, 5 matched</div>
+        <div className="term-row term-row-search term-row-head">
+          <span>match</span>
+          <span>tool passed to the model</span>
+        </div>
+        {MATCHED_TOOLS.map(({ score, tool }, index) => (
+          <div className={`term-row term-row-search draft-row draft-row-${index + 1}`} key={tool}>
+            <span className="term-dim">{score}</span>
+            <span className="term-name">{tool}</span>
+          </div>
+        ))}
+      </div>
+      <div className="term-note">209 others stay connected, out of context</div>
+      <TermCursorLine />
+    </div>
+  );
+}
+
+const LEAGUE_ROWS = [
+  { rank: 1, name: "postgres-mcp", score: "0.947", scoreNew: "", swap: "" },
+  { rank: 2, name: "supabase-mcp", score: "0.921", scoreNew: "", swap: "down" },
+  { rank: 3, name: "mongodb-mcp", score: "0.898", scoreNew: "0.924", swap: "up" },
+  { rank: 4, name: "mysql-mcp", score: "0.874", scoreNew: "", swap: "" },
+  { rank: 5, name: "redis-mcp", score: "0.712", scoreNew: "", swap: "" },
+] as const;
+
+function RankingsVisual() {
+  return (
+    <div className="term-body" aria-hidden="true">
+      <TermPrompt command="roster standings" arg="database" />
+      <div className="term-out">
+        <div className="term-row term-row-league term-row-head">
+          <span>#</span>
+          <span className="term-league-entry">
+            <span>server</span>
+            <span className="term-right">score</span>
+            <span>signed</span>
+          </span>
+        </div>
+        {LEAGUE_ROWS.map(({ rank, name, score, scoreNew, swap }) => (
+          <div className="term-row term-row-league" key={name}>
+            <span className="term-dim">{rank}</span>
+            <span className={`term-league-entry${swap ? ` league-swap-${swap}` : ""}`}>
+              <span className="term-name">{name}</span>
+              {scoreNew ? (
+                <span className="term-right league-score-flip">
+                  <span className="league-score-old">{score}</span>
+                  <span className="league-score-new">{scoreNew}</span>
+                </span>
+              ) : (
+                <span className="term-right">{score}</span>
+              )}
+              <span className="term-check">&#10003;</span>
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="term-note">6 certified, same suite, reproducible</div>
+      <TermCursorLine />
+    </div>
+  );
+}
+
+const SYNC_RESULTS = [
+  { client: "claude code", detail: "14 servers \u2192 1 endpoint" },
+  { client: "cursor", detail: " 9 servers \u2192 1 endpoint" },
+  { client: "codex", detail: " 6 servers \u2192 1 endpoint" },
+] as const;
+
+function PortabilityVisual() {
+  return (
+    <div className="term-body" aria-hidden="true">
+      <TermPrompt command="roster sync" />
+      <div className="term-out">
+        {SYNC_RESULTS.map(({ client, detail }) => (
+          <div className="term-line term-line-out" key={client}>
+            <span className="term-check">&#10003;</span>
+            <span className="term-name">{client}</span>
+            <span className="term-dim">{detail}</span>
+          </div>
+        ))}
+        <div className="term-note term-note-tight">originals backed up before any write</div>
+      </div>
+
+      <TermPrompt command="roster eject" />
+      <div className="term-out">
+        <div className="term-line term-line-out">
+          <span className="term-check">&#10003;</span>
+          <span className="term-dim">3 configs restored byte for byte</span>
+        </div>
+      </div>
+
+      <TermCursorLine />
+    </div>
+  );
+}
+
+const LINEUP = [
+  {
+    id: "learning",
+    label: "Self-learning",
+    role: "ranks on evidence",
+    icon: <LearnIcon />,
+    window: "~/proj \u2014 roster outcomes",
+    title: "It learns which tools actually work",
+    body:
+      "Most routers rank tools by how well the description matches. Roster grades what happens after the call, on outcome, latency and drift, so what keeps working keeps getting picked.",
+    bullets: [
+      "Ranked on evidence, not on wording",
+      "Learned locally, from your own history",
+    ],
+    visual: <LearningVisual />,
+  },
+  {
+    id: "search",
+    label: "Tool search",
+    role: "only what fits the task",
+    icon: <RouteIcon />,
+    window: "~/proj \u2014 roster draft",
+    title: "Irrelevant tools never reach the model",
+    body:
+      "Every tool gets indexed. Each task searches that index and only the matches pass through. Nothing is disconnected; the rest simply never reaches the context window.",
+    bullets: [
+      "Every tool indexed, then searched per request",
+      "Keyword search built in, semantic search optional",
+    ],
+    visual: <SearchVisual />,
+  },
+  {
+    id: "rankings",
+    label: "Rankings",
+    role: "signed and reproducible",
+    icon: <RankIcon />,
+    window: "~/proj \u2014 roster standings",
+    title: "Rankings anyone can re-run",
+    body:
+      "Registries list servers. Roster scores them. Certified servers run one identical task suite in an open harness, and every published number is signed and version-bound.",
+    bullets: [
+      "Compared only against an identical suite",
+      "Signed scores you can verify yourself",
+    ],
+    visual: <RankingsVisual />,
+  },
+  {
+    id: "portability",
+    label: "No lock-in",
+    role: "one command out",
+    icon: <EjectIcon />,
+    window: "~/proj \u2014 roster sync",
+    title: "One command in, one command out",
+    body:
+      "roster sync points every MCP client at one endpoint, backing up each file first. roster eject restores them byte for byte. No account, and nothing leaves your machine.",
+    bullets: [
+      "Config files restored byte for byte",
+      "No account, no key, no hosted service",
+    ],
+    visual: <PortabilityVisual />,
+  },
+] as const;
+
+// Figures are from the sources cited in the project README, linked so the
+// claim is checkable rather than asserted.
+function EndpointIcon() {
+  return (
+    <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
+      <path d="M2.6 4.2h4.2M2.6 9h4.2M2.6 13.8h4.2" />
+      <path d="M6.8 4.2c3 0 2.6 4.8 5 4.8M6.8 13.8c3 0 2.6-4.8 5-4.8" />
+      <circle cx="13.4" cy="9" r="2" />
+    </svg>
+  );
+}
+
+function FailoverIcon() {
+  return (
+    <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
+      <path d="M2.6 6.2h4.6c2.4 0 2.4 5.6 4.8 5.6h3.4" />
+      <path d="M13 9.2l2.4 2.6-2.4 2.6" />
+      <path d="M11.4 4.4h4M13.4 2.6v3.6" />
+    </svg>
+  );
+}
+
+function DriftIcon() {
+  return (
+    <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
+      <path d="M9 2.2 15 4.6v4.2c0 3.4-2.6 5.6-6 7-3.4-1.4-6-3.6-6-7V4.6z" />
+      <path d="M9 6.6v3M9 12h.01" />
+    </svg>
+  );
+}
+
+function KeyIcon() {
+  return (
+    <svg className="badge-icon" viewBox="0 0 18 18" aria-hidden="true">
+      <circle cx="6" cy="9" r="3.2" />
+      <path d="M9.2 9h6.2M13.4 9v2.6M15.4 9v2" />
+    </svg>
+  );
+}
+
+// Deliberately the parts the tabbed section below does not cover, so the two
+// read as overview then deep dive rather than saying the same thing twice.
+const FEATURES = [
+  {
+    title: "One endpoint",
+    icon: <EndpointIcon />,
+    body: "Claude Code, Cursor, Codex and OpenClaw all point at the same local router. One config entry each, instead of one per server.",
+  },
+  {
+    title: "Automatic failover",
+    icon: <FailoverIcon />,
+    body: "When a tool hard-fails, Roster offers the next-ranked equivalent, so one bad server does not take the whole task down with it.",
+  },
+  {
+    title: "Drift quarantine",
+    icon: <DriftIcon />,
+    body: "When a tool's definition changes underneath you, it is benched locally and held back until you choose to re-admit it.",
+  },
+  {
+    title: "Keys stay put",
+    icon: <KeyIcon />,
+    body: "Credentials live in one owner-only file and are passed straight through to backends. Never logged, never written to the outcome record.",
+  },
+] as const;
+
+function FeatureSection() {
+  return (
+    <section className="section stakes-section" aria-labelledby="features-title">
       <div className="section-inner">
-        <h2 className="reveal" id="showcase-title">
-          Tool routers already exist.
-          <br />
-          Roster is much more.
-        </h2>
+        <div className="section-head reveal">
+          <span className="section-tag"><i />Product overview</span>
+          <h2 id="features-title">One local router in front of every server you own.</h2>
+          <p className="section-sub">
+            Roster sits between your agent and your tools. Nothing is hosted, nothing
+            is uploaded, and everything it changes it can put back.
+          </p>
+        </div>
 
-        <div className="showcase-grid">
-          <div className="showcase-card reveal">
-            <div className="card-head">
-              <span className="card-badge"><RotationIcon /></span>
-              <span className="showcase-kicker">The Rotation</span>
+        <div className="stakes-grid">
+          {FEATURES.map(({ title, icon, body }, index) => (
+            <div
+              className="stake reveal"
+              key={title}
+              style={{ transitionDelay: `${index * 90}ms` }}
+            >
+              <span className="stake-icon">{icon}</span>
+              <h3 className="stake-title">{title}</h3>
+              <p className="stake-body">{body}</p>
             </div>
-            <h3>The best five, every task</h3>
-            <div className="showcase-visual" aria-hidden="true">
-              <div className="mock-query">
-                <span className="mock-query-fn">draft</span>(&ldquo;ship a hotfix and tell the team&rdquo;<span className="mock-caret" />)
-              </div>
-              <div className="score-rows">
-                {DRAFT_RESULTS.map(({ icon, tool, score }, index) => (
-                  <div className={`score-row draft-row draft-row-${index + 1}`} key={tool}>
-                    <span className="mock-tile"><MockIcon kind={icon} /></span>
-                    <span className="score-name">{tool}</span>
-                    <span className="score-bar"><i style={{ width: `${score}%` }} /></span>
-                    <span className="score-value">{score}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="showcase-foot">best 5 of 200 &middot; one endpoint</div>
-            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const LINEUP_CYCLE_MS = 9000;
+
+function LineupSection() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  // Auto-advance introduces all four pillars on its own, but hands control
+  // over permanently the moment someone picks a card themselves.
+  const [autoplay, setAutoplay] = useState(true);
+  const active = LINEUP[activeIndex];
+
+  useEffect(() => {
+    if (!autoplay || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = setTimeout(
+      () => setActiveIndex((index) => (index + 1) % LINEUP.length),
+      LINEUP_CYCLE_MS,
+    );
+    return () => clearTimeout(timer);
+  }, [autoplay, activeIndex]);
+
+  return (
+    <section className="section lineup-section" id="showcase" aria-labelledby="lineup-title">
+      <div className="section-inner">
+        <div className="section-head reveal">
+          <span className="section-tag"><i />Why roster</span>
+          <h2 id="lineup-title">Every other router reads the label. Roster reads the receipts.</h2>
+          <p className="section-sub">
+            One local endpoint in front of every MCP server you own.
+          </p>
+        </div>
+
+        <div className="lineup-grid reveal">
+          <div className="lineup-tabs" role="tablist" aria-label="What roster does">
+            <span
+              aria-hidden="true"
+              className="lineup-marker"
+              style={{ "--i": activeIndex, "--n": LINEUP.length } as React.CSSProperties}
+            />
+            {LINEUP.map((entry, index) => {
+              const isActive = index === activeIndex;
+              return (
+                <button
+                  aria-selected={isActive}
+                  className={`lineup-tab${isActive ? " lineup-tab-active" : ""}`}
+                  key={entry.id}
+                  onClick={() => {
+                    setActiveIndex(index);
+                    setAutoplay(false);
+                  }}
+                  role="tab"
+                  type="button"
+                >
+                  <span className="lineup-tab-icon">{entry.icon}</span>
+                  <span className="lineup-tab-text">
+                    <span className="lineup-tab-label">{entry.label}</span>
+                    <span className="lineup-tab-role">{entry.role}</span>
+                  </span>
+                  {isActive && autoplay ? (
+                    <span className="lineup-progress" key={activeIndex} />
+                  ) : null}
+                </button>
+              );
+            })}
           </div>
 
-          <div className="showcase-card reveal" style={{ transitionDelay: "130ms" }}>
-            <div className="card-head">
-              <span className="card-badge"><CoachIcon /></span>
-              <span className="showcase-kicker">The Coach</span>
-            </div>
-            <h3>Learns what works</h3>
-            <div className="showcase-visual" aria-hidden="true">
-              <div className="learn-table">
-                <div className="learn-head">
-                  <span>tool</span>
-                  <span>outcome</span>
-                  <span className="learn-head-score">score</span>
+          <div className="lineup-panel" role="tabpanel">
+            <div className="lineup-stage">
+              <div className="lineup-window">
+                <div className="term-titlebar">
+                  <span className="term-lights"><i /><i /><i /></span>
+                  <span className="term-title" key={active.id}>{active.window}</span>
                 </div>
-                {LEARN_ROWS.map(({ tool, note, width, from, score, delta, kind }, index) => (
-                  <div
-                    className={`learn-row learn-row-${kind} learn-row-${index + 1}`}
-                    key={tool}
-                    style={{ "--from": from } as React.CSSProperties}
-                  >
-                    <span className="learn-name">{tool}</span>
-                    <span className="learn-note">{note}</span>
-                    <span className="score-bar learn-bar"><i style={{ width: `${width}%` }} /></span>
-                    <span className="learn-score">
-                      {score}
-                      <span className={`learn-delta learn-delta-${kind}`}>{delta}</span>
-                    </span>
-                  </div>
-                ))}
+                {active.visual}
               </div>
-              <div className="showcase-foot">local outcomes only &middot; prompts never stored</div>
             </div>
-          </div>
 
-          <div className="showcase-card reveal" style={{ transitionDelay: "260ms" }}>
-            <div className="card-head">
-              <span className="card-badge"><LeagueIcon /></span>
-              <span className="showcase-kicker">The League</span>
-            </div>
-            <h3>Every category, ranked</h3>
-            <div className="showcase-visual" aria-hidden="true">
-              <div className="league-head">
-                <span>database mcps</span>
-                <span>6 certified</span>
-              </div>
-              <div className="league-rows">
-                {LEAGUE_ROWS.map(({ rank, icon, name, score, scoreNew, move, swap }) => (
-                  <div className="league-row" key={name}>
-                    <span className="league-rank">{rank}</span>
-                    <div className={`league-entry${swap ? ` league-swap-${swap}` : ""}`}>
-                      <span className="mock-tile"><MockIcon kind={icon} /></span>
-                      <span className="league-name">{name}</span>
-                      <span className={`league-move league-move-${move}`}>{LEAGUE_MOVE_GLYPHS[move]}</span>
-                      {scoreNew ? (
-                        <span className="league-score league-score-flip">
-                          <span className="league-score-old">{score}</span>
-                          <span className="league-score-new">{scoreNew}</span>
-                        </span>
-                      ) : (
-                        <span className="league-score">{score}</span>
-                      )}
-                    </div>
-                  </div>
+            <div className="lineup-copy" key={active.id}>
+              <h3>{active.title}</h3>
+              <p>{active.body}</p>
+              <ul className="lineup-bullets">
+                {active.bullets.map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
                 ))}
-              </div>
-              <div className="showcase-foot">signed scores &middot; open harness</div>
+              </ul>
             </div>
           </div>
         </div>
@@ -777,38 +1100,187 @@ function ShowcaseSection() {
   );
 }
 
+// Atlanta's skyline in fog (CC0 photograph). The sky is masked to empty space
+// per column; inside the mask the building's own luminance picks the glyph.
+// SHADE carries a separate brightness level per cell, because a plate drawn at
+// one flat colour reads as texture no matter how many glyphs the ramp has.
+// Regenerate with scripts/build-skyline.py
+const SKYLINE_CHARS = [
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "                                                                                                                                                                                                                                   `ox:",
+  "                                                                                                                                                                                                                                   ~##*",
+  "                                                                                                  `ooox~                                                                                                                          ;%%%%+",
+  "                                                                                                  :#%%%x;                                                                                                                        ,#%%#%#*~",
+  "                                                                                                  =%%%%%#`                                                                                                                      -######%#8,",
+  "                                                                                                `*%%%%%%#;                                                                                                                     .%%%####%%#*;",
+  "                                                                                                +8%%%%%%#*                                                                                                                    `x%x%#####%###~:.",
+  "                                                   .,```                                       ~%%%%%%%#%#*                                                                                                                  .+#%%%#####%#%x%#:",
+  "                                              -==oox%%%%+                                      o#%%##%##%%#~                                                                                                                `x%%##%%%###%%%x%#;",
+  "                                             :%%%%%%xxx%#=                                     o%%%%%%%%%%%#:                                                                                                               `xx###%#%%%%x##x%#-",
+  "                                             +%x%%%%%%%%#*                                    .x%%%%#%%%%%%%:            ..                                                                                                 `xx###%##%##x##x%#~",
+  "                                             *%%%x%%%%%%#*                                    .x%%%%%%%%%%%%:      `++***x; `                                                                                               `xx###%##%%%x%#x%#=",
+  "                                             o%%%xx%%%%%#o                                    `%%%%%%%%%%%%%:      :#%%%##-`=                                                                                               ,x%###%#%%##x%#x%#+",
+  "                                            .x%%xx%%%%%%#*                                    `%%%%%%%%%%%%%;      ;8###88~,+                                                                                               ,x%#%#%#%%##x%#x%#+",
+  "                                            .x%%xx%%%%%%#o                                    `%%%%%%%%%%%%%;      -8###8#=;+                                                                    `-~    :  :                ,x%#%#%%#x%#%%#x%#*",
+  "                                            `%x%xx%%%%%%#o                                    ,%%%%%%%%%%%%%;      -8###8#=~*                                                                   .x8+    -  ;                :xx%##%%#x%%x%#x%%*",
+  "                                            ,%x%xx%%%%%%%o                                    `%%%%%%%%%%%%%;      ~8###8#=~o                                                                   +##*    =  ~                ;%x%%#%%#x##x%#x%%*",
+  "                                            ;%x%%%%%%%%%%x.                                   ,%%%%%%%%%%%%%-      ~8%%#8#+=*                                                                   *##o   .+ .=                ;%%%%#x%#x%#%%#x%%o",
+  "                                            *%x%x%%%%%%%%x.                                   :%%%%%%%%%%%%%~      =8%%%8#++*                                                                   *##o   .o .+                ;%%%%#%%#x%#x%#xx%*",
+  "                                            oxxxxx%%%%%%%x.                                   :%%%%%###%%%%%~      =8%##8#*oo                                                                   o##x   `x .o                -%%%%#%%#x%#%%#xx%o",
+  "                                           .xxxxxx%%%%%%%%`                                   :%%%%%%%%%%%%%~      =8%#%8%x#o                                                                   x##x   ,%.`x                -%%%%#x%#x%%%%#xx%o",
+  "                                           ,%x%xxx%%%%%%%%`                                   ;%%%%%%%%%%%%%=      =8%%#8%x8*                                                                   %##x.  ,#.`%.               =%x%%%x%#x%#%%#xx%o                                                                               `,",
+  "                                        .`.-%x%xx%%%%%%%%%`                                   ;%%%%%%%%%%%x%=      +8%%#8%x#*                                                                  .%#%x` :o8+;#.     :.        =#o%%#%%%x%#%%%xx%x.                                                                             `~~",
+  "                                   ;~=*oooox%%%xxx%%%%%%%#,                                   ;%%%%%%%%%%%x%=      +8%%#8%x#o                                                      `---        `##%%` o8#8x%~   `=8%~;`     =#o%%%%%%x%#%x%xx%x.                                                                             ,~-",
+  "                                  `x%%%%xoox%%%xxx%%%%%%%#,                                   -%x%%%%%%%%%x%=      +8%%#8%x#o      .~=;                          `~~,            .:xxxx-.      ,8#%%``x*##*+x=+=*x#%%x~     *#o%%%xx%x%#%x%xx%x.                                                                             ~=-",
+  "                                  `oooxxxoo%%%%xx%%%%%%%x#:                                   -%x%%%%%%%%%x%*      *8%%#8%x#o      -8#%`                         *#8o          -ox%oxxxooo+    ,8%x%`;#o#8%%#888#8####o     *8x%##%%#xx#%x%xxxx.                                                                             *+-",
+  "                                  ,xoxx%%ox#%%%xx%%%%%%%x8;                                   -%%%%%%%%%%%xx*      o8%%#8%x#o   :~-o##%+--.                   ;~=x%%%~~-      .x%%%x%%%xxx%*`  -@##8,+@8888@@88888888@8:,,``*#x##%%%8#x#%x%xxxx`                                                       .                     xo-",
+  "                                  :xoxxxxox%%%xxx%%%%%%%x8:                                   ~%%%%%%%%#%%xx*      *#%%#8xx#x   *#%x##xx%#; .**:              x##x%%%%#%.     `x%%%x%%%xx###%=~x%%x%,*8x%%#xoxxoxxxoxxxxx%xox%#%#%%%#%x%%x%xxxx`                                              .,=++-;;+x.             .::;;--8%-",
+  "                                  ;xoxx%xox%%%xxx%%%%%%%%#o*+~~~~~-;;:                        ~%%%%%%%%%%%xx*      *%%%#8xx#x.  *#xx##%x%%*.~###%-     =%x.  `%%%x%%%x%x`     :%%%%x%%%ox#%xx%x%%xo%;o@##%#%oxxoxxxx%%xoo%%%%######%8%x%%x%xxxx`                                           `+*o%%%%##%%#-....``,,,::;;*%x%%%#8x-",
+  "                                  -xoxx%xox%%%xxx%%%%%%%%%####888####8~                       =%%%%%%%%%%%xxo      o%%%#8xx%x.  o#%x##%%#%%%%%%###,    o##=``~#%%x##%x%%`   . ;#%%%x%%%xx#%%%%%%%xx#-x@8#%8#xxxx%%%o%%%%%#%x#####%%%##x%%x%xx%%,                                           ;#xx%xx%%%%xooooooooxxxxxxxoooooxx#%~",
+  ".  ,=,                            -xoxx%xox%%%xxx%%%%%%%%%#%%%%#%%%%%#=                       +%%%%%%%%%%%xxo      o%%%##xx#x.  o#%x##xx%#xx%xx%%%,   .%%%x%%%%##x##%x%%,   :;-#%%%x%%%oo##%%%%%%%%%*%8##88%x%#xx%#xx%xxoxxx#%%%#%%%##o%%x%%xxx,                                           ~%xx%%x%ox%xox%%xxxxxxxoxxoxxxx%x%#8=",
+  ", .~%*-:,`.                       ~ooxx%xox#%%xxx%%%%%%%%%#####%%#%%%#+              .::=**+*,*%%%%%%%%%x%xxo      o%%%##ox%%.  o#%x##%#888#xo*ox#:   ;#%%o%%x%#%x##%x%%:   -x*#%%%x%%%oo##%%%%%%%%%##8%%%#%ox%ox%%ox%xx%#xx#8######8#o%%x%%xx%:                                           +%xx%%x%xx%xxxxxxxxxxxxxxxxxxxxxx%%8+",
+  "~ ~ox*%xooo.,-;                   =ooxx%x*x#%%xxx%%%%%%%%%##%%%%%%%%%#*              ;%x%x%ooo%%%%%%%%%%x%xxo     .xx%%##oxx%` .x#######888##8#8o8;  `x%%%x%%%##%x%#xx%%;   =%x%%%%o%%%oo##%%%%%%%%%%#8%%%##x%xoxxxox%xxxxxo#######88#o%%x%%xx%:                                           o%x%%%x%xx%xxxxxxxxxxxxxxxxxxxxxx%%8o",
+  "@:x@%x#%#88~*oo::,          ,,    o8#%%88#%#%%xx%%%%%%%%%%#%#%%%%%%%%%o              ~xxx%%ooo%##%%%%%%%x%xxx     .xx%%#%oxxx` .x%#xxooox#+*#@@@o8~  ,x%%%x%%%%##x##%x%%-   *=+##%%ox%xox##%%%%%%%%%##8%%%#%x%%xx%#xx%%xo%xo##%%##%%##o%%x%%xx%;                                ;~~~~~~~~==x%x%%%x%xx%xxxxxxxxxxxxxxxxxxxxxx%%#%",
+  "+=+**oxx##8%ooxo#*,```````:x@8x8#o%xx++*x%#88#%%#%%%%%%%%####%%%%%%%%%x              +%x%%%oo*%##%%%x%%%x%xx%     `xxxx8#oxox` .%%%*+*ox#x~o#@88o8~  :x%%%o%%%##%x%#xxx%~  .x+*####x%%%ox#%%#%%%%xxx##8#####x%xox%%x%%%ox#xo#8#%#%%%##o%%x%%xx%-                               `#xx%%%%%%%%%%%%%#xxxx%xxxxxxxxxxxxxxxxxxxxxxxx%%",
+  "~==+*++++*xx---=~=%###%*=+*===***xxxxx*oxoo%###8@88###%%%%##%%%%%%%%%%%.         *~  x%##88%xo#8##%%%%%%x%xx%     `%xxo8#*xoo` .%%%+*xxx#%=x#@88o8=  :xx%#o%%x##%x%%xxx%=  ,%=*##%#x%%%xx8#%###88####@@8x%@8#88888#x%%%%x#%x###%##%%##o%%x%%xx%~                               :#oxxx%%%%%%%#%%%#xxxx%x%88xxx%%%%%%%%x%%xxx%%xxx",
+  "+**oxoooox8#++~---~+%@@#o#x--------~o%@8888#%x%%#8@@@8##%%%###%%%%%##88;~+**o***x##+%88@##8##%@@@8##%%%#x%xx%`    :%xox8%oxox, `#%%+oxxx%x=o#@88o8=  ;x%%#x%%x###x%%xxx%+  ;#=*8#%#x%%#x#@@888##%%888@@@8@@@@@@@@@@8#%8#x%%x###%##%%##*oooxxox%=                               ;8x%%x%%%#%#######%%xx%xx88xxx%%%*o%%%x%xxxx%%xxx",
+  "**ooooooxx#x=xx*+~-;;~**+xx*=++=~~-*o~+~~~~~-~---~=+o%##%%%%%%%%%%####%%88#######%xxo+++~~++++*ox%8@@88#%%xxxx:,~x#%oox8%oxox: ,#%x=oxx%%x=x8@88o8+  -x%#%o%%%##%x%#%x%%o`;%%=*8###%8@@#%x*+++++=~+=====++++===~~~~~=o8x%#%o#8#%##%%##x%%%##%#%xo**oo*********+=; ~,           ~8x%%%###xx%xx#8##%%xx%x%88oo%%x%**%#xx#xx#%#xooo",
+  "*oooxxx*o##%o@@8@x*++=~==+x888xo%##@8--;---+*##o*+-+##8#%%%%%%%%%##8%=----------;--~=*ox#8@#xx%x*+=+o%@@@8%%xxxxx%@%ooo8%*xox: ,#xx*oxxx%%=o#@88o8*  ~xx%%o%%x%%%x%%xoxx%%%%%+o@88@#%o+=+ox%#88@@##%xxxo*+;=x*=+=~++%#%xx#%x###%##%##8%%%88888@@@@@###@8##%%%%%#%*#%,,; ~+=`   *@x%%%#%x*+=~+*x88#%xx%x%88*+*#o#o-%%x%%o*88@#oox",
+  "xxxx#x%x8#@%~==+#~~=xxx*+=*##+--~=*xxx@%+~-~~o8@8@8@@8#%%##%%%#%%##8@@x~=~===%x-*8@@@@@@@@@##@@@@@@#o+=*%@@8%%%xox#xxxx#%x%xx, :8%x+oxxx%%=x#@88o8o  =x%##o%%oo%#%###%#%xxx%#*x@@#*=+o#%8@@888%####8@@@@@@xx88##%###%#%xo%%o####8##88#**o888@8#%xxo==~+%88%x%%xx%xo8~~8*xxxo***ox%##%o*+=~==*=+oo%%xx%xx@8+=*#%x%~o%%xo=*%#%x=%#",
+  "oxxx#*%%8%@%;--~#~-=@@@8+;+88=-~~o+=x+oxx~~~~-+*+*o%##%%%##8%xx%%%xx%#8###xoxxox@@@@88@@8xx%#@@@88@@@@8x+=*#@@8#ox#xx%%%%%%%x` ;@xo~oxx%xo~x#@88x8o  *ox%xoooo%######88###888#8x==o%8@8%x8#%##%##%%%#8@###@#oooo%##xx%%xx%%o#8#%##%%#8*o%@8@@#*-;-=~~~++%@8###%%#xx8++#%%%%%####%##@%=~+==++x*o+o%#%%%%o*%x=*x%xo+=%%%+=*xo--+%o",
+  "ooxx#+%#8+@%-~-=8~-+8x%#+;+8@**x=@@*#--;-~-+xx8o=x#ox#xo%xo#x+*#8#**o%%%%%%#x%#8#8@8#8@x+~+==o##8##ox88@@8o=+#@8%#%%%%#8%####: ;8%x+o%x%%%+x8@88x8x ,%+**xx**oo*oooo***ooox%#*~+#@@%###xo#%xx%xx%oox%88#####%##x%#8xx%xox#%o##%%##%##8*o##*8oo+-~+~-*x+o*xx#@8%%#%%8xx##%#####8@88@@#+=o#*++xo++x##%o%x%*o%*~*%##++*o*=+**~-~8#x",
+  "xxxxx%%x##@%-~-=8--=8-;**;+xx+=*~==+%=~-~=-+oo#%*###%#xo#%o#x+o88##88#8#%#@@%%%%888#@8x==++===~*oo#xx8xo#@@@o~o@8##%#%oxx%%%%~ ;###=oxx#%o~%8@88x8% -8+*o%xo*ooooooxxxxxx%#%=~%@@88x%%#xx8x*o%*o%oox%88%%x%#xxxoxxxox%##%#xo#%%%%%%%#8ox%*++~~~-+==~=%o==-~*%8###%%#8####8#*++++++++*=xx*++*#o**+*ox*xx*%ox+oo==o=~=x%~**-~-*@xo",
+];
+
+const SKYLINE_SHADE = [
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001551",
+  "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003664",
+  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003444200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000255664",
+  "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002456552000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000166676543",
+  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000045565660000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000026777776661",
+  "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014566666720000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000666777865752",
+  "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000046556666640000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005646777875766310",
+  "00000000000000000000000000000000000000000000000000001111000000000000000000000000000000000000000366676667664000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000046666777776763651",
+  "00000000000000000000000000000000000000000000002334445445400000000000000000000000000000000000000466677677656300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000457775567774653662",
+  "00000000000000000000000000000000000000000000014456654445630000000000000000000000000000000000000466666667656510000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000347775765654773662",
+  "00000000000000000000000000000000000000000000023455566666740000000000000000000000000000000000000566667666656510000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000347775775774773563",
+  "00000000000000000000000000000000000000000000034544466666740000000000000000000000000000000000000566666666656510000001333344101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000347775775664674563",
+  "00000000000000000000000000000000000000000000044554466666650000000000000000000000000000000000000566666666656510000001655565114000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001357775765774674553",
+  "00000000000000000000000000000000000000000000044544466666640000000000000000000000000000000000000566666666666520000002888897224000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001367675764774674563",
+  "00000000000000000000000000000000000000000000044543466666650000000000000000000000000000000000001566666666656520000002888797234000000000000000000000000000000000000000000000000000000000000000000000220000100000000000000000001357675674674674554",
+  "00000000000000000000000000000000000000000000144543566666650000000000000000000000000000000000001566666666656520000003887796245000000000000000000000000000000000000000000000000000000000000000000005640000200100000000000000001346775674664674553",
+  "00000000000000000000000000000000000000000000144543566666650000000000000000000000000000000000001556556666655420000003887796345000000000000000000000000000000000000000000000000000000000000000000046640000200100000000000000002446774673774573554",
+  "00000000000000000000000000000000000000000000244544565566650000000000000000000000000000000000001555666666655420000003876697245000000000000000000000000000000000000000000000000000000000000000000047650000300200000000000000002456674674674574554",
+  "00000000000000000000000000000000000000000000344445666666550000000000000000000000000000000000001555556666655430000003876696255000000000000000000000000000000000000000000000000000000000000000000056650000300200000000000000003456675674574574453",
+  "00000000000000000000000000000000000000000000344434666666550000000000000000000000000000000000001566666776655430000004867696255000000000000000000000000000000000000000000000000000000000000000000057750001400300000000000000003456674673574573454",
+  "00000000000000000000000000000000000000000000344434666566561000000000000000000000000000000000001454555556655430000004877696485000000000000000000000000000000000000000000000000000000000000000000068750001501400000000000000003456674673564574444",
+  "00000000000000000000000000000000000000000001445434665566561000000000000000000000000000000000002455556666555330000003866696484000000000000000000000000000000000000000000000000000000000000000000078750002601500000000000000004436664673575574444000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  "00000000000000000000000000000000000000000003545434665566561000000000000000000000000000000000001455556666555340000004866796384000000000000000000000000000000000000000000000000000000000000000000078651026853600000020000000004626675563575464454000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  "00000000000000000000000000000000000112332123545434665566562000000000000000000000000000000000001455556666555340000004866695385000000000000000000000000000000000000000000000000000000111100000000187651048986530000287310000004625664563575464344000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  "00000000000000000000000000000000000233442113555324655566562000000000000000000000000000000000002455556666554340000004866695375000000023100000000000000000000000000133100000000000002311120000000187551142781032322276510000005615664463575464344000000000000000000000000000000000000000000000000000000000000000000000000000000300",
+  "00000000000000000000000000000000000112334214656445655566472000000000000000000000000000000000002454555566544340000004856795375000000376500000000000000000000000000366400000000002444243323210000287441253795678887988765000006736665574475464344000000000000000000000000000000000000000000000000000000000000000000000000000000620",
+  "00000000000000000000000000000000000224454137654346655665473000000000000000000000000000000000002455566666554350000005856795375000232588522100000000000000000000233477623200000003555366634354100398772598889999989888899211006646766686375364344100000000000000000000000000000000000000000000000000000000000000000000000000000730",
+  "00000000000000000000000000000000001223444137554346655655473000000000000000000000000000000000002455555557554350000004656794375000464377434310033100000000000000456366445400000003566366633776532565561484556423313331332234326565755475365364343100000000000000000000000000000000000000000000000122221123000000000000000111223950",
+  "00000000000000000000000000000000001223444136554346555655566443333332220000000000000000000000002455665666554250000004556793375000465488545440356773000003650000566466545400000014566356523853454453341596657524424442554235657678866576265364343100000000000000000000000000000000000000000000223433566445300000000011112333336850",
+  "00000000000000000000000000000000001123444036554346655665568777777777773000000000000000000000003455555556554250000004555793365000465477557666666766100005773113665477545410000025666466634865565564462698668744424552566556547677755576265364354100000000000000000000000000000000000000000001433434756632222221221122222122234760",
+  "00011000000000000000000000000000001123354036654236555666568666777666663000000000000000000000003465555556554250000004456782375000465477446644644655100006663665677478646510002226666466622765565565554786888535634673344224327555755576265364243100000000000000000000000000000000000000000002433553523521345443333222323334446780",
+  "10132210000000000000000000000000001012353037654246555656568777766766564000000000000000012222215565565556444250000004556782366000565488678997421347200036662654676377445310003756655356522765665565557785556524424552354356438876877786165365243200000000000000000000000000000000000000000004434553523643334444433333333334445792",
+  "40463132222000000000000000000000002023453037653346555555567767666665664000000000000000233341125665545556454260000004456861335100577687888987777828400036663664776467435420005436655356522765664564556795567744424442354224427666878896166355243100000000000000000000000000000000000000000005434664523633334333433233344323335584",
+  "92796475788541112100000000001200006765688668654456555565568777666666655000000000000001344551105776656666454260000004356860434100666431214711699947400125663664677477545420004007766345423765564564556895657645633574456325327765775576155355343200000000000000000000000000000000111122222224545664533633333333433333334333335586",
+  "21232344778642357400000000279979756430013578876676656666578777666666555000000000000003345662106775454456454260000015343860422200645200236403699937400135562665676367434430005018877355523765665564456896667655524553564236318865765566155355343200000000000000000000000000000001623334544445656674432533333334443444344434344355",
+  "00000000014400010157766101211132244554344334677899888766567777666666667000000000032005678995417887666666454270000015422960422101756112436504799937500125673654776366434340016018766366633865776886667998568878878874466446537765765577155355343300000000000000000000000000000002834446665567766674432445873444554555545443265244",
+  "00012111139722000003699616500000000045989987556678999977667777666667789345566666767578996887759999876667454361000025322960422201746122335403799938500125673554777366434440036019766356747988787766788999899999999998768646637765775577022244233400000000000000000000000000000003835546667678877775532544883445551256535444255433",
+  "22232323358504532000004303321110000340200000000000124687666666666678886688777777775420000022223457899988564333213785112950422201754023345413799938600215762554776367535561386019878589976532222210000001222211111001247456527865765577255687666554444444333333432021000000000004845557874443478885543545782254351057447337574222",
+  "11224652477529989532110110399954666980000002376321027897666666666779710000000000000013467897546542224799996532222595102850423201734134435503799938600214662554565355324454465029999764212456788998765654320142000000776347558776765678555999999998866688665555556466112023210006955668620000015897543546871017373055465218897124",
+  "22337464879511127000554321188200002554962000048989899876577666766789995010011540389999999997789999974213699975641484444763542102854224445603799938700415873652167477657543456039974224768998876777679999994488665676676425527788876887002889987655300016786466445436326322232223457862000000100225543533970017535025542025665056",
+  "22337366869500007001999810187100043142455000002322467765678853455544589766444545999999998445799989999985213799972464455555663103941034453203799938700503431222667777777776788785214599945865765665557996779744435774456335527974665567014989973000000011598677556447547655566666578950000001302015854552153024543115552025300164",
+  "22336166829600017002856720289324199360000002558315633643643641179821255566676689789989941000027788724899984127986754557966776202754135456613799938802600043001101110000112467313799678732764564564446896667747635673344247416555675678027727442002002524245698557558667767888899999960026200321037852644225102567122321122000864",
+  "33334554679600017002700330255113011260000002447627776643653741288888888768996545989897400000000233744943899940499875761335555202667034366204899938804701144111112223222234772169998466733853353353346895435624423442467647416554654568136222000021001640100368657558878878832222222210331011730101241431634132104101460220002843",
+];
+
+type ShadeRun = { level: number; text: string };
+
+// Cells are grouped into runs of equal brightness once, at module load, so the
+// plate is a few thousand spans rather than one per character.
+const SKYLINE_ROWS: ShadeRun[][] = SKYLINE_CHARS.map((line, row) => {
+  const shade = SKYLINE_SHADE[row] ?? "";
+  const runs: ShadeRun[] = [];
+  for (let i = 0; i < line.length; i += 1) {
+    const level = line[i] === " " ? 0 : Number(shade[i] ?? "0");
+    const last = runs[runs.length - 1];
+    if (last && last.level === level) last.text += line[i];
+    else runs.push({ level, text: line[i] });
+  }
+  return runs;
+});
+
 function SiteFooter() {
   return (
     <footer className="site-footer">
-      <div className="footer-top">
-        <div className="footer-brand">
-          <a className="brand footer-brand-lockup" href="#top" aria-label="Roster home">
-            <RosterMark />
-            <span className="brand-name">roster</span>
-          </a>
-          <p>
-            The self-learning tool router for MCP. Local-first: prompts,
-            arguments, and results never leave your machine.
-          </p>
+      <div className="footer-inner">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <a className="brand footer-brand-lockup" href="#top" aria-label="Roster home">
+              <RosterMark />
+              <span className="brand-name">roster</span>
+            </a>
+            <p>
+              The self-learning tool router for MCP. One local endpoint in front
+              of every server you own, ranked on what actually worked.
+            </p>
+          </div>
+
+          <nav className="footer-cols" aria-label="Footer">
+            <div className="footer-col">
+              <h4>Product</h4>
+              <a href="#showcase">What roster does</a>
+              <a href={PLACEHOLDER}>Rankings</a>
+            </div>
+            <div className="footer-col">
+              <h4>Docs</h4>
+              <a href={PLACEHOLDER}>Documentation</a>
+              <a href={PLACEHOLDER}>Telemetry schema</a>
+            </div>
+            <div className="footer-col">
+              <h4>Project</h4>
+              <a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub</a>
+              <a href={PLACEHOLDER}>Provenance</a>
+              <a href={PLACEHOLDER}>MIT license</a>
+            </div>
+          </nav>
         </div>
 
-        <nav className="footer-columns" aria-label="Footer">
-          <div className="footer-column">
-            <h4>Product</h4>
-            <a href="#showcase">What roster does</a>
-            <a href={`${REPO_URL}/blob/main/docs/methodology.md`} target="_blank" rel="noreferrer">The League</a>
-          </div>
-          <div className="footer-column">
-            <h4>Resources</h4>
-            <a href={REPO_URL} target="_blank" rel="noreferrer">GitHub</a>
-            <a href={`${REPO_URL}/tree/main/docs`} target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </nav>
+        <div className="footer-bottom">
+          <span>&copy; 2026 roster</span>
+        </div>
       </div>
 
-      <div className="footer-bottom">
-        <span className="footer-watermark" aria-hidden="true">roster</span>
-        <span className="footer-copy">&copy; 2026 roster</span>
+      <div className="footer-art reveal" aria-hidden="true">
+        <pre>
+          {SKYLINE_ROWS.map((runs, row) => (
+            <span key={row}>
+              {runs.map((run, i) => (
+                <span className={`sky-${run.level}`} key={i}>{run.text}</span>
+              ))}
+              {"\n"}
+            </span>
+          ))}
+        </pre>
       </div>
     </footer>
   );
@@ -860,7 +1332,7 @@ export default function Home() {
           </a>
 
           <nav className="nav-links" aria-label="Primary navigation">
-            <a className="nav-github" href={REPO_URL} target="_blank" rel="noreferrer">
+            <a className="nav-github" href={GITHUB_URL} target="_blank" rel="noreferrer">
               <GitHubMark />
               <span>GitHub</span>
             </a>
@@ -880,9 +1352,9 @@ export default function Home() {
           </h1>
 
           <p className="hero-description">
-            <span>Roster finds the right tools when needed,</span>
+            <span>Your agent has 200 tools. Roster shows it only the ones that fit the task,</span>{" "}
             <br />
-            <span>learns from what works, and works with any MCP client.</span>
+            <span>learns which ones actually deliver, and never leaves your machine.</span>
           </p>
 
           <div className="hero-actions">
@@ -890,7 +1362,7 @@ export default function Home() {
               <CopyIcon />
               <span>{copied ? "Copied to clipboard" : "Prompt for LLMs"}</span>
             </button>
-            <a className="hero-button hero-button-secondary" href={REPO_URL} target="_blank" rel="noreferrer">
+            <a className="hero-button hero-button-secondary" href={GITHUB_URL} target="_blank" rel="noreferrer">
               <StarIcon />
               <span>Star on GitHub</span>
             </a>
@@ -898,7 +1370,8 @@ export default function Home() {
         </section>
       </div>
 
-      <ShowcaseSection />
+      <FeatureSection />
+      <LineupSection />
       <SiteFooter />
     </main>
   );

@@ -1,5 +1,5 @@
 {
-  "name": "roster-landing",
+  "name": "roster",
   "version": "0.1.0",
   "private": true,
   "description": "Landing page for Roster, the self-healing, self-learning MCP tool router.",
